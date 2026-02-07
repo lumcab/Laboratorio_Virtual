@@ -59,9 +59,10 @@
             padding-left: 1.5rem;
             margin-bottom: 3rem;
         }
-        .grade-6 { border-color: #f59e0b; }
-        .grade-10 { border-color: #3b82f6; }
-        .grade-11 { border-color: #a855f7; }
+        .grade-math { border-color: #f59e0b; }
+        .grade-geo { border-color: #0ea5e9; }
+        .grade-fis10 { border-color: #3b82f6; }
+        .grade-fis11 { border-color: #a855f7; }
     </style>
 </head>
 <body class="min-h-screen bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
@@ -72,12 +73,12 @@
             <i class="fa-solid fa-atom text-4xl text-cyan-400"></i>
         </div>
         <h1 class="tech-font text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600 mb-2">
-            FISICA PAULO VI
+            VIRTUAL-LAB PVI
         </h1>
         <p class="text-slate-400 text-lg">Laboratorio Virtual de Ciencias y Matemáticas</p>
         <div class="mt-4 inline-flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full border border-slate-700">
             <i class="fa-solid fa-calendar text-cyan-400"></i>
-            <span class="text-sm text-slate-300">Año Lectivo 2025</span>
+            <span class="text-sm text-slate-300">Año Lectivo 2026</span>
         </div>
     </header>
 
@@ -90,231 +91,268 @@
                     <i class="fa-solid fa-circle-info text-2xl text-cyan-400"></i>
                 </div>
                 <div>
-                    <h3 class="font-bold text-white text-lg mb-2">Organización por Períodos Académicos</h3>
+                    <h3 class="font-bold text-white text-lg mb-2">Organización por Materias y Períodos</h3>
                     <p class="text-slate-300 text-sm leading-relaxed">
-                        El contenido está organizado por grados y períodos académicos. Cada período contiene los temas 
-                        correspondientes al plan de estudios. Actualmente se encuentra disponible el <strong class="text-cyan-400">PRIMER PERÍODO</strong>. 
-                        Los demás períodos se irán activando durante el año lectivo.
+                        El contenido está organizado en <strong class="text-cyan-400">4 páginas por materia al año</strong>. 
+                        Cada página contiene todo el contenido de un período. Actualmente se encuentra disponible 
+                        el <strong class="text-green-400">PRIMER PERÍODO</strong> de cada grado. Los demás períodos 
+                        se irán activando durante el año lectivo.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- GRADO 6° -->
-        <section class="grade-section grade-6">
+        <!-- ==================== GRADO 6° - MATEMÁTICAS ==================== -->
+        <section class="grade-section grade-math">
             <div class="flex items-center gap-3 mb-6">
                 <div class="bg-amber-500/20 p-3 rounded-xl">
-                    <i class="fa-solid fa-shapes text-2xl text-amber-400"></i>
+                    <i class="fa-solid fa-calculator text-2xl text-amber-400"></i>
                 </div>
                 <div>
-                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 6°</h2>
-                    <p class="text-slate-400 text-sm">Matemáticas Básicas</p>
+                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 6° - MATEMÁTICAS</h2>
+                    <p class="text-slate-400 text-sm">4 páginas de contenido anual</p>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Período 1 - Activo -->
-                <a href="binario.html" class="group">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col relative overflow-hidden">
-                        <div class="absolute top-4 right-4">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Página 1 - Activa -->
+                <a href="matematicas6.html" class="group">
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col relative overflow-hidden">
+                        <div class="absolute top-3 right-3">
                             <span class="period-badge">Período 1</span>
                         </div>
-                        <i class="fa-solid fa-microchip text-4xl text-amber-400 mb-4 group-hover:scale-110 transition-transform"></i>
-                        <h3 class="font-bold text-white text-lg mb-2">Sistema Binario</h3>
-                        <p class="text-slate-400 text-sm mb-4 flex-grow">El lenguaje de las computadoras. Conversión entre decimal y binario.</p>
-                        <span class="text-amber-400 text-xs font-bold flex items-center gap-2">
-                            INGRESAR <i class="fa-solid fa-arrow-right"></i>
+                        <div class="text-3xl mb-3">🔢</div>
+                        <h3 class="font-bold text-white text-base mb-2">Página 1</h3>
+                        <p class="text-slate-400 text-xs mb-3 flex-grow">Sistemas Numéricos y Binario</p>
+                        <span class="text-amber-400 text-xs font-bold flex items-center gap-1">
+                            VER <i class="fa-solid fa-arrow-right text-xs"></i>
                         </span>
                     </div>
                 </a>
 
-                <a href="sistemas.html" class="group">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col relative overflow-hidden">
-                        <div class="absolute top-4 right-4">
-                            <span class="period-badge">Período 1</span>
-                        </div>
-                        <i class="fa-solid fa-landmark text-4xl text-amber-400 mb-4 group-hover:scale-110 transition-transform"></i>
-                        <h3 class="font-bold text-white text-lg mb-2">Sistemas Antiguos</h3>
-                        <p class="text-slate-400 text-sm mb-4 flex-grow">Romanos, Egipcios, Mayas y Chinos. Historia de los números.</p>
-                        <span class="text-amber-400 text-xs font-bold flex items-center gap-2">
-                            INGRESAR <i class="fa-solid fa-arrow-right"></i>
-                        </span>
-                    </div>
-                </a>
-
-                <a href="geometria.html" class="group">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col relative overflow-hidden">
-                        <div class="absolute top-4 right-4">
-                            <span class="period-badge">Período 1</span>
-                        </div>
-                        <i class="fa-solid fa-compass-drafting text-4xl text-amber-400 mb-4 group-hover:scale-110 transition-transform"></i>
-                        <h3 class="font-bold text-white text-lg mb-2">Geometría Básica</h3>
-                        <p class="text-slate-400 text-sm mb-4 flex-grow">Puntos, rectas, planos y sus relaciones. Conceptos fundamentales.</p>
-                        <span class="text-amber-400 text-xs font-bold flex items-center gap-2">
-                            INGRESAR <i class="fa-solid fa-arrow-right"></i>
-                        </span>
-                    </div>
-                </a>
-
-                <!-- Períodos 2, 3, 4 - Próximamente -->
+                <!-- Páginas 2-4 - Próximamente -->
                 <div class="coming-soon">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-3 py-1 rounded-full">Período 2</span>
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 2</span>
                         </div>
-                        <i class="fa-solid fa-calculator text-4xl text-slate-600 mb-4"></i>
-                        <h3 class="font-bold text-slate-500 text-lg mb-2">Operaciones y Fracciones</h3>
-                        <p class="text-slate-600 text-sm mb-4">Próximamente disponible</p>
+                        <div class="text-3xl mb-3 opacity-50">📐</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 2</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
                     </div>
                 </div>
 
                 <div class="coming-soon">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-3 py-1 rounded-full">Período 3</span>
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 3</span>
                         </div>
-                        <i class="fa-solid fa-chart-pie text-4xl text-slate-600 mb-4"></i>
-                        <h3 class="font-bold text-slate-500 text-lg mb-2">Estadística Básica</h3>
-                        <p class="text-slate-600 text-sm mb-4">Próximamente disponible</p>
+                        <div class="text-3xl mb-3 opacity-50">📊</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 3</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
                     </div>
                 </div>
 
                 <div class="coming-soon">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-3 py-1 rounded-full">Período 4</span>
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 4</span>
                         </div>
-                        <i class="fa-solid fa-shapes text-4xl text-slate-600 mb-4"></i>
-                        <h3 class="font-bold text-slate-500 text-lg mb-2">Figuras Geométricas</h3>
-                        <p class="text-slate-600 text-sm mb-4">Próximamente disponible</p>
+                        <div class="text-3xl mb-3 opacity-50">🎯</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 4</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- GRADO 10° -->
-        <section class="grade-section grade-10">
+        <!-- ==================== GRADO 6° - GEOMETRÍA ==================== -->
+        <section class="grade-section grade-geo">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-sky-500/20 p-3 rounded-xl">
+                    <i class="fa-solid fa-shapes text-2xl text-sky-400"></i>
+                </div>
+                <div>
+                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 6° - GEOMETRÍA</h2>
+                    <p class="text-slate-400 text-sm">4 páginas de contenido anual</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Página 1 - Activa -->
+                <a href="geometria.html" class="group">
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col relative overflow-hidden">
+                        <div class="absolute top-3 right-3">
+                            <span class="period-badge">Período 1</span>
+                        </div>
+                        <div class="text-3xl mb-3">📏</div>
+                        <h3 class="font-bold text-white text-base mb-2">Página 1</h3>
+                        <p class="text-slate-400 text-xs mb-3 flex-grow">Puntos, Rectas, Planos y Ángulos</p>
+                        <span class="text-sky-400 text-xs font-bold flex items-center gap-1">
+                            VER <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Páginas 2-4 - Próximamente -->
+                <div class="coming-soon">
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 2</span>
+                        </div>
+                        <div class="text-3xl mb-3 opacity-50">🔺</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 2</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
+                    </div>
+                </div>
+
+                <div class="coming-soon">
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 3</span>
+                        </div>
+                        <div class="text-3xl mb-3 opacity-50">⭕</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 3</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
+                    </div>
+                </div>
+
+                <div class="coming-soon">
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 4</span>
+                        </div>
+                        <div class="text-3xl mb-3 opacity-50">📐</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 4</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== GRADO 10° - FÍSICA ==================== -->
+        <section class="grade-section grade-fis10">
             <div class="flex items-center gap-3 mb-6">
                 <div class="bg-blue-500/20 p-3 rounded-xl">
-                    <i class="fa-solid fa-ruler-combined text-2xl text-blue-400"></i>
+                    <i class="fa-solid fa-gauge-high text-2xl text-blue-400"></i>
                 </div>
                 <div>
-                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 10°</h2>
-                    <p class="text-slate-400 text-sm">Física Fundamental</p>
+                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 10° - FÍSICA</h2>
+                    <p class="text-slate-400 text-sm">4 páginas de contenido anual</p>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Período 1 - Activo -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Página 1 - Activa -->
                 <a href="magnitudes.html" class="group">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col relative overflow-hidden">
-                        <div class="absolute top-4 right-4">
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col relative overflow-hidden">
+                        <div class="absolute top-3 right-3">
                             <span class="period-badge">Período 1</span>
                         </div>
-                        <i class="fa-solid fa-scale-balanced text-4xl text-blue-400 mb-4 group-hover:scale-110 transition-transform"></i>
-                        <h3 class="font-bold text-white text-lg mb-2">Magnitudes Físicas</h3>
-                        <p class="text-slate-400 text-sm mb-4 flex-grow">Unidades, conversiones y notación científica.</p>
-                        <span class="text-blue-400 text-xs font-bold flex items-center gap-2">
-                            INGRESAR <i class="fa-solid fa-arrow-right"></i>
+                        <div class="text-3xl mb-3">⚖️</div>
+                        <h3 class="font-bold text-white text-base mb-2">Página 1</h3>
+                        <p class="text-slate-400 text-xs mb-3 flex-grow">Magnitudes, Unidades y Notación Científica</p>
+                        <span class="text-blue-400 text-xs font-bold flex items-center gap-1">
+                            VER <i class="fa-solid fa-arrow-right text-xs"></i>
                         </span>
                     </div>
                 </a>
 
-                <!-- Períodos 2, 3, 4 - Próximamente -->
+                <!-- Páginas 2-4 - Próximamente -->
                 <div class="coming-soon">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-3 py-1 rounded-full">Período 2</span>
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 2</span>
                         </div>
-                        <i class="fa-solid fa-gauge-high text-4xl text-slate-600 mb-4"></i>
-                        <h3 class="font-bold text-slate-500 text-lg mb-2">Cinemática</h3>
-                        <p class="text-slate-600 text-sm mb-4">Movimiento rectilíneo y uniforme</p>
+                        <div class="text-3xl mb-3 opacity-50">🏃</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 2</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
                     </div>
                 </div>
 
                 <div class="coming-soon">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-3 py-1 rounded-full">Período 3</span>
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 3</span>
                         </div>
-                        <i class="fa-solid fa-apple-whole text-4xl text-slate-600 mb-4"></i>
-                        <h3 class="font-bold text-slate-500 text-lg mb-2">Dinámica</h3>
-                        <p class="text-slate-600 text-sm mb-4">Leyes de Newton y fuerzas</p>
+                        <div class="text-3xl mb-3 opacity-50">🍎</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 3</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
                     </div>
                 </div>
 
                 <div class="coming-soon">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-3 py-1 rounded-full">Período 4</span>
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 4</span>
                         </div>
-                        <i class="fa-solid fa-bolt text-4xl text-slate-600 mb-4"></i>
-                        <h3 class="font-bold text-slate-500 text-lg mb-2">Energía y Trabajo</h3>
-                        <p class="text-slate-600 text-sm mb-4">Conservación de la energía</p>
+                        <div class="text-3xl mb-3 opacity-50">⚡</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 4</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- GRADO 11° -->
-        <section class="grade-section grade-11">
+        <!-- ==================== GRADO 11° - FÍSICA ==================== -->
+        <section class="grade-section grade-fis11">
             <div class="flex items-center gap-3 mb-6">
                 <div class="bg-purple-500/20 p-3 rounded-xl">
-                    <i class="fa-solid fa-wave-square text-2xl text-purple-400"></i>
+                    <i class="fa-solid fa-atom text-2xl text-purple-400"></i>
                 </div>
                 <div>
-                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 11°</h2>
-                    <p class="text-slate-400 text-sm">Física Avanzada</p>
+                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 11° - FÍSICA</h2>
+                    <p class="text-slate-400 text-sm">4 páginas de contenido anual</p>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Período 1 - Activo -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Página 1 - Activa -->
                 <a href="ondas.html" class="group">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col relative overflow-hidden">
-                        <div class="absolute top-4 right-4">
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col relative overflow-hidden">
+                        <div class="absolute top-3 right-3">
                             <span class="period-badge">Período 1</span>
                         </div>
-                        <i class="fa-solid fa-volume-high text-4xl text-purple-400 mb-4 group-hover:scale-110 transition-transform"></i>
-                        <h3 class="font-bold text-white text-lg mb-2">Ondas y Sonido</h3>
-                        <p class="text-slate-400 text-sm mb-4 flex-grow">Características de las ondas, frecuencia y longitud.</p>
-                        <span class="text-purple-400 text-xs font-bold flex items-center gap-2">
-                            INGRESAR <i class="fa-solid fa-arrow-right"></i>
+                        <div class="text-3xl mb-3">〰️</div>
+                        <h3 class="font-bold text-white text-base mb-2">Página 1</h3>
+                        <p class="text-slate-400 text-xs mb-3 flex-grow">Ondas, Sonido, Efecto Doppler y Tubos Sonoros</p>
+                        <span class="text-purple-400 text-xs font-bold flex items-center gap-1">
+                            VER <i class="fa-solid fa-arrow-right text-xs"></i>
                         </span>
                     </div>
                 </a>
 
-                <!-- Períodos 2, 3, 4 - Próximamente -->
+                <!-- Páginas 2-4 - Próximamente -->
                 <div class="coming-soon">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-3 py-1 rounded-full">Período 2</span>
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 2</span>
                         </div>
-                        <i class="fa-solid fa-lightbulb text-4xl text-slate-600 mb-4"></i>
-                        <h3 class="font-bold text-slate-500 text-lg mb-2">Óptica</h3>
-                        <p class="text-slate-600 text-sm mb-4">Luz, espejos y lentes</p>
+                        <div class="text-3xl mb-3 opacity-50">💡</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 2</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
                     </div>
                 </div>
 
                 <div class="coming-soon">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-3 py-1 rounded-full">Período 3</span>
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 3</span>
                         </div>
-                        <i class="fa-solid fa-magnet text-4xl text-slate-600 mb-4"></i>
-                        <h3 class="font-bold text-slate-500 text-lg mb-2">Electricidad y Magnetismo</h3>
-                        <p class="text-slate-600 text-sm mb-4">Campos electromagnéticos</p>
+                        <div class="text-3xl mb-3 opacity-50">🧲</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 3</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
                     </div>
                 </div>
 
                 <div class="coming-soon">
-                    <div class="glass-card p-6 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-3 py-1 rounded-full">Período 4</span>
+                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 4</span>
                         </div>
-                        <i class="fa-solid fa-atom text-4xl text-slate-600 mb-4"></i>
-                        <h3 class="font-bold text-slate-500 text-lg mb-2">Física Moderna</h3>
-                        <p class="text-slate-600 text-sm mb-4">Física cuántica y relatividad</p>
+                        <div class="text-3xl mb-3 opacity-50">☢️</div>
+                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 4</h3>
+                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
                     </div>
                 </div>
             </div>
@@ -324,27 +362,27 @@
         <section class="mt-16">
             <h2 class="tech-font text-2xl font-bold text-white mb-6 text-center">
                 <i class="fa-solid fa-calendar-days text-cyan-400 mr-2"></i>
-                Calendario Académico 2025
+                Calendario Académico 2026
             </h2>
             <div class="grid md:grid-cols-4 gap-4">
-                <div class="glass-card p-4 rounded-xl text-center border-t-4 border-green-500">
+                <div class="glass-panel p-4 rounded-xl text-center border-t-4 border-green-500">
                     <div class="text-green-400 font-bold text-sm mb-1">PERÍODO 1</div>
-                    <div class="text-white font-bold">Febrero - Abril</div>
+                    <div class="text-white font-bold">26 Enero -  10 Abril</div>
                     <div class="text-slate-400 text-xs mt-2">En progreso</div>
                 </div>
-                <div class="glass-card p-4 rounded-xl text-center border-t-4 border-yellow-500 opacity-60">
+                <div class="glass-panel p-4 rounded-xl text-center border-t-4 border-yellow-500 opacity-60">
                     <div class="text-yellow-400 font-bold text-sm mb-1">PERÍODO 2</div>
-                    <div class="text-white font-bold">Mayo - Julio</div>
+                    <div class="text-white font-bold">13 Abril - 19 Junio</div>
                     <div class="text-slate-400 text-xs mt-2">Próximo</div>
                 </div>
-                <div class="glass-card p-4 rounded-xl text-center border-t-4 border-orange-500 opacity-60">
+                <div class="glass-panel p-4 rounded-xl text-center border-t-4 border-orange-500 opacity-60">
                     <div class="text-orange-400 font-bold text-sm mb-1">PERÍODO 3</div>
-                    <div class="text-white font-bold">Agosto - Octubre</div>
+                    <div class="text-white font-bold">06 Julio - 11 Septiembre</div>
                     <div class="text-slate-400 text-xs mt-2">Pendiente</div>
                 </div>
-                <div class="glass-card p-4 rounded-xl text-center border-t-4 border-red-500 opacity-60">
+                <div class="glass-panel p-4 rounded-xl text-center border-t-4 border-red-500 opacity-60">
                     <div class="text-red-400 font-bold text-sm mb-1">PERÍODO 4</div>
-                    <div class="text-white font-bold">Noviembre</div>
+                    <div class="text-white font-bold">08 Septiembre - 27 Noviembre</div>
                     <div class="text-slate-400 text-xs mt-2">Pendiente</div>
                 </div>
             </div>
@@ -356,7 +394,7 @@
         <div class="container mx-auto px-4">
             <p class="text-slate-400 font-bold">I.E. Paulo VI</p>
             <p class="text-slate-500 text-sm mt-1">Docente: Luis Miguel Cabrera</p>
-            <p class="text-slate-600 text-xs mt-4">Laboratorio Virtual © 2025</p>
+            <p class="text-slate-600 text-xs mt-4">Laboratorio Virtual © 2026</p>
         </div>
     </footer>
 
