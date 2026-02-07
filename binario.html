@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Binario | Grado 6° - Período 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600;700&family=Nunito:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .fun-font { font-family: 'Fredoka', sans-serif; }
+        .tech-font { font-family: 'Share Tech Mono', monospace; }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .switch-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+        
+        .switch-btn:active { transform: scale(0.95); }
+        .switch-btn.active {
+            background: #22c55e;
+            box-shadow: 0 0 15px #22c55e;
+            border-color: #4ade80;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 100;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .theory-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border-left: 4px solid #22d3ee;
+        }
+
+        .bit-table td, .bit-table th {
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Período Badge -->
+    <div class="fixed top-20 right-4 z-40 bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
+        <i class="fa-solid fa-check-circle mr-1"></i> PERÍODO 1
+    </div>
+
+    <nav class="bg-slate-900/80 border-b border-white/10 sticky top-0 z-50 backdrop-blur-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            
+            <a href="index.html" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg font-bold transition-colors text-sm border border-slate-600">
+                <i class="fa-solid fa-arrow-left"></i> MENÚ
+            </a>
+
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden md:block">
+                    <h1 class="fun-font font-bold text-lg text-white leading-none">Sistema Binario</h1>
+                    <p class="text-xs text-slate-400">Matemáticas 6°</p>
+                </div>
+                <i class="fa-solid fa-microchip text-cyan-400 text-2xl animate-pulse"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8 space-y-12 max-w-6xl">
+
+        <!-- Header -->
+        <header class="text-center relative py-8">
+            <div class="animate-float text-6xl md:text-8xl mb-4">🤖</div>
+            <h1 class="fun-font text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+                El Código Secreto de las Computadoras
+            </h1>
+            <p class="text-xl text-blue-200 max-w-2xl mx-auto">
+                Descubre por qué las computadoras solo entienden 
+                <span class="text-green-400 font-bold">Encendido (1)</span> o <span class="text-red-400 font-bold">Apagado (0)</span>.
+            </p>
+        </header>
+
+        <!-- SECCIÓN 1: ¿Qué es el Sistema Binario? -->
+        <section class="theory-card p-8 rounded-3xl">
+            <h2 class="fun-font text-3xl text-cyan-400 mb-6">
+                <i class="fa-solid fa-circle-question mr-2"></i> 1. ¿Qué es el Sistema Binario?
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <p class="text-slate-300 leading-relaxed">
+                        El <strong class="text-cyan-400">sistema binario</strong> es un sistema de numeración que solo usa 
+                        <strong>dos dígitos: 0 y 1</strong>. A diferencia del sistema decimal que usamos diariamente (0-9), 
+                        el binario es el "lenguaje" que entienden las computadoras.
+                    </p>
+                    <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                        <h4 class="text-yellow-400 font-bold mb-2"><i class="fa-solid fa-lightbulb mr-1"></i> ¿Por qué binario?</h4>
+                        <p class="text-slate-400 text-sm">
+                            Las computadoras funcionan con electricidad. Es más fácil y confiable distinguir entre 
+                            <span class="text-green-400">electricidad encendida (1)</span> y 
+                            <span class="text-red-400">electricidad apagada (0)</span> que medir 10 niveles diferentes de voltaje.
+                        </p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                        <h4 class="text-white font-bold mb-3"><i class="fa-solid fa-scale-balanced text-cyan-400 mr-2"></i>Sistema Decimal vs Binario</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-purple-400 font-bold text-sm mb-2">Decimal (Base 10)</p>
+                                <p class="text-slate-400 text-xs">Usa 10 dígitos: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9</p>
+                                <p class="text-slate-500 text-xs mt-1">Lo usamos los humanos</p>
+                            </div>
+                            <div>
+                                <p class="text-green-400 font-bold text-sm mb-2">Binario (Base 2)</p>
+                                <p class="text-slate-400 text-xs">Usa 2 dígitos: 0 y 1</p>
+                                <p class="text-slate-500 text-xs mt-1">Lo usan las computadoras</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: Valores Posicionales -->
+        <section class="glass-panel rounded-3xl p-6 md:p-8 border-t-4 border-cyan-500">
+            <h2 class="fun-font text-2xl md:text-3xl font-bold text-white mb-6">
+                <i class="fa-solid fa-list-ol mr-2 text-cyan-400"></i> 2. Valores de los Bits
+            </h2>
+            <p class="text-slate-300 mb-6">
+                Cada posición en un número binario tiene un valor. De derecha a izquierda, los valores se duplican: 
+                <strong class="text-cyan-400">1, 2, 4, 8, 16, 32, 64, 128...</strong>
+            </p>
+            
+            <div class="overflow-x-auto">
+                <table class="bit-table w-full text-sm">
+                    <tr class="bg-slate-800">
+                        <th class="text-cyan-400">Posición</th>
+                        <th>8</th>
+                        <th>7</th>
+                        <th>6</th>
+                        <th>5</th>
+                        <th>4</th>
+                        <th>3</th>
+                        <th>2</th>
+                        <th>1</th>
+                    </tr>
+                    <tr class="bg-slate-800/50">
+                        <td class="text-cyan-400 font-bold">Valor</td>
+                        <td class="tech-font text-green-400">128</td>
+                        <td class="tech-font text-green-400">64</td>
+                        <td class="tech-font text-green-400">32</td>
+                        <td class="tech-font text-green-400">16</td>
+                        <td class="tech-font text-green-400">8</td>
+                        <td class="tech-font text-green-400">4</td>
+                        <td class="tech-font text-green-400">2</td>
+                        <td class="tech-font text-green-400">1</td>
+                    </tr>
+                    <tr class="bg-slate-800/30">
+                        <td class="text-cyan-400 font-bold">Potencia</td>
+                        <td class="text-slate-400">2⁷</td>
+                        <td class="text-slate-400">2⁶</td>
+                        <td class="text-slate-400">2⁵</td>
+                        <td class="text-slate-400">2⁴</td>
+                        <td class="text-slate-400">2³</td>
+                        <td class="text-slate-400">2²</td>
+                        <td class="text-slate-400">2¹</td>
+                        <td class="text-slate-400">2⁰</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mt-6 p-4 bg-slate-800/50 rounded-xl">
+                <h4 class="text-white font-bold text-sm mb-2"><i class="fa-solid fa-calculator text-yellow-400 mr-2"></i>Ejemplo: Convertir 10110100 a decimal</h4>
+                <p class="text-slate-400 text-sm font-mono">
+                    128 + 0 + 32 + 16 + 0 + 4 + 0 + 0 = <strong class="text-cyan-400">180</strong>
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: Laboratorio de Bits -->
+        <section class="glass-panel rounded-3xl p-6 md:p-8 border-t-4 border-cyan-500">
+            <div class="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
+                <h2 class="fun-font text-2xl md:text-3xl font-bold text-white">🎛️ Laboratorio de Bits</h2>
+                <div class="bg-slate-900 px-6 py-3 rounded-xl border border-slate-700 shadow-lg">
+                    <span class="text-slate-400 text-sm mr-2 block text-center md:inline">Valor Decimal:</span>
+                    <span id="decimalDisplay" class="tech-font text-4xl font-bold text-yellow-400">0</span>
+                </div>
+            </div>
+            
+            <p class="text-center text-slate-300 mb-6">¡Toca los interruptores para encender/apagar bits y ver el resultado!</p>
+
+            <div class="overflow-x-auto pb-4">
+                <div class="flex justify-center min-w-max gap-2 md:gap-4 px-2">
+                    <script>
+                        const bitValues = [128, 64, 32, 16, 8, 4, 2, 1];
+                        bitValues.forEach(val => {
+                            document.write(`
+                                <div class="flex flex-col items-center gap-2 group">
+                                    <span class="text-xs text-slate-500 font-bold">${val}</span>
+                                    <button onclick="toggleBit(${val}, this)" class="switch-btn w-12 h-20 md:w-16 md:h-24 bg-slate-800 rounded-lg border-b-4 border-slate-950 flex flex-col items-center justify-end pb-2 relative overflow-hidden">
+                                        <div class="absolute top-2 w-3 h-3 rounded-full bg-red-500 status-light transition-colors shadow-inner"></div>
+                                        <span class="tech-font text-xl md:text-2xl font-bold text-slate-600 bit-val">0</span>
+                                    </button>
+                                </div>
+                            `);
+                        });
+                    </script>
+                </div>
+            </div>
+
+            <div class="mt-6 bg-slate-900/50 rounded-xl p-4 text-center border border-white/10 min-h-[3rem] flex items-center justify-center">
+                <p id="mathSteps" class="text-slate-400 font-mono text-sm md:text-base">0 = 0</p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: Conversores -->
+        <div class="grid md:grid-cols-2 gap-8">
+            <section class="glass-panel rounded-3xl p-6 border-t-4 border-pink-500">
+                <h3 class="fun-font text-xl font-bold mb-4 flex items-center gap-2">
+                    <span class="bg-pink-500 text-xs px-2 py-1 rounded text-white">DEC</span>
+                    <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                    <span class="bg-cyan-500 text-xs px-2 py-1 rounded text-white">BIN</span>
+                </h3>
+                <p class="text-slate-400 text-sm mb-4">Convierte un número decimal (normal) a binario:</p>
+                <input type="number" id="inputDec" placeholder="Ingresa un número (0-255)" oninput="convertDecToBin()" 
+                       class="w-full bg-slate-800 border border-slate-600 rounded-xl p-3 text-white focus:outline-none focus:border-pink-500 font-bold text-lg mb-4">
+                <div class="bg-slate-900 rounded-xl p-4 text-center">
+                    <span id="outputBin" class="tech-font text-3xl text-cyan-400 tracking-widest">00000000</span>
+                </div>
+                <div class="mt-4 p-3 bg-slate-800/50 rounded-lg">
+                    <p class="text-xs text-slate-400">
+                        <strong class="text-yellow-400">Método:</strong> Divide el número entre 2 repetidamente y anota los residuos de abajo hacia arriba.
+                    </p>
+                </div>
+            </section>
+
+            <section class="glass-panel rounded-3xl p-6 border-t-4 border-green-500">
+                <h3 class="fun-font text-xl font-bold mb-4 flex items-center gap-2">
+                    <span class="bg-cyan-500 text-xs px-2 py-1 rounded text-white">BIN</span>
+                    <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                    <span class="bg-pink-500 text-xs px-2 py-1 rounded text-white">DEC</span>
+                </h3>
+                <p class="text-slate-400 text-sm mb-4">Convierte un número binario a decimal:</p>
+                <input type="text" id="inputBin" placeholder="Ej: 101010" maxlength="8" oninput="convertBinToDec()" 
+                       class="w-full bg-slate-800 border border-slate-600 rounded-xl p-3 text-white focus:outline-none focus:border-green-500 font-mono tracking-widest text-lg mb-4">
+                <div class="bg-slate-900 rounded-xl p-4 text-center">
+                    <span id="outputDec" class="tech-font text-3xl text-pink-400 font-bold">0</span>
+                </div>
+                <div class="mt-4 p-3 bg-slate-800/50 rounded-lg">
+                    <p class="text-xs text-slate-400">
+                        <strong class="text-yellow-400">Método:</strong> Multiplica cada bit por su valor posicional (1, 2, 4, 8...) y suma.
+                    </p>
+                </div>
+            </section>
+        </div>
+
+        <!-- SECCIÓN 5: Tabla de Conversión -->
+        <section class="glass-panel rounded-3xl p-6 md:p-8">
+            <h2 class="fun-font text-2xl font-bold text-white mb-6">
+                <i class="fa-solid fa-table mr-2 text-cyan-400"></i> 5. Tabla de Conversión Decimal-Binario
+            </h2>
+            <div class="grid grid-cols-4 md:grid-cols-8 gap-2">
+                <script>
+                    for(let i = 0; i <= 15; i++) {
+                        const bin = i.toString(2).padStart(4, '0');
+                        document.write(`
+                            <div class="bg-slate-800 p-3 rounded-xl text-center border border-slate-700 hover:border-cyan-400 transition-colors">
+                                <div class="text-2xl font-bold text-white">${i}</div>
+                                <div class="tech-font text-cyan-400 text-sm">${bin}</div>
+                            </div>
+                        `);
+                    }
+                </script>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: Unidades de Información -->
+        <section class="theory-card p-8 rounded-3xl">
+            <h2 class="fun-font text-2xl text-cyan-400 mb-6">
+                <i class="fa-solid fa-hard-drive mr-2"></i> 6. Unidades de Información Digital
+            </h2>
+            <p class="text-slate-300 mb-6">
+                Los bits se agrupan para representar más información. Cada grupo tiene un nombre especial:
+            </p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
+                    <div class="text-3xl mb-2">🔤</div>
+                    <h4 class="font-bold text-white">Bit</h4>
+                    <p class="text-cyan-400 text-sm">0 o 1</p>
+                    <p class="text-slate-500 text-xs mt-1">Unidad más pequeña</p>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
+                    <div class="text-3xl mb-2">📄</div>
+                    <h4 class="font-bold text-white">Byte</h4>
+                    <p class="text-cyan-400 text-sm">8 bits</p>
+                    <p class="text-slate-500 text-xs mt-1">Representa 1 letra</p>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
+                    <div class="text-3xl mb-2">📚</div>
+                    <h4 class="font-bold text-white">Kilobyte (KB)</h4>
+                    <p class="text-cyan-400 text-sm">1,024 bytes</p>
+                    <p class="text-slate-500 text-xs mt-1">Una página de texto</p>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-center">
+                    <div class="text-3xl mb-2">💾</div>
+                    <h4 class="font-bold text-white">Megabyte (MB)</h4>
+                    <p class="text-cyan-400 text-sm">1,024 KB</p>
+                    <p class="text-slate-500 text-xs mt-1">Una foto o canción</p>
+                </div>
+            </div>
+            <div class="mt-6 p-4 bg-slate-800/50 rounded-xl">
+                <p class="text-slate-400 text-sm text-center">
+                    <i class="fa-solid fa-info-circle text-cyan-400 mr-1"></i>
+                    <strong>¿Sabías que?</strong> Un CD de música contiene aproximadamente 700 MB, 
+                    ¡eso es más de 5,800 millones de bits individuales!
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 7: Desafío Hacker -->
+        <section class="glass-panel rounded-3xl p-8 relative overflow-hidden bg-gradient-to-br from-indigo-900 to-purple-900 border border-purple-500/30 text-center">
+            <h2 class="fun-font text-3xl font-bold mb-2 text-white">¡Desafío Hacker!</h2>
+            <p class="text-purple-200 mb-6">¿Qué número es este código binario?</p>
+            
+            <div class="bg-slate-950 inline-block px-8 py-4 rounded-xl mb-8 border-2 border-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+                <span id="gameQuestion" class="tech-font text-4xl md:text-5xl text-white tracking-widest">...</span>
+            </div>
+
+            <div id="gameOptions" class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-6"></div>
+
+            <div class="flex justify-between items-center bg-black/20 p-4 rounded-xl">
+                <div><span class="text-xs text-slate-400">Puntaje:</span> <span id="score" class="text-xl font-bold text-yellow-400">0</span></div>
+                <div id="feedback" class="font-bold"></div>
+                <button onclick="initGame()" class="text-xs bg-white/10 px-3 py-1 rounded hover:bg-white/20">Saltar</button>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 8: Tu Edad en Binario -->
+        <section class="text-center py-8">
+            <h2 class="fun-font text-2xl font-bold mb-4">🎂 Tu Edad en Binario</h2>
+            <div class="inline-flex items-center gap-4 bg-slate-800 p-2 rounded-full pr-6 border border-slate-600">
+                <input type="number" id="ageInput" value="11" min="1" max="99" oninput="calcAge()" 
+                       class="w-16 h-12 rounded-full bg-slate-700 text-center font-bold text-xl focus:outline-none text-white">
+                <span class="text-xl">=</span>
+                <span id="ageResult" class="tech-font text-2xl text-cyan-400 font-bold tracking-wider">00001011</span>
+            </div>
+            <p class="text-slate-400 text-sm mt-4">¡Comparte tu edad binaria con tus amigos!</p>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-950 py-6 text-center border-t border-slate-900 text-slate-500 text-sm">
+        <p class="font-bold">I.E. Paulo VI | Grado 6°</p>
+        <p class="mt-1">Período 1: Sistema Binario</p>
+        <p class="text-xs mt-2">Docente: Luis Miguel Cabrera</p>
+    </footer>
+
+    <script>
+        // --- LOGICA ---
+        let totalValue = 0;
+
+        function toggleBit(val, btn) {
+            const isActive = btn.classList.contains('active');
+            const light = btn.querySelector('.status-light');
+            const text = btn.querySelector('.bit-val');
+            
+            if (isActive) {
+                btn.classList.remove('active');
+                light.classList.remove('bg-green-400', 'shadow-[0_0_10px_#4ade80]');
+                light.classList.add('bg-red-500');
+                text.textContent = '0';
+                text.classList.remove('text-white');
+                totalValue -= val;
+            } else {
+                btn.classList.add('active');
+                light.classList.remove('bg-red-500');
+                light.classList.add('bg-green-400', 'shadow-[0_0_10px_#4ade80]');
+                text.textContent = '1';
+                text.classList.add('text-white');
+                totalValue += val;
+            }
+            document.getElementById('decimalDisplay').innerText = totalValue;
+            updateMathSteps();
+        }
+
+        function updateMathSteps() {
+            const activeBits = [];
+            document.querySelectorAll('.switch-btn').forEach((btn, idx) => {
+                if(btn.classList.contains('active')) activeBits.push([128,64,32,16,8,4,2,1][idx]);
+            });
+            document.getElementById('mathSteps').innerHTML = activeBits.length ? 
+                activeBits.join(' + ') + ` = <span class="text-yellow-400 font-bold">${totalValue}</span>` : "Todo apagado = 0";
+        }
+
+        function convertDecToBin() {
+            let val = parseInt(document.getElementById('inputDec').value) || 0;
+            if(val > 255) val = 255;
+            document.getElementById('outputBin').innerText = val.toString(2).padStart(8, '0');
+        }
+
+        function convertBinToDec() {
+            let val = document.getElementById('inputBin').value.replace(/[^01]/g, '');
+            document.getElementById('inputBin').value = val;
+            document.getElementById('outputDec').innerText = val ? parseInt(val, 2) : 0;
+        }
+
+        // Juego
+        let currentTarget = 0, score = 0;
+        function initGame() {
+            currentTarget = Math.floor(Math.random() * 255) + 1;
+            document.getElementById('gameQuestion').innerText = currentTarget.toString(2).padStart(8, '0');
+            document.getElementById('feedback').innerText = "";
+            
+            let options = [currentTarget];
+            while(options.length < 4) {
+                let r = Math.floor(Math.random() * 255) + 1;
+                if(!options.includes(r)) options.push(r);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const container = document.getElementById('gameOptions');
+            container.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl border border-white/10 text-xl";
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    if(opt === currentTarget) {
+                        btn.className = "bg-green-500 text-white font-bold py-3 rounded-xl border border-green-400 text-xl";
+                        score += 10;
+                        document.getElementById('score').innerText = score;
+                        document.getElementById('feedback').innerHTML = "<span class='text-green-400'>¡Correcto!</span>";
+                        throwConfetti();
+                        setTimeout(initGame, 1000);
+                    } else {
+                        btn.className = "bg-red-500/50 text-white font-bold py-3 rounded-xl border border-red-400 text-xl";
+                        document.getElementById('feedback').innerHTML = "<span class='text-red-400'>Intenta de nuevo</span>";
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function throwConfetti() {
+            for(let i=0; i<30; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random()*100+'vw';
+                c.style.backgroundColor = ['#f0f','#0ff','#ff0'][Math.floor(Math.random()*3)];
+                c.style.animationDuration = Math.random()*2+1+'s';
+                document.body.appendChild(c);
+                setTimeout(()=>c.remove(), 3000);
+            }
+        }
+
+        function calcAge() {
+            const val = document.getElementById('ageInput').value;
+            if(val) document.getElementById('ageResult').innerText = parseInt(val).toString(2).padStart(8, '0');
+        }
+
+        initGame();
+        calcAge();
+    </script>
+</body>
+</html>

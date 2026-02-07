@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Física 11° | Ondas y Sonido - Período 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { tech: ['Orbitron', 'sans-serif'], mono: ['Roboto Mono', 'monospace'] },
+                    colors: { neon: '#00f3ff', purple: '#bc13fe', dark: '#050b14' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #050b14; color: #e2e8f0; }
+        .glass-panel { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(0, 243, 255, 0.1); }
+        .wave-part { cursor: pointer; transition: color 0.3s; }
+        .wave-part:hover { color: #00f3ff; }
+        .theory-card { 
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border-left: 4px solid #00f3ff;
+        }
+        .formula-box {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            font-family: 'Roboto Mono', monospace;
+        }
+    </style>
+</head>
+<body class="antialiased pb-20">
+
+    <!-- Período Badge -->
+    <div class="fixed top-20 right-4 z-40 bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
+        <i class="fa-solid fa-check-circle mr-1"></i> PERÍODO 1
+    </div>
+
+    <nav class="border-b border-white/10 bg-dark/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-xs font-mono text-neon border border-neon/50 px-3 py-1 rounded hover:bg-neon/10 transition-colors">
+                <i class="fa-solid fa-arrow-left"></i> MENÚ
+            </a>
+            <span class="font-tech text-lg text-white">LABORATORIO <span class="text-neon">ONDAS</span></span>
+            <span class="text-xs text-slate-500">Grado 11°</span>
+        </div>
+    </nav>
+
+    <!-- Header con Teoría -->
+    <header class="py-12 px-4 bg-gradient-to-b from-slate-900 to-dark">
+        <div class="container mx-auto max-w-5xl text-center">
+            <div class="inline-block p-4 rounded-full bg-purple-500/10 mb-4">
+                <i class="fa-solid fa-wave-square text-4xl text-purple-400"></i>
+            </div>
+            <h1 class="font-tech text-4xl md:text-5xl font-bold text-white mb-4">ONDAS Y SONIDO</h1>
+            <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+                El estudio de las perturbaciones que se propagan a través del espacio y el tiempo, 
+                transportando energía sin transportar materia.
+            </p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 space-y-16 max-w-6xl">
+
+        <!-- SECCIÓN 1: ¿Qué es una Onda? -->
+        <section class="theory-card p-8 rounded-2xl">
+            <h2 class="font-tech text-2xl text-neon mb-6">
+                <i class="fa-solid fa-circle-question mr-2"></i> 1. ¿Qué es una Onda?
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <p class="text-slate-300 leading-relaxed">
+                        Una <strong class="text-neon">onda</strong> es una perturbación que se propaga a través de un medio 
+                        (o incluso en el vacío), transportando <strong>energía</strong> de un lugar a otro 
+                        <strong>sin transportar materia</strong>.
+                    </p>
+                    <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                        <h4 class="text-white font-bold mb-2"><i class="fa-solid fa-lightbulb text-yellow-400 mr-2"></i>Ejemplo cotidiano:</h4>
+                        <p class="text-slate-400 text-sm">
+                            Cuando lanzas una piedra al agua, las ondas circulares se expanden, pero el agua 
+                            no se mueve horizontalmente; solo oscila arriba y abajo.
+                        </p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-slate-800 p-4 rounded-xl">
+                        <h4 class="text-purple-400 font-bold mb-3">Tipos de Ondas según su naturaleza:</h4>
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-water text-blue-400 mt-1"></i>
+                                <span><strong>Mecánicas:</strong> Necesitan un medio material (sonido, olas del mar)</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-bolt text-yellow-400 mt-1"></i>
+                                <span><strong>Electromagnéticas:</strong> No necesitan medio (luz, radio, X)</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: Anatomía de una Onda -->
+        <section>
+            <h2 class="font-tech text-2xl mb-6 text-center">
+                <i class="fa-solid fa-microscope mr-2 text-neon"></i> 2. Anatomía de una Onda
+            </h2>
+            <div class="glass-panel p-6 rounded-2xl max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="relative h-48 bg-slate-900 rounded-lg border border-slate-700 overflow-hidden flex items-center justify-center">
+                        <div class="absolute w-full h-px bg-slate-500 top-1/2"></div>
+                        <svg viewBox="0 0 100 50" class="w-full h-full text-purple-500 fill-none stroke-current stroke-2">
+                            <path d="M0,25 Q12.5,0 25,25 T50,25 T75,25 T100,25" />
+                        </svg>
+                        <div class="absolute top-2 left-1/4 text-xs text-white bg-black/50 px-1 rounded">Cresta</div>
+                        <div class="absolute bottom-2 right-1/4 text-xs text-white bg-black/50 px-1 rounded">Valle</div>
+                    </div>
+
+                    <div class="space-y-3 text-sm">
+                        <div class="p-3 border-l-2 border-neon bg-slate-800/50 rounded-r-lg">
+                            <strong class="text-neon">Longitud de onda (λ):</strong> Distancia entre dos crestas consecutivas. Se mide en metros (m).
+                        </div>
+                        <div class="p-3 border-l-2 border-purple-500 bg-slate-800/50 rounded-r-lg">
+                            <strong class="text-purple-400">Frecuencia (f):</strong> Número de oscilaciones completas por segundo. Se mide en Hertz (Hz).
+                        </div>
+                        <div class="p-3 border-l-2 border-green-500 bg-slate-800/50 rounded-r-lg">
+                            <strong class="text-green-400">Amplitud (A):</strong> Máximo desplazamiento desde la posición de equilibrio. En metros (m).
+                        </div>
+                        <div class="p-3 border-l-2 border-white bg-slate-800/50 rounded-r-lg">
+                            <strong class="text-white">Periodo (T):</strong> Tiempo que tarda una onda en completar un ciclo. T = 1/f. En segundos (s).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: Ecuación Fundamental -->
+        <section class="theory-card p-8 rounded-2xl">
+            <h2 class="font-tech text-2xl text-neon mb-6">
+                <i class="fa-solid fa-function mr-2"></i> 3. Ecuación Fundamental de las Ondas
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <p class="text-slate-300 mb-4 leading-relaxed">
+                        La velocidad de propagación de una onda depende de dos factores fundamentales: 
+                        su longitud de onda y su frecuencia. Esta relación es la base del estudio ondulatorio.
+                    </p>
+                    <div class="formula-box p-6 rounded-xl text-center mb-4">
+                        <div class="text-3xl text-neon font-bold mb-2">v = λ · f</div>
+                        <div class="text-sm text-slate-400 mt-2">Donde:</div>
+                        <div class="text-xs text-slate-500 mt-1">
+                            v = velocidad (m/s) | λ = longitud de onda (m) | f = frecuencia (Hz)
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/50 p-4 rounded-xl">
+                        <h4 class="text-yellow-400 font-bold text-sm mb-2"><i class="fa-solid fa-calculator mr-1"></i> Ejemplo:</h4>
+                        <p class="text-slate-400 text-sm">
+                            Una onda sonora con frecuencia de 440 Hz (nota La) y longitud de onda de 0.78 m 
+                            se propaga a: v = 0.78 × 440 = <strong class="text-white">343.2 m/s</strong> (velocidad del sonido en aire)
+                        </p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                        <h4 class="text-white font-bold mb-3"><i class="fa-solid fa-table text-purple-400 mr-2"></i>Velocidades de referencia:</h4>
+                        <table class="w-full text-sm">
+                            <tr class="border-b border-slate-700">
+                                <td class="py-2 text-slate-400">Aire (20°C)</td>
+                                <td class="py-2 text-neon text-right">343 m/s</td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="py-2 text-slate-400">Agua</td>
+                                <td class="py-2 text-neon text-right">1,480 m/s</td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="py-2 text-slate-400">Acero</td>
+                                <td class="py-2 text-neon text-right">5,960 m/s</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 text-slate-400">Vacío (luz)</td>
+                                <td class="py-2 text-neon text-right">300,000 km/s</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: Tipos de Ondas -->
+        <section>
+            <h2 class="font-tech text-2xl mb-6 text-center">
+                <i class="fa-solid fa-shapes mr-2 text-neon"></i> 4. Clasificación de las Ondas
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Ondas Transversales -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-purple-500/20 p-3 rounded-xl">
+                            <i class="fa-solid fa-arrows-up-down text-purple-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-tech text-xl text-white">Ondas Transversales</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-4">
+                        Las partículas del medio vibran <strong class="text-purple-400">perpendicularmente</strong> a la dirección de propagación.
+                    </p>
+                    <div class="bg-slate-800/50 p-4 rounded-xl mb-4">
+                        <div class="h-20 relative">
+                            <svg viewBox="0 0 200 60" class="w-full h-full">
+                                <path d="M0,30 Q25,5 50,30 T100,30 T150,30 T200,30" fill="none" stroke="#a855f7" stroke-width="3"/>
+                                <line x1="0" y1="30" x2="200" y2="30" stroke="#475569" stroke-width="1" stroke-dasharray="5,5"/>
+                                <text x="100" y="55" text-anchor="middle" fill="#94a3b8" font-size="10">Dirección de propagación →</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="text-xs text-slate-400">
+                        <strong class="text-white">Ejemplos:</strong> Ondas en una cuerda, ondas electromagnéticas (luz, radio)
+                    </div>
+                </div>
+
+                <!-- Ondas Longitudinales -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-neon/20 p-3 rounded-xl">
+                            <i class="fa-solid fa-arrows-left-right text-neon text-xl"></i>
+                        </div>
+                        <h3 class="font-tech text-xl text-white">Ondas Longitudinales</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-4">
+                        Las partículas del medio vibran <strong class="text-neon">paralelamente</strong> a la dirección de propagación.
+                    </p>
+                    <div class="bg-slate-800/50 p-4 rounded-xl mb-4">
+                        <div class="h-20 relative flex items-center justify-center">
+                            <div class="flex items-center gap-1">
+                                <div class="w-3 h-3 bg-neon rounded-full"></div>
+                                <div class="w-2 h-2 bg-slate-600 rounded-full"></div>
+                                <div class="w-2 h-2 bg-slate-600 rounded-full"></div>
+                                <div class="w-3 h-3 bg-neon rounded-full"></div>
+                                <div class="w-2 h-2 bg-slate-600 rounded-full"></div>
+                                <div class="w-2 h-2 bg-slate-600 rounded-full"></div>
+                                <div class="w-3 h-3 bg-neon rounded-full"></div>
+                                <div class="w-2 h-2 bg-slate-600 rounded-full"></div>
+                                <div class="w-2 h-2 bg-slate-600 rounded-full"></div>
+                                <div class="w-3 h-3 bg-neon rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="text-center text-xs text-slate-500 mt-2">Compresiones y rarefacciones</div>
+                    </div>
+                    <div class="text-xs text-slate-400">
+                        <strong class="text-white">Ejemplos:</strong> Sonido, ondas en un resorte
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: El Sonido -->
+        <section class="theory-card p-8 rounded-2xl">
+            <h2 class="font-tech text-2xl text-neon mb-6">
+                <i class="fa-solid fa-volume-high mr-2"></i> 5. El Sonido: Una Onda Mecánica
+            </h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 space-y-4">
+                    <p class="text-slate-300 leading-relaxed">
+                        El <strong class="text-neon">sonido</strong> es una onda mecánica longitudinal que se propaga 
+                        mediante compresiones y rarefacciones de las moléculas del medio. <strong>No puede viajar en el vacío</strong> 
+                        porque necesita un material para propagarse.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-800 p-4 rounded-xl">
+                            <h4 class="text-green-400 font-bold text-sm mb-2"><i class="fa-solid fa-ear-listen mr-1"></i> Rango audible:</h4>
+                            <p class="text-slate-400 text-xs">20 Hz - 20,000 Hz (humanos)</p>
+                            <p class="text-slate-500 text-xs mt-1">Disminuye con la edad</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl">
+                            <h4 class="text-red-400 font-bold text-sm mb-2"><i class="fa-solid fa-wave-square mr-1"></i> Ultrasonido:</h4>
+                            <p class="text-slate-400 text-xs">> 20,000 Hz</p>
+                            <p class="text-slate-500 text-xs mt-1">Usado en medicina y sonar</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-xl">
+                    <h4 class="text-white font-bold mb-3 text-sm">Características del Sonido:</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2">
+                            <span class="text-purple-400 font-bold">①</span>
+                            <div>
+                                <strong class="text-white">Altura (Tono):</strong>
+                                <p class="text-slate-400 text-xs">Determinada por la frecuencia. Mayor frecuencia = tono más agudo.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-neon font-bold">②</span>
+                            <div>
+                                <strong class="text-white">Intensidad (Volumen):</strong>
+                                <p class="text-slate-400 text-xs">Determinada por la amplitud. Mayor amplitud = sonido más fuerte.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-yellow-400 font-bold">③</span>
+                            <div>
+                                <strong class="text-white">Timbre:</strong>
+                                <p class="text-slate-400 text-xs">Permite distinguir entre fuentes diferentes (flauta vs. piano).</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: Fenómenos Ondulatorios -->
+        <section>
+            <h2 class="font-tech text-2xl mb-6 text-center">
+                <i class="fa-solid fa-wand-magic-sparkles mr-2 text-neon"></i> 6. Fenómenos Ondulatorios
+            </h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="glass-panel p-5 rounded-xl">
+                    <div class="bg-blue-500/20 w-12 h-12 rounded-xl flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-rotate text-blue-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-2">Reflexión</h3>
+                    <p class="text-slate-400 text-sm">
+                        La onda rebota al chocar con una superficie. 
+                        <strong class="text-blue-400">Ejemplo:</strong> Eco, espejos.
+                    </p>
+                </div>
+                <div class="glass-panel p-5 rounded-xl">
+                    <div class="bg-green-500/20 w-12 h-12 rounded-xl flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-arrow-right-arrow-left text-green-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-2">Refracción</h3>
+                    <p class="text-slate-400 text-sm">
+                        Cambio de dirección al pasar de un medio a otro. 
+                        <strong class="text-green-400">Ejemplo:</strong> Lápiz "roto" en agua.
+                    </p>
+                </div>
+                <div class="glass-panel p-5 rounded-xl">
+                    <div class="bg-purple-500/20 w-12 h-12 rounded-xl flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-water text-purple-400"></i>
+                    </div>
+                    <h3 class="font-bold text-white mb-2">Difracción</h3>
+                    <p class="text-slate-400 text-sm">
+                        La onda rodea obstáculos. 
+                        <strong class="text-purple-400">Ejemplo:</strong> Escuchar detrás de una esquina.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 7: Efecto Doppler -->
+        <section class="theory-card p-8 rounded-2xl">
+            <h2 class="font-tech text-2xl text-neon mb-6">
+                <i class="fa-solid fa-bullhorn mr-2"></i> 7. Efecto Doppler
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <p class="text-slate-300 leading-relaxed">
+                        El <strong class="text-neon">efecto Doppler</strong> es el cambio aparente en la frecuencia de una onda 
+                        cuando hay movimiento relativo entre la fuente y el observador. Fue descrito por el físico austríaco 
+                        <strong>Christian Doppler</strong> en 1842.
+                    </p>
+                    <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                        <h4 class="text-white font-bold mb-2"><i class="fa-solid fa-car text-yellow-400 mr-2"></i>Ejemplo cotidiano:</h4>
+                        <p class="text-slate-400 text-sm">
+                            Cuando una ambulancia se acerca, el sonido parece más agudo (mayor frecuencia). 
+                            Cuando se aleja, suena más grave (menor frecuencia).
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-800 p-4 rounded-xl text-center">
+                            <div class="text-3xl mb-2">🔊📈</div>
+                            <h4 class="text-green-400 font-bold text-sm">Fuente se acerca</h4>
+                            <p class="text-slate-400 text-xs">Frecuencia percibida <strong class="text-white">AUMENTA</strong></p>
+                            <p class="text-slate-500 text-xs mt-1">Sonido más agudo</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl text-center">
+                            <div class="text-3xl mb-2">🔊📉</div>
+                            <h4 class="text-red-400 font-bold text-sm">Fuente se aleja</h4>
+                            <p class="text-slate-400 text-xs">Frecuencia percibida <strong class="text-white">DISMINUYE</strong></p>
+                            <p class="text-slate-500 text-xs mt-1">Sonido más grave</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700">
+                        <h4 class="text-white font-bold mb-3"><i class="fa-solid fa-function text-purple-400 mr-2"></i>Fórmula del Efecto Doppler</h4>
+                        <div class="formula-box p-4 rounded-xl text-center mb-4">
+                            <div class="text-xl text-neon font-bold mb-2">f' = f · (v ± v₀) / (v ∓ vₛ)</div>
+                            <div class="text-xs text-slate-400 mt-2">
+                                f' = frecuencia percibida | f = frecuencia emitida<br>
+                                v = velocidad del sonido | v₀ = velocidad del observador<br>
+                                vₛ = velocidad de la fuente
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-400 space-y-1">
+                            <p><span class="text-green-400">+</span> en numerador: observador se acerca a la fuente</p>
+                            <p><span class="text-red-400">−</span> en numerador: observador se aleja de la fuente</p>
+                            <p><span class="text-red-400">−</span> en denominador: fuente se acerca al observador</p>
+                            <p><span class="text-green-400">+</span> en denominador: fuente se aleja del observador</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/50 p-4 rounded-xl">
+                        <h4 class="text-yellow-400 font-bold text-sm mb-2"><i class="fa-solid fa-calculator mr-1"></i> Ejemplo:</h4>
+                        <p class="text-slate-400 text-sm">
+                            Una ambulancia emite un sonido de 500 Hz y se acerca a 30 m/s. 
+                            La velocidad del sonido es 343 m/s.<br><br>
+                            <strong class="text-white">f' = 500 × (343) / (343 − 30) = 547.9 Hz</strong><br>
+                            <span class="text-green-400">¡Suena más agudo!</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Aplicaciones del Efecto Doppler -->
+            <div class="mt-6">
+                <h4 class="text-white font-bold mb-4"><i class="fa-solid fa-lightbulb text-yellow-400 mr-2"></i>Aplicaciones del Efecto Doppler</h4>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="glass-panel p-4 rounded-xl text-center">
+                        <i class="fa-solid fa-heart-pulse text-red-400 text-2xl mb-2"></i>
+                        <h5 class="text-white font-bold text-sm">Medicina</h5>
+                        <p class="text-slate-400 text-xs">Ultrasonido Doppler para medir flujo sanguíneo</p>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl text-center">
+                        <i class="fa-solid fa-satellite-dish text-blue-400 text-2xl mb-2"></i>
+                        <h5 class="text-white font-bold text-sm">Radar</h5>
+                        <p class="text-slate-400 text-xs">Detectar velocidad de vehículos</p>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl text-center">
+                        <i class="fa-solid fa-star text-yellow-400 text-2xl mb-2"></i>
+                        <h5 class="text-white font-bold text-sm">Astronomía</h5>
+                        <p class="text-slate-400 text-xs">Determinar si galaxias se alejan o acercan</p>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl text-center">
+                        <i class="fa-solid fa-plane text-cyan-400 text-2xl mb-2"></i>
+                        <h5 class="text-white font-bold text-sm">Meteorología</h5>
+                        <p class="text-slate-400 text-xs">Radar Doppler para predecir tormentas</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 8: Tubos Sonoros -->
+        <section class="theory-card p-8 rounded-2xl">
+            <h2 class="font-tech text-2xl text-neon mb-6">
+                <i class="fa-solid fa-music mr-2"></i> 8. Tubos Sonoros y Resonancia
+            </h2>
+            <p class="text-slate-300 mb-6">
+                Los <strong class="text-neon">tubos sonoros</strong> son dispositivos que producen sonido por la vibración 
+                de columnas de aire en su interior. Se usan en instrumentos musicales como flautas, órganos y trompetas.
+            </p>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Tubo Abierto -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-green-500/20 p-3 rounded-xl">
+                            <i class="fa-solid fa-arrows-left-right text-green-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-tech text-xl text-white">Tubo Abierto (Ambos extremos)</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-4">
+                        En ambos extremos hay <strong class="text-green-400">vientres</strong> (máxima amplitud de vibración).
+                        La longitud del tubo contiene medias longitudes de onda.
+                    </p>
+                    <div class="bg-slate-800/50 p-4 rounded-xl mb-4">
+                        <div class="h-24 relative flex items-center justify-center">
+                            <svg viewBox="0 0 300 80" class="w-full h-full">
+                                <!-- Tubo -->
+                                <rect x="20" y="20" width="260" height="40" fill="none" stroke="#475569" stroke-width="2"/>
+                                <!-- Onda estacionaria -->
+                                <path d="M20,40 Q70,10 120,40 T220,40 T270,40" fill="none" stroke="#22c55e" stroke-width="3"/>
+                                <!-- Vientres -->
+                                <circle cx="20" cy="40" r="5" fill="#22c55e"/>
+                                <circle cx="280" cy="40" r="5" fill="#22c55e"/>
+                                <!-- Nodo central -->
+                                <circle cx="150" cy="40" r="4" fill="#ef4444"/>
+                                <text x="20" y="70" fill="#94a3b8" font-size="10">Vientre</text>
+                                <text x="240" y="70" fill="#94a3b8" font-size="10">Vientre</text>
+                                <text x="140" y="15" fill="#ef4444" font-size="10">Nodo</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="formula-box p-4 rounded-xl text-center mb-4">
+                        <div class="text-lg text-green-400 font-bold mb-1">λ = 2L / n</div>
+                        <div class="text-sm text-green-400 font-bold">f = n · v / 2L</div>
+                        <div class="text-xs text-slate-400 mt-2">n = 1, 2, 3... (armónicos)</div>
+                    </div>
+                    <div class="text-xs text-slate-400">
+                        <strong class="text-white">Ejemplos:</strong> Flauta, clarinete (notas agudas), órgano
+                    </div>
+                </div>
+
+                <!-- Tubo Cerrado -->
+                <div class="glass-panel p-6 rounded-2xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-purple-500/20 p-3 rounded-xl">
+                            <i class="fa-solid fa-door-closed text-purple-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-tech text-xl text-white">Tubo Cerrado (Un extremo)</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-4">
+                        En el extremo abierto hay un <strong class="text-green-400">vientre</strong>, 
+                        y en el cerrado un <strong class="text-red-400">nodo</strong> (sin vibración).
+                        Solo se producen armónicos impares.
+                    </p>
+                    <div class="bg-slate-800/50 p-4 rounded-xl mb-4">
+                        <div class="h-24 relative flex items-center justify-center">
+                            <svg viewBox="0 0 300 80" class="w-full h-full">
+                                <!-- Tubo -->
+                                <rect x="20" y="20" width="260" height="40" fill="none" stroke="#475569" stroke-width="2"/>
+                                <!-- Tapa cerrada -->
+                                <line x1="20" y1="20" x2="20" y2="60" stroke="#ef4444" stroke-width="4"/>
+                                <!-- Onda estacionaria -->
+                                <path d="M20,40 Q75,10 130,40 T260,40" fill="none" stroke="#a855f7" stroke-width="3"/>
+                                <!-- Vientre -->
+                                <circle cx="280" cy="40" r="5" fill="#22c55e"/>
+                                <!-- Nodo -->
+                                <circle cx="20" cy="40" r="4" fill="#ef4444"/>
+                                <text x="260" y="70" fill="#94a3b8" font-size="10">Vientre</text>
+                                <text x="10" y="15" fill="#ef4444" font-size="10">Nodo</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="formula-box p-4 rounded-xl text-center mb-4">
+                        <div class="text-lg text-purple-400 font-bold mb-1">λ = 4L / n</div>
+                        <div class="text-sm text-purple-400 font-bold">f = n · v / 4L</div>
+                        <div class="text-xs text-slate-400 mt-2">n = 1, 3, 5... (solo impares)</div>
+                    </div>
+                    <div class="text-xs text-slate-400">
+                        <strong class="text-white">Ejemplos:</strong> Clarinete (notas graves), tubos de órgano cerrados
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla Comparativa -->
+            <div class="mt-6 bg-slate-800 p-6 rounded-xl border border-slate-700">
+                <h4 class="text-white font-bold mb-4"><i class="fa-solid fa-table text-cyan-400 mr-2"></i>Comparación: Tubo Abierto vs Cerrado</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-600">
+                                <th class="text-left py-2 text-cyan-400">Característica</th>
+                                <th class="text-center py-2 text-green-400">Tubo Abierto</th>
+                                <th class="text-center py-2 text-purple-400">Tubo Cerrado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-300">
+                            <tr class="border-b border-slate-700">
+                                <td class="py-2">Frecuencia fundamental</td>
+                                <td class="text-center">f₁ = v/2L</td>
+                                <td class="text-center">f₁ = v/4L</td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="py-2">Longitud de onda fundamental</td>
+                                <td class="text-center">λ = 2L</td>
+                                <td class="text-center">λ = 4L</td>
+                            </tr>
+                            <tr class="border-b border-slate-700">
+                                <td class="py-2">Armónicos presentes</td>
+                                <td class="text-center text-green-400">Todos (1, 2, 3, 4...)</td>
+                                <td class="text-center text-purple-400">Solo impares (1, 3, 5...)</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2">Relación con longitud</td>
+                                <td class="text-center">L = λ/2</td>
+                                <td class="text-center">L = λ/4</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Ejemplo práctico -->
+            <div class="mt-6 bg-slate-800/50 p-4 rounded-xl">
+                <h4 class="text-yellow-400 font-bold text-sm mb-2"><i class="fa-solid fa-calculator mr-1"></i> Ejemplo práctico:</h4>
+                <p class="text-slate-400 text-sm">
+                    Un tubo abierto de 0.5 m de longitud produce un sonido en el aire (v = 343 m/s). 
+                    ¿Cuál es su frecuencia fundamental?<br><br>
+                    <strong class="text-white">f₁ = v / 2L = 343 / (2 × 0.5) = 343 Hz</strong><br>
+                    <span class="text-green-400">¡Es aproximadamente la nota Fa!</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- SIMULADOR -->
+        <section>
+            <div class="text-center mb-4">
+                <h2 class="font-tech text-3xl font-bold text-white">Osciloscopio Virtual</h2>
+                <p class="text-slate-400 text-sm">Experimenta con sonido y visuales</p>
+            </div>
+
+            <div class="glass-panel p-4 rounded-xl max-w-5xl mx-auto grid lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 relative bg-black rounded-lg border-2 border-slate-800 h-[300px] overflow-hidden">
+                    <canvas id="waveCanvas" class="w-full h-full block"></canvas>
+                    <div class="absolute top-2 right-2 text-right">
+                        <div class="text-neon font-mono text-xs">v = λ · f</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-center gap-6 p-4">
+                    <div>
+                        <label class="flex justify-between text-xs font-bold text-slate-300 mb-2">
+                            <span>FRECUENCIA (Hz)</span>
+                            <span id="freqVal" class="text-neon">2.0 Hz</span>
+                        </label>
+                        <input type="range" id="freqSlider" min="1" max="20" step="0.5" value="2" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <div>
+                        <label class="flex justify-between text-xs font-bold text-slate-300 mb-2">
+                            <span>AMPLITUD</span>
+                            <span id="ampVal" class="text-purple-400">50</span>
+                        </label>
+                        <input type="range" id="ampSlider" min="10" max="100" value="50" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <button id="audioBtn" onclick="toggleAudio()" class="py-3 bg-slate-800 hover:bg-neon hover:text-black border border-slate-600 rounded font-bold transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-volume-off"></i> <span>ENCENDER AUDIO</span>
+                    </button>
+                    <p class="text-[10px] text-slate-500 text-center">⚠️ Usa volumen bajo en tus audífonos</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CALCULADORA -->
+        <section class="max-w-2xl mx-auto">
+            <h2 class="font-tech text-2xl mb-6 text-center">Calculadora de Ondas</h2>
+            <div class="glass-panel p-8 rounded-2xl border-t-4 border-purple-500">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="text-xs text-slate-400">Variable a calcular:</label>
+                        <select id="calcType" onchange="updateCalcUI()" class="w-full bg-slate-900 border border-slate-700 text-white p-2 rounded mt-1">
+                            <option value="v">Velocidad (v)</option>
+                            <option value="l">Longitud (λ)</option>
+                            <option value="f">Frecuencia (f)</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <div class="text-neon font-mono text-xl text-right w-full" id="formulaDisplay">v = λ · f</div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div id="input1-container">
+                        <label class="text-xs text-slate-400" id="label1">Longitud (m)</label>
+                        <input type="number" id="input1" class="w-full bg-slate-950 border border-slate-700 text-white p-3 rounded font-mono">
+                    </div>
+                    <div id="input2-container">
+                        <label class="text-xs text-slate-400" id="label2">Frecuencia (Hz)</label>
+                        <input type="number" id="input2" class="w-full bg-slate-950 border border-slate-700 text-white p-3 rounded font-mono">
+                    </div>
+                    <button onclick="calculate()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded shadow-lg transition-transform active:scale-95">
+                        CALCULAR
+                    </button>
+                    <div id="resultOutput" class="bg-black border border-purple-500/50 p-4 rounded text-center text-2xl font-mono text-white hidden">
+                        0
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ejercicios Prácticos -->
+        <section class="glass-panel p-8 rounded-2xl">
+            <h2 class="font-tech text-2xl text-white mb-6 text-center">
+                <i class="fa-solid fa-pencil mr-2 text-neon"></i> Ejercicios de Práctica
+            </h2>
+            <div class="space-y-4">
+                <div class="bg-slate-800/50 p-4 rounded-xl border-l-4 border-neon">
+                    <p class="text-slate-300 text-sm">
+                        <strong class="text-white">Ejercicio 1:</strong> Una onda tiene una frecuencia de 50 Hz y una longitud de onda de 2 m. 
+                        ¿Cuál es su velocidad de propagación?
+                    </p>
+                    <p class="text-neon text-xs mt-2">Solución: v = 50 × 2 = 100 m/s</p>
+                </div>
+                <div class="bg-slate-800/50 p-4 rounded-xl border-l-4 border-purple-500">
+                    <p class="text-slate-300 text-sm">
+                        <strong class="text-white">Ejercicio 2:</strong> El sonido viaja en el agua a 1,480 m/s. Si una ballena emite un sonido 
+                        con frecuencia de 20 Hz, ¿cuál es la longitud de onda?
+                    </p>
+                    <p class="text-purple-400 text-xs mt-2">Solución: λ = 1,480 ÷ 20 = 74 m</p>
+                </div>
+                <div class="bg-slate-800/50 p-4 rounded-xl border-l-4 border-green-500">
+                    <p class="text-slate-300 text-sm">
+                        <strong class="text-white">Ejercicio 3:</strong> Una onda electromagnética tiene una longitud de onda de 600 nm 
+                        (nanómetros). ¿Cuál es su frecuencia? (c = 3×10⁸ m/s)
+                    </p>
+                    <p class="text-green-400 text-xs mt-2">Solución: f = (3×10⁸) ÷ (600×10⁻⁹) = 5×10¹⁴ Hz (luz naranja)</p>
+                </div>
+                <div class="bg-slate-800/50 p-4 rounded-xl border-l-4 border-yellow-400">
+                    <p class="text-slate-300 text-sm">
+                        <strong class="text-white">Ejercicio 4 (Doppler):</strong> Un tren emite un silbato de 800 Hz. Si se acerca a una 
+                        velocidad de 25 m/s, ¿qué frecuencia percibe un observador en reposo? (v = 343 m/s)
+                    </p>
+                    <p class="text-yellow-400 text-xs mt-2">Solución: f' = 800 × 343 ÷ (343 − 25) = 862.9 Hz</p>
+                </div>
+                <div class="bg-slate-800/50 p-4 rounded-xl border-l-4 border-blue-400">
+                    <p class="text-slate-300 text-sm">
+                        <strong class="text-white">Ejercicio 5 (Tubos):</strong> ¿Cuál es la longitud de un tubo abierto que produce 
+                        un sonido de 440 Hz (nota La) en el aire? (v = 343 m/s)
+                    </p>
+                    <p class="text-blue-400 text-xs mt-2">Solución: L = v ÷ (2f) = 343 ÷ (2 × 440) = 0.39 m = 39 cm</p>
+                </div>
+                <div class="bg-slate-800/50 p-4 rounded-xl border-l-4 border-pink-400">
+                    <p class="text-slate-300 text-sm">
+                        <strong class="text-white">Ejercicio 6 (Tubos cerrados):</strong> Un tubo cerrado de 0.6 m produce su frecuencia 
+                        fundamental en el aire. ¿Cuál es esa frecuencia? (v = 343 m/s)
+                    </p>
+                    <p class="text-pink-400 text-xs mt-2">Solución: f₁ = v ÷ (4L) = 343 ÷ (4 × 0.6) = 142.9 Hz</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-950 py-8 text-center border-t border-slate-800 mt-16">
+        <div class="container mx-auto px-4">
+            <p class="text-slate-400 font-bold">I.E. Paulo VI - Grado 11°</p>
+            <p class="text-slate-500 text-sm mt-1">Período 1: Ondas y Sonido</p>
+            <p class="text-slate-600 text-xs mt-4">Docente: Luis Miguel Cabrera</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- SIMULADOR ---
+        const canvas = document.getElementById('waveCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, phase = 0;
+        let audioCtx, osc, gain;
+        let isAudioOn = false;
+
+        function resize() {
+            width = canvas.parentElement.clientWidth;
+            height = canvas.parentElement.clientHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0,0,0,0.2)';
+            ctx.fillRect(0,0,width,height);
+
+            const freq = parseFloat(document.getElementById('freqSlider').value);
+            const amp = parseFloat(document.getElementById('ampSlider').value);
+
+            document.getElementById('freqVal').innerText = freq.toFixed(1) + " Hz";
+            document.getElementById('ampVal').innerText = amp;
+
+            if(isAudioOn && osc) {
+                osc.frequency.value = 100 + (freq * 20);
+                gain.gain.value = amp / 400;
+            }
+
+            ctx.beginPath();
+            ctx.strokeStyle = '#00f3ff';
+            ctx.lineWidth = 3;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#00f3ff';
+
+            for(let x=0; x<width; x++) {
+                const y = height/2 + amp * Math.sin((x * 0.02 * freq) - phase);
+                x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+            }
+            ctx.stroke();
+
+            const pX = width/2;
+            const pY = height/2 + amp * Math.sin((pX * 0.02 * freq) - phase);
+            ctx.beginPath();
+            ctx.fillStyle = '#bc13fe';
+            ctx.arc(pX, pY, 5, 0, Math.PI*2);
+            ctx.fill();
+
+            phase += freq * 0.1;
+            requestAnimationFrame(draw);
+        }
+
+        function toggleAudio() {
+            const btn = document.getElementById('audioBtn');
+            if(!isAudioOn) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                osc = audioCtx.createOscillator();
+                gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                isAudioOn = true;
+                btn.innerHTML = '<i class="fa-solid fa-volume-high"></i> APAGAR AUDIO';
+                btn.classList.add('bg-neon', 'text-black');
+            } else {
+                osc.stop();
+                isAudioOn = false;
+                btn.innerHTML = '<i class="fa-solid fa-volume-off"></i> ENCENDER AUDIO';
+                btn.classList.remove('bg-neon', 'text-black');
+            }
+        }
+        draw();
+
+        // --- CALCULADORA ---
+        function updateCalcUI() {
+            const type = document.getElementById('calcType').value;
+            const l1 = document.getElementById('label1');
+            const l2 = document.getElementById('label2');
+            const form = document.getElementById('formulaDisplay');
+
+            if(type === 'v') {
+                l1.innerText = "Longitud de onda (m)";
+                l2.innerText = "Frecuencia (Hz)";
+                form.innerText = "v = λ · f";
+            } else if (type === 'l') {
+                l1.innerText = "Velocidad (m/s)";
+                l2.innerText = "Frecuencia (Hz)";
+                form.innerText = "λ = v / f";
+            } else {
+                l1.innerText = "Velocidad (m/s)";
+                l2.innerText = "Longitud de onda (m)";
+                form.innerText = "f = v / λ";
+            }
+            document.getElementById('resultOutput').classList.add('hidden');
+        }
+
+        function calculate() {
+            const type = document.getElementById('calcType').value;
+            const v1 = parseFloat(document.getElementById('input1').value);
+            const v2 = parseFloat(document.getElementById('input2').value);
+            const out = document.getElementById('resultOutput');
+            let res = 0, unit = '';
+
+            if(isNaN(v1) || isNaN(v2)) return;
+
+            if(type === 'v') { res = v1 * v2; unit = 'm/s'; }
+            else if (type === 'l') { res = v1 / v2; unit = 'm'; }
+            else { res = v1 / v2; unit = 'Hz'; }
+
+            out.innerText = `${res.toFixed(2)} ${unit}`;
+            out.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

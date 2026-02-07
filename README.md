@@ -1,137 +1,64 @@
-🔬 Laboratorio Virtual - I.E. Paulo VI
+<div align="center">
 
-Plataforma web interactiva diseñada para el aprendizaje práctico de Matemáticas y Física en la Institución Educativa Paulo VI. Este proyecto ofrece herramientas visuales, simuladores y juegos educativos para estudiantes de grados 6°, 10° y 11°, facilitando la comprensión de conceptos abstractos mediante la tecnología.
-📋 Tabla de Contenidos
+# 🔬 Laboratorio Virtual | I.E. Paulo VI
 
-    Descripción General
+![Estado](https://img.shields.io/badge/Estado-Activo-success?style=for-the-badge&logo=statuspage)
+![Versión](https://img.shields.io/badge/Versión-1.0.0-blue?style=for-the-badge&logo=git)
+![Tech](https://img.shields.io/badge/Tech-HTML5_|_Tailwind-38bdf8?style=for-the-badge&logo=tailwindcss)
 
-    Módulos Disponibles
+**Plataforma interactiva para la enseñanza de Matemáticas y Física mediante simulaciones y juegos.**
 
-        Matemáticas (Grado 6°)
+[Ver Demo (GitHub Pages)]() · [Reportar un Bug]() · [Solicitar Función]()
 
-        Física (Grado 10°)
+</div>
 
-        Física (Grado 11°)
+---
 
-    Tecnologías Utilizadas
+## 📋 Descripción
 
-    Estructura del Proyecto
+El **Laboratorio Virtual** es una suite de herramientas educativas web desarrollada para los estudiantes de la **Institución Educativa Paulo VI**. Este proyecto busca modernizar el aprendizaje en el aula mediante la gamificación y la visualización interactiva de conceptos abstractos.
 
-    Instalación y Uso
+El sistema es **ligero, modular y no requiere instalación**, diseñado específicamente para funcionar en equipos con recursos limitados o directamente en los dispositivos móviles de los estudiantes.
 
-    Autor
+## 🚀 Módulos Académicos
 
-📖 Descripción General
+### 📐 Matemáticas (Grado 6°)
+Herramientas visuales para geometría y lógica matemática.
 
-El Laboratorio Virtual nace como una iniciativa del PRAE y el área de Ciencias Naturales para integrar las TIC en el aula. El objetivo es proporcionar a los estudiantes un entorno seguro y accesible donde puedan experimentar con:
+| Módulo | Archivo | Descripción | Características Clave |
+| :--- | :--- | :--- | :--- |
+| **Geometría Básica** | `geometria.html` | Visualizador de relaciones entre rectas. | • Renderizado en Canvas API<br>• Detección de paralelas, perpendiculares y secantes<br>• Interfaz táctil amigable |
+| **Sistemas Antiguos** | `sistemas.html` | Conversor y juego de historia matemática. | • Soporte para números Romanos y Mayas<br>• Validador de lógica en tiempo real<br>• Estética histórica inmersiva |
+| **Lógica Binaria** | `binario.html` | Introducción al pensamiento computacional. | • Juego de "switches" (encendido/apagado)<br>• Calculadora de edad en binario<br>• Sistema de recompensas (Confeti) |
 
-    Conversiones de unidades y sistemas numéricos.
+### ⚛️ Física (Grados 10° y 11°)
+Simuladores para fenómenos físicos y cálculo de variables.
 
-    Visualización de fenómenos físicos (ondas).
+| Módulo | Archivo | Descripción | Características Clave |
+| :--- | :--- | :--- | :--- |
+| **Magnitudes (10°)** | `magnitudes.html` | Herramienta de conversión y notación. | • Notación científica automática ($A \times 10^n$)<br>• Conversión de unidades fundamentales<br>• Diseño "Glassmorphism" |
+| **Ondas y Sonido (11°)** | `ondas.html` | Calculadora de ecuaciones de onda. | • Despeje automático de fórmula ($v = \lambda \cdot f$)<br>• Interfaz estilo "Cyberpunk"<br>• Validación física de datos |
 
-    Geometría interactiva.
+---
 
-El proyecto está optimizado para funcionar directamente en el navegador sin necesidad de instalaciones complejas ni bases de datos, lo que facilita su despliegue en las salas de sistemas del colegio o en los dispositivos personales de los estudiantes.
-🚀 Módulos Disponibles
-Matemáticas (Grado 6°)
+## 🛠️ Tecnologías Utilizadas
 
-    📐 Geometría Básica (geometria.html):
+Este proyecto utiliza un stack **"Vanilla"** (sin frameworks pesados) para garantizar la máxima compatibilidad y facilidad de edición.
 
-        Visualización interactiva de rectas paralelas, perpendiculares y secantes.
+* **Estructura:** HTML5 Semántico.
+* **Estilos:** [Tailwind CSS](https://tailwindcss.com/) (vía CDN) para un diseño rápido y responsivo.
+* **Lógica:** JavaScript (ES6+) nativo.
+* **Iconografía:** [FontAwesome 6](https://fontawesome.com/).
+* **Tipografías:** Google Fonts (*Orbitron, Fredoka, Cinzel, Exo 2*).
 
-        Uso de Canvas HTML5 para renderizar gráficos dinámicos.
+## 📂 Estructura del Proyecto
 
-        Explicaciones teóricas integradas.
-
-    🏛️ Sistemas Numéricos Antiguos (sistemas.html):
-
-        Herramientas para aprender y practicar números Romanos y Mayas.
-
-        Minijuegos de construcción de números romanos.
-
-        Representación visual de glifos mayas (puntos, barras, caracoles).
-
-    💻 Sistema Binario (binario.html):
-
-        Calculadora de edad en binario.
-
-        Juego interactivo de conversión decimal-binario con interruptores (switches) visuales.
-
-        Sistema de puntaje y retroalimentación inmediata (confeti).
-
-Física (Grado 10°)
-
-    📏 Magnitudes y Conversiones (magnitudes.html):
-
-        Conversor de unidades en tiempo real.
-
-        Herramienta de notación científica automática.
-
-        Teoría sobre magnitudes fundamentales y derivadas.
-
-Física (Grado 11°)
-
-    🌊 Ondas y Sonido (ondas.html):
-
-        Calculadora de la ecuación de onda (v=λ⋅f).
-
-        Permite despejar variables automáticamente (Velocidad, Frecuencia, Longitud de onda).
-
-        Interfaz estilo "Cyberpunk/Tech" para mayor atractivo visual.
-
-🛠 Tecnologías Utilizadas
-
-El proyecto utiliza un stack tecnológico ligero y moderno ("Vanilla Stack"), ideal para enseñanza web:
-
-    HTML5 Semántico: Estructura base de las páginas.
-
-    Tailwind CSS (v3.4): Framework de estilos utilitario (cargado vía CDN) para un diseño rápido, responsivo y moderno.
-
-    JavaScript (ES6+): Lógica del lado del cliente para interactividad, cálculos y manipulación del DOM.
-
-    FontAwesome: Iconografía para interfaces de usuario intuitivas.
-
-    Google Fonts: Tipografías seleccionadas para cada temática (ej. Cinzel para romanos, Orbitron para física, Fredoka para juegos).
-
-📂 Estructura del Proyecto
-Plaintext
-
+```text
 Laboratorio_Virtual/
-│
-├── index.html          # Dashboard principal / Menú de navegación
-├── geometria.html      # Módulo de Geometría (6°)
-├── sistemas.html       # Módulo de Sistemas Numéricos (6°)
-├── binario.html        # Módulo de Sistema Binario (6°)
-├── magnitudes.html     # Módulo de Física Mecánica (10°)
-├── ondas.html          # Módulo de Ondas (11°)
-│
-└── README.md           # Documentación del proyecto
-
-💻 Instalación y Uso
-
-Al ser un sitio estático, no requiere servidor backend (Node.js, Python, PHP, etc.).
-
-    Descargar: Clona este repositorio o descarga la carpeta .zip.
-    Bash
-
-    git clone https://github.com/tu-usuario/Laboratorio_Virtual.git
-
-    Ejecutar:
-
-        Navega a la carpeta del proyecto.
-
-        Haz doble clic en el archivo index.html.
-
-        El laboratorio se abrirá en tu navegador web predeterminado.
-
-    Requisito: Se necesita conexión a internet la primera vez para cargar las librerías de Tailwind CSS y las fuentes (CDN), a menos que se descarguen localmente.
-
-👨‍🏫 Autor
-
-Desarrollado por lumcab para la I.E. Paulo VI (Huila, Colombia).
-
-    Áreas: Ciencias Naturales, Física y Matemáticas.
-
-    Proyecto: Apoyo tecnológico transversal y PRAE.
-
-Hecho con ❤️ y código para la educación.
+├── index.html          # 🏠 Dashboard principal y menú de navegación
+├── binario.html        # 🎮 Juego de sistema binario
+├── geometria.html      # 📐 Visualizador de rectas
+├── magnitudes.html     # 📏 Conversor de física mecánica
+├── ondas.html          # 🌊 Calculadora de ondas
+├── sistemas.html       # 🏛️ Juego de números romanos/mayas
+└── README.md           # 📄 Documentación del proyecto
