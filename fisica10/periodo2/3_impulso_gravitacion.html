@@ -191,8 +191,8 @@
       <span class="current">Impulso y Gravitación</span>
     </div>
     <div class="nav-right">
-      <a class="v2-btn v2-btn-ghost" href="2_trabajo_energia.html">← Anterior</a>
-      <a class="v2-btn v2-btn-primary" href="../periodo3/index.html">Período 3 →</a>
+      <a class="v2-btn v2-btn-ghost" href="2_trabajo_energia.html">← Trabajo y Energía</a>
+      <a class="v2-btn v2-btn-primary" href="../periodo3/index.html">Índice Período 3 →</a>
     </div>
   </div>
 </nav>
@@ -209,7 +209,7 @@
     <div class="hero-content-wrap">
       <div class="v2-badge">
         <span class="badge-dot"></span>
-        Física 10° &nbsp;·&nbsp; Período 2 &nbsp;·&nbsp; Tema 3
+        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 10°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 2</a> &nbsp;·&nbsp; Tema 3
       </div>
       <h1>Impulso y Gravitación</h1>
       <p class="hero-sub">
@@ -461,10 +461,10 @@
   </div>
 
   <div class="yt-player-wrap" id="ytPlayerWrap">
-    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('yPXZ1t6uHxg')">
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('B3Xs4XpR3vU')">
       <img class="yt-thumb-img"
-           src="https://img.youtube.com/vi/yPXZ1t6uHxg/maxresdefault.jpg"
-           onerror="this.src='https://img.youtube.com/vi/yPXZ1t6uHxg/hqdefault.jpg'"
+           src="https://img.youtube.com/vi/B3Xs4XpR3vU/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/B3Xs4XpR3vU/hqdefault.jpg'"
            alt="Cantidad de movimiento e impulso">
       <div class="yt-thumb-overlay">
         <div class="yt-big-play">&#9654;</div>
@@ -474,7 +474,7 @@
           <span style="font-weight:400;opacity:.8;font-size:.78rem;">Explicación y ejemplos de colisiones · Toca para reproducir</span>
         </div>
         <a class="yt-ext-btn"
-           href="https://www.youtube.com/watch?v=yPXZ1t6uHxg"
+           href="https://www.youtube.com/watch?v=B3Xs4XpR3vU"
            target="_blank" rel="noopener"
            onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
       </div>
@@ -761,7 +761,11 @@ function ytLoadEmbed(videoId) {
   let initialParams = {};
 
   function resize() {
-    canvas.width = canvas.offsetWidth;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = canvas.offsetWidth * dpr;
+    canvas.height = 200 * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+    if (!running && typeof x1 !== 'undefined') draw();
   }
 
   function updateValues() {
@@ -784,7 +788,8 @@ function ytLoadEmbed(videoId) {
     v2 = parseFloat(inputs.v2.value);
     initialParams = {v1, v2};
     x1 = 100;
-    x2 = canvas.width - 100;
+    const W = canvas.offsetWidth || 400;
+    x2 = W - 100;
     if(x2 < 100) x2 = 300;
     
     running = false;
@@ -814,10 +819,11 @@ function ytLoadEmbed(videoId) {
     }
 
     // Re-appear on screen (loop)
-    if(x1 > canvas.width + r1) x1 = -r1;
-    if(x1 < -r1) x1 = canvas.width + r1;
-    if(x2 > canvas.width + r2) x2 = -r2;
-    if(x2 < -r2) x2 = canvas.width + r2;
+    const W = canvas.offsetWidth;
+    if(x1 > W + r1) x1 = -r1;
+    if(x1 < -r1) x1 = W + r1;
+    if(x2 > W + r2) x2 = -r2;
+    if(x2 < -r2) x2 = W + r2;
 
     updateValues();
     draw();
@@ -825,21 +831,22 @@ function ytLoadEmbed(videoId) {
   }
 
   function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const W = canvas.offsetWidth, H = 200;
+    ctx.clearRect(0, 0, W, H);
     ctx.fillStyle = 'rgba(255,255,255,.05)';
-    ctx.fillRect(0, canvas.height/2, canvas.width, 2);
+    ctx.fillRect(0, H/2, W, 2);
 
     // Object 1 (Blue)
     ctx.fillStyle = '#4cc9f0';
-    ctx.beginPath(); ctx.arc(x1, canvas.height/2, r1 + m1*2, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x1, H/2, r1 + m1*2, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = '#fff'; ctx.font = 'bold 12px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText('1', x1, canvas.height/2 + 4);
+    ctx.fillText('1', x1, H/2 + 4);
     
     // Object 2 (Pink)
     ctx.fillStyle = '#f72585';
-    ctx.beginPath(); ctx.arc(x2, canvas.height/2, r2 + m2*2, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x2, H/2, r2 + m2*2, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = '#fff';
-    ctx.fillText('2', x2, canvas.height/2 + 4);
+    ctx.fillText('2', x2, H/2 + 4);
   }
 
   btnPlay.addEventListener('click', () => {

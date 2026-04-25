@@ -109,7 +109,7 @@
       <span class="current">Trabajo y Energía</span>
     </div>
     <div class="nav-right">
-      <a class="v2-btn v2-btn-ghost" href="1_estatica_dinamica.html">← Dinámica</a>
+      <a class="v2-btn v2-btn-ghost" href="1_dinamica_equilibrio.html">← Dinámica</a>
       <a class="v2-btn v2-btn-primary" href="3_impulso_gravitacion.html">Impulso →</a>
     </div>
   </div>
@@ -122,7 +122,7 @@
     <div class="hero-content-wrap">
       <div class="v2-badge">
         <span class="badge-dot"></span>
-        Física 10° &nbsp;·&nbsp; Período 2 &nbsp;·&nbsp; Tema 2
+        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 10°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 2</a> &nbsp;·&nbsp; Tema 2
       </div>
       <h1>Trabajo y Energía</h1>
       <p class="hero-sub">
@@ -409,10 +409,10 @@
   </div>
 
   <div class="yt-player-wrap" id="ytPlayerWrap">
-    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('9uKYbe-w1co')">
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('1Bc9wH6lk74')">
       <img class="yt-thumb-img"
-           src="https://img.youtube.com/vi/9uKYbe-w1co/maxresdefault.jpg"
-           onerror="this.src='https://img.youtube.com/vi/9uKYbe-w1co/hqdefault.jpg'"
+           src="https://img.youtube.com/vi/1Bc9wH6lk74/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/1Bc9wH6lk74/hqdefault.jpg'"
            alt="Trabajo y Energía — Física 10°">
       <div class="yt-thumb-overlay">
         <div class="yt-big-play">&#9654;</div>
@@ -422,7 +422,7 @@
           <span style="font-weight:400;opacity:.8;font-size:.78rem;">Conservación de la energía mecánica · Toca para reproducir</span>
         </div>
         <a class="yt-ext-btn"
-           href="https://www.youtube.com/watch?v=9uKYbe-w1co"
+           href="https://www.youtube.com/watch?v=1Bc9wH6lk74"
            target="_blank" rel="noopener"
            onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
       </div>
@@ -548,7 +548,7 @@
 <div class="v2-wrap">
   <hr class="v2-hr">
   <div class="v2-page-nav">
-    <a class="nav-btn-card" href="1_estatica_dinamica.html">
+    <a class="nav-btn-card" href="1_dinamica_equilibrio.html">
       <span class="nbc-arr">←</span>
       <div>
         <div class="nbc-sub">Tema anterior</div>
@@ -696,12 +696,14 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   }
 
   function resize() {
-    canvas.width  = canvas.offsetWidth;
-    canvas.height = 310;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width  = canvas.offsetWidth * dpr;
+    canvas.height = 310 * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
   }
 
   function draw() {
-    const W = canvas.width, H = canvas.height;
+    const W = canvas.offsetWidth, H = 310;
     ctx.clearRect(0, 0, W, H);
 
     /* fondo */

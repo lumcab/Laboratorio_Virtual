@@ -193,8 +193,8 @@
       <span class="current">Cinemática</span>
     </div>
     <div class="nav-right">
-      <a class="v2-btn v2-btn-ghost" href="2_magnitudes_vectores.html">← Anterior</a>
-      <a class="v2-btn v2-btn-primary" href="../periodo2/index.html">Período 2 →</a>
+      <a class="v2-btn v2-btn-ghost" href="2_magnitudes_vectores.html">← Magnitudes</a>
+      <a class="v2-btn v2-btn-primary" href="../periodo2/index.html">Índice Período 2 →</a>
     </div>
   </div>
 </nav>
@@ -212,7 +212,7 @@
     <div class="hero-content-wrap">
       <div class="v2-badge">
         <span class="badge-dot"></span>
-        Física 10° &nbsp;·&nbsp; Período 1 &nbsp;·&nbsp; Tema 3
+        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 10°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 1</a> &nbsp;·&nbsp; Tema 3
       </div>
       <h1>Cinemática</h1>
       <p class="hero-sub">
@@ -517,11 +517,11 @@
   <!-- Miniatura: visible por defecto. Al hacer clic carga el iframe con autoplay -->
   <div class="yt-player-wrap" id="ytPlayerWrap">
 
-    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('XE9UXxtep6M')">
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('yn8iJVmpu_E')">
       <!-- Miniatura de YouTube (siempre disponible públicamente) -->
       <img class="yt-thumb-img"
-           src="https://img.youtube.com/vi/XE9UXxtep6M/maxresdefault.jpg"
-           onerror="this.src='https://img.youtube.com/vi/XE9UXxtep6M/hqdefault.jpg'"
+           src="https://img.youtube.com/vi/yn8iJVmpu_E/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/yn8iJVmpu_E/hqdefault.jpg'"
            alt="MRU — Movimiento Rectilíneo Uniforme">
       <div class="yt-thumb-overlay">
         <div class="yt-big-play">&#9654;</div>
@@ -531,7 +531,7 @@
           <span style="font-weight:400;opacity:.8;font-size:.78rem;">Explicación, fórmulas y ejercicios · Toca para reproducir</span>
         </div>
         <a class="yt-ext-btn"
-           href="https://www.youtube.com/watch?v=XE9UXxtep6M"
+           href="https://www.youtube.com/watch?v=yn8iJVmpu_E"
            target="_blank" rel="noopener"
            onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
       </div>
@@ -852,10 +852,14 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   const MAX_T = 12;
 
   function resize() {
-    trackCanvas.width  = trackCanvas.offsetWidth;
-    graphCanvas.width  = graphCanvas.offsetWidth;
-    trackCanvas.height = 110;
-    graphCanvas.height = 160;
+    const dpr = window.devicePixelRatio || 1;
+    trackCanvas.width  = trackCanvas.offsetWidth * dpr;
+    graphCanvas.width  = graphCanvas.offsetWidth * dpr;
+    trackCanvas.height = 110 * dpr;
+    graphCanvas.height = 160 * dpr;
+    tc.setTransform(1, 0, 0, 1, 0, 0); tc.scale(dpr, dpr);
+    gc.setTransform(1, 0, 0, 1, 0, 0); gc.scale(dpr, dpr);
+    if (!running && typeof history !== 'undefined') { drawTrack(); drawGraphs(); }
   }
 
   function readParams() {
@@ -875,7 +879,7 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   }
 
   function drawTrack() {
-    const W = trackCanvas.width, H = trackCanvas.height;
+    const W = trackCanvas.offsetWidth, H = 110;
     tc.clearRect(0, 0, W, H);
 
     // Fondo pista
@@ -950,7 +954,7 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   }
 
   function drawGraphs() {
-    const W = graphCanvas.width, H = graphCanvas.height;
+    const W = graphCanvas.offsetWidth, H = 160;
     gc.clearRect(0, 0, W, H);
     gc.fillStyle = 'rgba(0,0,0,.3)';
     gc.beginPath(); gc.roundRect(0, 0, W, H, 10); gc.fill();

@@ -716,19 +716,16 @@ button { font-family: inherit; }
   .nav-crumbs { display: none; }
   .nav-right .v2-btn { padding: .45rem .8rem; font-size: .78rem; }
 
-  /* Tabs: scroll horizontal en móvil */
+  /* Tabs: botones en grid o wrap en móvil */
   .v2-tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    flex-wrap: wrap;
     padding-bottom: .3rem;
     gap: .4rem;
   }
   .v2-tabs::-webkit-scrollbar { display: none; }
   .v2-tab {
-    white-space: nowrap;
-    flex-shrink: 0;
+    flex: 1 1 auto;
+    text-align: center;
     font-size: .84rem;
     padding: .55rem 1.1rem;
   }

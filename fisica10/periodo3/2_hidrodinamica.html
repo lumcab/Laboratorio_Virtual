@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hidrodinámica | Física 10° · VirtualLab</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/icons/favicon.ico">
+  <link rel="stylesheet" href="../../css/tema-v2.css">
+  <script src="../../js/theme.js"></script>
+  <style>
+    :root {
+      --accent-a: #4361ee;
+      --accent-b: #3a0ca3;
+      --accent-c: #4cc9f0;
+      --accent-grad: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+      --hero-c1: #4cc9f0;
+      --hero-c2: #4361ee;
+    }
+    .v2-badge      { background: rgba(67,97,238,.12); border-color: rgba(67,97,238,.35); color: #4cc9f0; }
+    .badge-dot     { background: #4cc9f0; }
+    .o-core        { background: var(--accent-grad); box-shadow: 0 0 40px rgba(67,97,238,.6); }
+    .o-ring-1      { width: 110px; height: 110px; border-color: rgba(67,97,238,.45); animation-duration: 4s; }
+    .o-ring-1::after { background: #4361ee; box-shadow: 0 0 14px #4361ee; }
+    .o-ring-2      { width: 190px; height: 190px; border-color: rgba(76,201,240,.35); animation-duration: 7s; animation-direction: reverse; }
+    .o-ring-2::after { background: #4cc9f0; box-shadow: 0 0 14px #4cc9f0; }
+    .o-ring-3      { width: 290px; height: 290px; border-color: rgba(58,12,163,.3); animation-duration: 13s; }
+    .o-ring-3::after { background: #3a0ca3; box-shadow: 0 0 14px #3a0ca3; width: 8px; height: 8px; top:-4px; left: calc(50% - 4px); }
+    .v2-tab.active { background: var(--accent-a); }
+    .f-eq          { color: #4cc9f0; }
+    .f-sym         { color: #ffd166; }
+    .quiz-prog-fill { background: var(--accent-grad); }
+    .score-ring    { background: var(--accent-grad); }
+
+    #simCanvas { border-radius: 10px; background: rgba(0,0,0,.4); display: block; }
+
+    .quiz-opt {
+      color: #ffffff !important; font-size: 1rem; min-height: 54px;
+      background: rgba(255,255,255,.05) !important; border-color: rgba(255,255,255,.12) !important;
+    }
+    .quiz-opt:hover:not(.answered) { background: rgba(67,97,238,.18) !important; border-color: #4361ee !important; }
+    .opt-ltr {
+      background: linear-gradient(135deg,#4361ee,#3a0ca3) !important; border: none !important;
+      color: #fff !important; font-weight: 900 !important; width: 36px !important; height: 36px !important;
+      font-size: .88rem !important; box-shadow: 0 0 10px rgba(67,97,238,.4);
+    }
+    .quiz-opt.correct           { background: rgba(6,214,160,.15) !important; border-color: #06d6a0 !important; }
+    .quiz-opt.correct .opt-ltr { background: linear-gradient(135deg,#06d6a0,#048a68) !important; }
+    .quiz-opt.wrong             { background: rgba(230,57,70,.15) !important; border-color: #e63946 !important; }
+    .quiz-opt.wrong   .opt-ltr { background: linear-gradient(135deg,#e63946,#9b2226) !important; }
+
+    .yt-player-wrap { border-radius: var(--r-md); overflow: hidden; }
+    .yt-thumb-card  { position: relative; aspect-ratio: 16/9; cursor: pointer; background: #000; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-thumb-img   { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease, filter .4s ease; filter: brightness(.75); }
+    .yt-thumb-card:hover .yt-thumb-img { transform: scale(1.04); filter: brightness(.6); }
+    .yt-thumb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+    .yt-big-play { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,0,0,.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #fff; box-shadow: 0 4px 30px rgba(0,0,0,.5); transition: transform .25s ease, background .25s ease; }
+    .yt-thumb-card:hover .yt-big-play { transform: scale(1.12); background: #ff0000; }
+    .yt-info-bar { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,.85), transparent); padding: 1.5rem 1rem .8rem; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    .yt-title-bar { font-size: .88rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .yt-ext-btn { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); color: #fff; padding: .35rem .8rem; border-radius: 6px; font-size: .75rem; font-weight: 600; text-decoration: none; white-space: nowrap; flex-shrink: 0; backdrop-filter: blur(6px); transition: background .2s; }
+    .yt-ext-btn:hover { background: rgba(255,255,255,.3); }
+    .yt-embed-frame { display: none; position: relative; aspect-ratio: 16/9; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .yt-embed-frame.visible { display: block; }
+
+    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .phet-mobile-note { display: none; background: rgba(255,209,102,.08); border: 1px solid rgba(255,209,102,.25); border-radius: var(--r-sm); padding: .7rem 1rem; margin-top: .8rem; font-size: .82rem; color: #ffd166; }
+
+    .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { display: flex; align-items: center; gap: .9rem; }
+    .footer-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-grad); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 900; color: #fff; box-shadow: 0 0 18px rgba(67,97,238,.5); flex-shrink: 0; }
+    .footer-name { font-weight: 800; font-size: .96rem; color: var(--text); }
+    .footer-role { font-size: .75rem; color: var(--text-muted); margin-top: .1rem; }
+    .footer-right { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .footer-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .28rem .75rem; border-radius: 100px; background: rgba(67,97,238,.12); border: 1px solid rgba(67,97,238,.28); font-size: .73rem; font-weight: 700; color: #4cc9f0; }
+    .footer-tag { font-size: .73rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); }
+
+    .sim-live-row { display: grid; grid-template-columns: repeat(2,1fr); gap: .6rem; margin-bottom: .8rem; }
+    .lv-box { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: .55rem .7rem; text-align: center; }
+    .lv-box .lbl { font-size: .7rem; color: var(--text-muted); margin-bottom: .2rem; }
+    .lv-box .val { font-size: .92rem; font-weight: 800; }
+
+    @media(max-width:700px) {
+      .sim-live-row { grid-template-columns: 1fr; }
+      .phet-mobile-note { display: block; }
+      .phet-wrap { padding-bottom: 80%; }
+      .yt-big-play { width: 60px; height: 60px; font-size: 1.3rem; }
+      .yt-title-bar { font-size: .8rem; }
+      .footer-role { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="page-progress"></div>
+
+<nav class="v2-nav">
+  <div class="inner">
+    <a class="nav-logo" href="../../index.html"><svg class="logo-atom" viewBox="0 0 40 40" width="26" height="26" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="3.2" fill="currentColor"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(120 20 20)"/></svg><span class="logo-text">VirtualLab</span></a>
+    <div class="nav-crumbs">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">›</span>
+      <a href="../index.html">Física 10°</a>
+      <span class="sep">›</span>
+      <a href="index.html">Período 3</a>
+      <span class="sep">›</span>
+      <span class="current">Hidrodinámica</span>
+    </div>
+    <div class="nav-right">
+      <a class="v2-btn v2-btn-ghost" href="1_hidrostatica.html">← Hidrostática</a>
+      <a class="v2-btn v2-btn-primary" href="3_bernoulli.html">Bernoulli →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="v2-hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-particles-layer" id="heroParticles"></div>
+  <div class="v2-wrap">
+    <div class="hero-content-wrap">
+      <div class="v2-badge">
+        <span class="badge-dot"></span>
+        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 10°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 3</a> &nbsp;·&nbsp; Tema 2
+      </div>
+      <h1>Hidrodinámica</h1>
+      <p class="hero-sub">
+        Descubre cómo se comportan los líquidos cuando se mueven. Entiende el caudal, la velocidad de flujo y por qué el agua sale más rápido si tapas la mitad de una manguera.
+      </p>
+      <div class="hero-tags">
+        <span class="h-tag">🌊 Flujo</span>
+        <span class="h-tag">📏 Caudal</span>
+        <span class="h-tag">🔄 Continuidad</span>
+        <span class="h-tag">🍯 Viscosidad</span>
+      </div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-mouse"></div>
+        <span>Desliza para explorar</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual-wrap">
+    <div class="orbital">
+      <div class="o-core" style="background: linear-gradient(135deg, #4cc9f0, #4361ee); box-shadow: 0 0 40px rgba(67,97,238,.6);"></div>
+      <div class="o-ring o-ring-1" style="border-color: rgba(67,97,238,.45);"></div>
+      <div class="o-ring o-ring-2" style="border-color: rgba(76,201,240,.35);"></div>
+      <div class="o-ring o-ring-3" style="border-color: rgba(67,97,238,.3);"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══ TEORÍA ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-teoria">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📖 Teoría</div>
+    <h2 class="v2-sec-title">Conceptos esenciales</h2>
+    <p class="v2-sec-desc">Haz clic en cada ficha para estudiar el tema. Puedes copiar el texto para tus apuntes.</p>
+  </div>
+
+  <div class="v2-tabs">
+    <button class="v2-tab active" data-tab="t-flujo">🌊 Tipos de Flujo</button>
+    <button class="v2-tab" data-tab="t-caudal">📏 Caudal</button>
+    <button class="v2-tab" data-tab="t-continuidad">🔄 Continuidad</button>
+    <button class="v2-tab" data-tab="t-viscosidad">🍯 Viscosidad</button>
+  </div>
+
+  <div class="v2-card">
+    <div id="t-flujo" class="v2-tab-panel active">
+      <button class="copy-teoria-btn" data-target="copy-flujo">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-flujo">
+        <h3>Fluidos en movimiento</h3>
+        <p>A diferencia de la hidrostática, la <strong>hidrodinámica</strong> estudia los fluidos que están en constante desplazamiento. Para simplificar, en Física 10° asumimos fluidos <em>ideales</em>: incompresibles (su volumen no cambia) y no viscosos (no hay fricción interna).</p>
+        <h3>Tipos de flujo</h3>
+        <ul>
+          <li><strong>Flujo Laminar:</strong> El fluido se mueve en capas o láminas paralelas y suaves. Sus líneas de corriente no se cruzan. Es predecible y calmado.</li>
+          <li><strong>Flujo Turbulento:</strong> El fluido es caótico. Se forman remolinos y las partículas cruzan las trayectorias de las demás. Ocurre a altas velocidades o frente a obstáculos.</li>
+        </ul>
+        <h3>Ejemplo cotidiano</h3>
+        <p>Abre la llave del lavamanos muy poco: verás que el agua cae transparente y recta (flujo laminar). Si la abres al máximo, el agua sale ruidosa, con burbujas y salpicando para todos lados (flujo turbulento).</p>
+      </div>
+    </div>
+
+    <div id="t-caudal" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-caudal">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-caudal">
+        <h3>Caudal o Gasto (Q)</h3>
+        <p>El caudal mide <strong>cuánto líquido</strong> pasa por una tubería o un río en una cierta cantidad de <strong>tiempo</strong>.</p>
+        <div class="key-box">💡 Fórmula 1: <strong>Q = V / t</strong> (Volumen dividido por tiempo). Se mide en m³/s o Litros/s.</div>
+        <h3>Relación con la velocidad y el área</h3>
+        <p>El caudal también depende del grosor de la tubería y de qué tan rápido vaya el agua. Por lo tanto, hay una segunda forma de calcularlo:</p>
+        <div class="key-box">💡 Fórmula 2: <strong>Q = A · v</strong> (Área de la tubería multiplicada por la velocidad del fluido).</div>
+        <h3>Ejemplo del Huila</h3>
+        <p>Imagina el caudal del río Magdalena en el malecón de Neiva. Si su cauce es muy ancho y profundo (Gran Área A), el agua puede pasar con relativa calma (baja velocidad v) y aún así entregar un caudal gigantesco al día.</p>
+      </div>
+    </div>
+
+    <div id="t-continuidad" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-continuidad">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-continuidad">
+        <h3>Ecuación de Continuidad</h3>
+        <p>Dado que el agua no se puede comprimir, todo el caudal que entra por un lado de una tubería cerrada TIENE que salir por el otro extremo. ¡El caudal se conserva! (<strong>Q₁ = Q₂</strong>).</p>
+        <div class="key-box">💡 Fórmula: <strong>A₁ · v₁ = A₂ · v₂</strong>.</div>
+        <h3>¿Qué significa esto?</h3>
+        <ul>
+          <li>Son magnitudes inversamente proporcionales.</li>
+          <li>Si el Área disminuye (un tubo más angosto), la velocidad <strong>debe aumentar</strong> para que pase la misma cantidad de agua.</li>
+          <li>Si el tubo se ensancha, el agua frena.</li>
+        </ul>
+        <h3>El clásico ejemplo de la manguera</h3>
+        <p>Cuando estás regando el jardín y quieres que el chorro llegue más lejos, ¿qué haces? ¡Tapas con el dedo la mitad de la boca de la manguera! Al reducir el <strong>área (A₂)</strong>, la <strong>velocidad (v₂)</strong> se dispara enormemente para lograr que pase el mismo caudal que viene desde la llave.</p>
+      </div>
+    </div>
+
+    <div id="t-viscosidad" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-viscosidad">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-viscosidad">
+        <h3>Viscosidad</h3>
+        <p>La viscosidad es la <strong>resistencia interna</strong> al flujo que presenta un fluido. Podríamos decir que es como la "fricción" entre las capas del propio líquido.</p>
+        <ul>
+          <li>El agua y el alcohol tienen <strong>baja viscosidad</strong>; fluyen rápidamente.</li>
+          <li>La miel, el aceite de motor y la glicerina tienen <strong>alta viscosidad</strong>; fluyen muy lento.</li>
+        </ul>
+        <h3>El efecto de la temperatura</h3>
+        <p>La temperatura afecta directamente la viscosidad. Cuando calientas miel (o aceite en el motor del carro), su viscosidad disminuye, volviéndose mucho más líquida y rápida. Al congelarse, los líquidos se vuelven más viscosos.</p>
+        <div class="key-box">💡 Para los cálculos en Hidrodinámica (como la Ecuación de Continuidad), generalmente asumimos fluidos "ideales", lo que significa que consideramos que su viscosidad es cero para facilitar las matemáticas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FÓRMULAS ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-formulas">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📐 Fórmulas</div>
+    <h2 class="v2-sec-title">Ecuaciones del flujo</h2>
+    <p class="v2-sec-desc">Pasa el cursor sobre cada tarjeta para ver el detalle de variables y unidades.</p>
+  </div>
+
+  <div class="formula-grid">
+
+    <div class="formula-card">
+      <div class="f-name">Caudal Volumétrico (1)</div>
+      <div class="f-eq">Q = V / t</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">Q</span><span class="f-desc">caudal</span><span class="f-unit">m³/s</span></div>
+        <div class="f-var"><span class="f-sym">V</span><span class="f-desc">volumen desplazado</span><span class="f-unit">m³</span></div>
+        <div class="f-var"><span class="f-sym">t</span><span class="f-desc">tiempo transcurrido</span><span class="f-unit">s</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Caudal Volumétrico (2)</div>
+      <div class="f-eq">Q = A · v</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">Q</span><span class="f-desc">caudal constante</span><span class="f-unit">m³/s</span></div>
+        <div class="f-var"><span class="f-sym">A</span><span class="f-desc">área de sección transversal</span><span class="f-unit">m²</span></div>
+        <div class="f-var"><span class="f-sym">v</span><span class="f-desc">velocidad del fluido</span><span class="f-unit">m/s</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Ecuación de Continuidad</div>
+      <div class="f-eq">A₁ · v₁ = A₂ · v₂</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">A</span><span class="f-desc">áreas de la tubería</span><span class="f-unit">m²</span></div>
+        <div class="f-var"><span class="f-sym">v</span><span class="f-desc">velocidades en esos puntos</span><span class="f-unit">m/s</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Área Circular (Tubo)</div>
+      <div class="f-eq">A = π · r²</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">A</span><span class="f-desc">área transversal</span><span class="f-unit">m²</span></div>
+        <div class="f-var"><span class="f-sym">π</span><span class="f-desc">constante pi</span><span class="f-unit">3.1416</span></div>
+        <div class="f-var"><span class="f-sym">r</span><span class="f-desc">radio de la tubería</span><span class="f-unit">m</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SIMULADOR ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-sim">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">💧 Simulador de Tuberías</div>
+    <h2 class="v2-sec-title">Ecuación de Continuidad</h2>
+    <p class="v2-sec-desc">Ajusta el radio de entrada y el radio de salida de la tubería. Observa cómo cambia radicalmente la velocidad de las partículas para conservar el caudal.</p>
+  </div>
+
+  <div class="v2-sim">
+    <div class="sim-topbar">
+      <div class="sim-tag"><div class="sim-dot" style="background:#4cc9f0;"></div> Flujo Continuo</div>
+      <div class="sim-ctrl-row">
+        <!-- El simulador corre automáticamente en hidrodinámica -->
+        <button class="s-btn" id="btnReset" title="Restaurar a valores de fábrica">↺</button>
+      </div>
+    </div>
+
+    <div class="sim-layout">
+      <div class="sim-sidebar">
+
+        <div class="s-label" style="color:#a5b4fc;">Entrada (Izquierda)</div>
+        <div class="s-label">Radio 1 (r₁)</div>
+        <input type="range" class="s-range" id="slR1" min="1" max="10" value="6" step="1">
+        <div class="s-val" id="valR1">r₁ = 6 m</div>
+
+        <div style="height:1rem"></div>
+
+        <div class="s-label" style="color:#ffd166;">Salida (Derecha)</div>
+        <div class="s-label">Radio 2 (r₂)</div>
+        <input type="range" class="s-range" id="slR2" min="1" max="10" value="3" step="1">
+        <div class="s-val" id="valR2">r₂ = 3 m</div>
+
+        <div style="height:1rem"></div>
+
+        <div class="s-label" style="color:#06d6a0;">Caudal Fijo (Q)</div>
+        <input type="range" class="s-range" id="slQ" min="100" max="1500" value="500" step="100">
+        <div class="s-val" id="valQ">Q = 500 m³/s</div>
+
+        <div style="margin-top:1.5rem; padding:.85rem; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:12px;">
+          <div style="font-size:.72rem; color:var(--text-muted); margin-bottom:.5rem; font-weight:700; letter-spacing:.05em;">ANÁLISIS DE VELOCIDAD</div>
+          <div style="display:flex;flex-direction:column;gap:.32rem;">
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:#a5b4fc;">Velocidad Entrada (v₁)</span><span id="liveV1" style="font-size:.82rem;font-weight:800;color:#fff;">0 m/s</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:#ffd166;">Velocidad Salida (v₂)</span><span id="liveV2" style="font-size:.82rem;font-weight:800;color:#fff;">0 m/s</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sim-main">
+        <canvas id="simCanvas" height="250" style="width:100%;"></canvas>
+        <p class="text-muted" style="margin-top:1rem; font-size:.8rem; text-align:center;">
+          Nota: Nota visual. Las áreas son proporcionales al cuadrado del radio. Si reduces el radio a la mitad, el área cae a una cuarta parte, por lo que la velocidad se multiplica por cuatro.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VIDEO ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-video">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🎬 Video explicativo</div>
+    <h2 class="v2-sec-title">Mira, escucha y entiende</h2>
+    <p class="v2-sec-desc">Toca el botón para reproducir el video directamente aquí.</p>
+  </div>
+
+  <div class="yt-player-wrap" id="ytPlayerWrap">
+    <!-- REEMPLAZAR ID DEL VIDEO -->
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('aYjY3J22vIE')">
+      <img class="yt-thumb-img"
+           src="https://img.youtube.com/vi/aYjY3J22vIE/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/aYjY3J22vIE/hqdefault.jpg'"
+           alt="Hidrodinámica — Física 10°">
+      <div class="yt-thumb-overlay">
+        <div class="yt-big-play">&#9654;</div>
+      </div>
+      <div class="yt-info-bar">
+        <div class="yt-title-bar">Hidrodinámica y Ecuación de Continuidad<br>
+          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Fluidos en movimiento · Toca para reproducir</span>
+        </div>
+        <a class="yt-ext-btn"
+           href="https://www.youtube.com/watch?v=aYjY3J22vIE"
+           target="_blank" rel="noopener"
+           onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
+      </div>
+    </div>
+    <div class="yt-embed-frame" id="ytEmbedFrame">
+      <iframe id="ytIframe" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+  <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
+    * ⚠️ <strong>Nota para docente:</strong> Actualiza el ID del video si subes uno específico de Hidrodinámica a tu canal.
+  </p>
+</section>
+
+<!-- ═══ PhET ═══ -->
+<section class="v2-section-sm v2-wrap anim-scroll" id="sec-phet">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🧪 Laboratorio PhET</div>
+    <h2 class="v2-sec-title">Flujo de Fluidos</h2>
+    <p class="v2-sec-desc">Laboratorio completo interactivo sobre presión, velocidad y caudal en tubos modificables.</p>
+  </div>
+  <div class="phet-wrap">
+    <!-- Se incluye la simulación PhET Fluid Pressure and Flow -->
+    <iframe
+      src="https://phet.colorado.edu/sims/html/fluid-pressure-and-flow/latest/fluid-pressure-and-flow_es.html"
+      title="Presión del Fluido y Flujo - PhET"
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+  <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
+    💡 <strong>Actividad sugerida:</strong> Ve a la pestaña "Flujo". Abre el grifo. Agarra la tubería de un extremo y redúcela lo máximo posible. Usa el medidor de velocidad antes y después del estrangulamiento.
+  </p>
+  <p class="phet-mobile-note">📱 Esta simulación funciona mejor en pantallas grandes o en un computador.</p>
+</section>
+
+<!-- ═══ TIPS ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-tips">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">💡 Tips y errores</div>
+    <h2 class="v2-sec-title">Lo que debes saber bien</h2>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:2rem;">
+    <div class="tip-card">
+      <div class="t-icon">📐</div>
+      <h4>Área NO es Radio</h4>
+      <p>Ten mucho cuidado en los problemas ICFES. La ecuación es A₁v₁ = A₂v₂. Si te dan el radio, recuerda que el área es proporcional al <strong>cuadrado del radio</strong> (A = πr²). ¡No cometas el error de usar el radio como área!</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🚀</div>
+      <h4>Se reduce el tubo, la velocidad estalla</h4>
+      <p>Si el radio de un tubo se reduce a la mitad (1/2), su área transversal se reduce a la cuarta parte (1/4). Por continuidad, para conservar el caudal, ¡la velocidad tiene que aumentar cuatro veces!</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🌊</div>
+      <h4>El Caudal nunca cambia</h4>
+      <p>En una manguera única (sin ramificaciones), la cantidad de litros por segundo que entra por la llave es exactamente la misma que sale por la boquilla. Si alguien te pregunta dónde es mayor el caudal, la respuesta es: <strong>es igual en todos lados</strong>.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🩸</div>
+      <h4>Flujo en tu cuerpo</h4>
+      <p>Esto se aplica a la sangre. La aorta es ancha, pero los capilares son diminutos. Si sumas el área de todos los capilares del cuerpo juntos, el área es inmensa. Por eso la sangre viaja lenta en los capilares y muy rápido en la aorta.</p>
+    </div>
+  </div>
+
+  <div class="v2-sec-label text-accent" style="margin-bottom:1rem;">❌ Errores frecuentes en el ICFES</div>
+  <div class="error-table-card">
+    <div class="err-row">
+      <div class="err-cell err-head err-bad">❌ Error frecuente</div>
+      <div class="err-cell err-head err-good">✅ Lo correcto</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Creer que al tapar media manguera con el dedo, sale "más agua".</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Sale exactamente la <strong>misma cantidad de agua</strong> por segundo (Q se conserva), pero como el hueco es más pequeño, el agua se ve obligada a salir a una <strong>velocidad mayor</strong>.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Asumir que si el diámetro se duplica, la velocidad se reduce a la mitad.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Si el diámetro se duplica, el ÁREA se cuadruplica (aumenta x4). Por lo tanto, la velocidad no cae a la mitad, cae a la cuarta parte (1/4).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUIZ ICFES ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-quiz">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📝 Quiz ICFES</div>
+    <h2 class="v2-sec-title">¿Entendiste el tema?</h2>
+    <p class="v2-sec-desc">5 preguntas estilo ICFES. Léelas con calma, no hay tiempo límite.</p>
+  </div>
+
+  <div class="quiz-v2" id="quizBox">
+    <div class="quiz-top">
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizFill" style="width:0%"></div></div>
+      <div class="quiz-cnt" id="quizCnt">Pregunta 1 de 5</div>
+    </div>
+    <div class="quiz-body" id="quizBody">
+      <div class="quiz-q" id="qText"></div>
+      <div class="quiz-opts" id="qOpts"></div>
+      <div class="quiz-fb" id="qFb"></div>
+    </div>
+    <div class="quiz-foot">
+      <button class="v2-btn v2-btn-primary" id="qNext" style="display:none">Siguiente →</button>
+    </div>
+    <div class="quiz-result-screen" id="quizResult">
+      <div class="score-ring" id="scoreRing">
+        <div class="score-big" id="scoreBig">0/5</div>
+        <div class="score-sub">respuestas correctas</div>
+      </div>
+      <div class="score-msg" id="scoreMsg"></div>
+      <div class="score-hint" id="scoreHint"></div>
+      <button class="v2-btn v2-btn-primary" id="qRestart">🔄 Intentar de nuevo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NAVEGACIÓN ═══ -->
+<div class="v2-wrap">
+  <hr class="v2-hr">
+  <div class="v2-page-nav">
+    <a class="nav-btn-card" href="1_hidrostatica.html">
+      <span class="nbc-arr">←</span>
+      <div>
+        <div class="nbc-sub">Tema anterior</div>
+        <div class="nbc-title">Hidrostática</div>
+      </div>
+    </a>
+    <a class="nav-btn-card right" href="3_bernoulli.html">
+      <div>
+        <div class="nbc-sub">Siguiente tema</div>
+        <div class="nbc-title">Ecuación de Bernoulli</div>
+      </div>
+      <span class="nbc-arr">→</span>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="v2-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-avatar">LC</div>
+      <div>
+        <div class="footer-name">Docente Luis Miguel Cabrera</div>
+        <div class="footer-role">I.E. Paulo VI &nbsp;·&nbsp; Huila, Colombia &nbsp;·&nbsp; Física & Matemáticas</div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">⚛️ VirtualLab 2026</span>
+      <span class="footer-tag">lumcab</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+/* VIDEO */
+function ytLoadEmbed(id) {
+  const thumb = document.getElementById('ytThumbCard'), frame = document.getElementById('ytEmbedFrame'), iframe = document.getElementById('ytIframe');
+  if (!thumb || !frame || !iframe) return;
+  thumb.style.display = 'none'; frame.classList.add('visible');
+  iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&color=white';
+}
+
+/* PROGRESS BAR */
+(function () {
+  const bar = document.getElementById('page-progress');
+  window.addEventListener('scroll', () => { const h = document.documentElement.scrollHeight - window.innerHeight; bar.style.width = (window.scrollY / h * 100) + '%'; }, { passive: true });
+})();
+
+/* SCROLL ANIM */
+(function () {
+  const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }), { threshold: 0.1 });
+  document.querySelectorAll('.anim-scroll').forEach(el => obs.observe(el));
+})();
+
+/* TABS */
+(function () {
+  document.querySelectorAll('.v2-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const g = btn.closest('section') || btn.parentElement.parentElement;
+      g.querySelectorAll('.v2-tab').forEach(b => b.classList.remove('active'));
+      g.querySelectorAll('.v2-tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = g.querySelector('#' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+})();
+
+/* COPIAR */
+document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const t = document.getElementById(btn.dataset.target); if (!t) return;
+    navigator.clipboard.writeText(t.innerText).then(() => {
+      btn.textContent = '✅ ¡Copiado!'; btn.classList.add('done');
+      setTimeout(() => { btn.textContent = '📋 Copiar para mis apuntes'; btn.classList.remove('done'); }, 2500);
+    }).catch(() => { btn.textContent = '⚠️ Copia manualmente'; });
+  });
+});
+
+/* ==========================================
+   SIMULADOR DE CONTINUIDAD (Tubería)
+========================================== */
+(function () {
+  const canvas = document.getElementById('simCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  const inputs = {
+    r1: document.getElementById('slR1'),
+    r2: document.getElementById('slR2'),
+    q: document.getElementById('slQ')
+  };
+  
+  const vals = {
+    r1: document.getElementById('valR1'),
+    r2: document.getElementById('valR2'),
+    q: document.getElementById('valQ')
+  };
+
+  const lives = {
+    v1: document.getElementById('liveV1'),
+    v2: document.getElementById('liveV2')
+  };
+
+  const btnReset = document.getElementById('btnReset');
+
+  let raf;
+  let r1, r2, q;
+  let v1, v2;
+  
+  // Sistema de partículas
+  const particles = [];
+  const NUM_PARTICLES = 150;
+  
+  for(let i=0; i<NUM_PARTICLES; i++) {
+    particles.push({
+      x: Math.random() * 800, // posición aleatoria inicial en el ancho máximo asimilado
+      yRel: (Math.random() - 0.5) * 2 // entre -1 y 1 (posición relativa al tubo)
+    });
+  }
+
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = canvas.offsetWidth * dpr;
+    canvas.height = 250 * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); 
+    ctx.scale(dpr, dpr);
+  }
+
+  function readInputs() {
+    r1 = parseFloat(inputs.r1.value);
+    r2 = parseFloat(inputs.r2.value);
+    q = parseFloat(inputs.q.value);
+    
+    vals.r1.textContent = `r₁ = ${r1} m`;
+    vals.r2.textContent = `r₂ = ${r2} m`;
+    vals.q.textContent = `Q = ${q} m³/s`;
+    
+    // Áreas
+    const a1 = Math.PI * r1 * r1;
+    const a2 = Math.PI * r2 * r2;
+    
+    // Velocidades
+    v1 = q / a1;
+    v2 = q / a2;
+    
+    lives.v1.textContent = `${v1.toFixed(1)} m/s`;
+    lives.v2.textContent = `${v2.toFixed(1)} m/s`;
+  }
+
+  function resetSim() {
+    inputs.r1.value = 6;
+    inputs.r2.value = 3;
+    inputs.q.value = 500;
+    readInputs();
+  }
+
+  function drawPipe() {
+    const W = canvas.offsetWidth;
+    const H = 250;
+    const midX = W / 2;
+    const centerY = H / 2;
+    
+    // Proporciones visuales para radios
+    const visualScale = 8; 
+    const h1 = r1 * visualScale;
+    const h2 = r2 * visualScale;
+    
+    const transLen = 60; // longitud de la transición
+    
+    // Dibujo del tubo (Fondo)
+    ctx.fillStyle = 'rgba(255,255,255,.05)';
+    ctx.beginPath();
+    // Pared superior
+    ctx.moveTo(0, centerY - h1);
+    ctx.lineTo(midX - transLen/2, centerY - h1);
+    ctx.lineTo(midX + transLen/2, centerY - h2);
+    ctx.lineTo(W, centerY - h2);
+    // Pared inferior
+    ctx.lineTo(W, centerY + h2);
+    ctx.lineTo(midX + transLen/2, centerY + h2);
+    ctx.lineTo(midX - transLen/2, centerY + h1);
+    ctx.lineTo(0, centerY + h1);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Bordes del tubo
+    ctx.strokeStyle = 'rgba(76,201,240,.6)';
+    ctx.lineWidth = 3;
+    
+    ctx.beginPath();
+    ctx.moveTo(0, centerY - h1);
+    ctx.lineTo(midX - transLen/2, centerY - h1);
+    ctx.lineTo(midX + transLen/2, centerY - h2);
+    ctx.lineTo(W, centerY - h2);
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.moveTo(0, centerY + h1);
+    ctx.lineTo(midX - transLen/2, centerY + h1);
+    ctx.lineTo(midX + transLen/2, centerY + h2);
+    ctx.lineTo(W, centerY + h2);
+    ctx.stroke();
+    
+    return { h1, h2, transLen, midX, centerY };
+  }
+
+  function renderLoop() {
+    readInputs();
+    const W = canvas.offsetWidth;
+    const H = 250;
+    ctx.clearRect(0, 0, W, H);
+    
+    const { h1, h2, transLen, midX, centerY } = drawPipe();
+    
+    // Actualizar y dibujar partículas
+    // Escala de velocidad visual para que sea comprensible
+    const visualVScale = 0.5; 
+    
+    ctx.fillStyle = '#4cc9f0';
+    for(let i=0; i<NUM_PARTICLES; i++) {
+      let p = particles[i];
+      
+      // Encontrar altura del tubo en la posición x
+      let currentHalfH;
+      let currentV;
+      
+      if (p.x < midX - transLen/2) {
+        currentHalfH = h1;
+        currentV = v1;
+      } else if (p.x > midX + transLen/2) {
+        currentHalfH = h2;
+        currentV = v2;
+      } else {
+        // En transición (interpolación lineal)
+        let t = (p.x - (midX - transLen/2)) / transLen;
+        currentHalfH = h1 + (h2 - h1) * t;
+        // La velocidad real es inversamente proporcional al cuadrado del radio
+        // Pero para la simulación usaremos una interpolación aproximada
+        let currentR = r1 + (r2 - r1) * t;
+        currentV = q / (Math.PI * currentR * currentR);
+      }
+      
+      // Mover partícula
+      p.x += currentV * visualVScale;
+      
+      // Reciclar partícula al inicio si sale por la derecha
+      if (p.x > W) {
+        p.x = -10;
+        p.yRel = (Math.random() - 0.5) * 2;
+      }
+      
+      // Dibujar
+      const absY = centerY + (p.yRel * currentHalfH * 0.85); // 0.85 para no rozar exactamente el borde
+      
+      ctx.beginPath();
+      // Crear un efecto de estela basado en la velocidad
+      const tail = currentV * 0.8; 
+      ctx.moveTo(p.x, absY);
+      ctx.lineTo(p.x - tail, absY);
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = `rgba(76,201,240,${0.3 + (currentV/v2)*0.6})`; // más rápido = más brillante
+      ctx.stroke();
+      
+      ctx.beginPath();
+      ctx.arc(p.x, absY, 2.5, 0, Math.PI*2);
+      ctx.fill();
+    }
+    
+    raf = requestAnimationFrame(renderLoop);
+  }
+
+  btnReset.addEventListener('click', resetSim);
+  
+  window.addEventListener('resize', () => { resize(); });
+  resize(); readInputs(); 
+  renderLoop(); // Arranca en automático
+})();
+
+/* ==========================================
+   QUIZ ICFES
+========================================== */
+(function () {
+  const Qs = [
+    {
+      q: 'El agua fluye por un tubo horizontal cerrado. Si el tubo se estrecha reduciendo su diámetro a la mitad, ¿qué sucede con la velocidad del agua?',
+      opts: ['A) Disminuye a la mitad', 'B) Se mantiene igual porque el caudal se conserva', 'C) Aumenta al doble', 'D) Aumenta cuatro veces'],
+      ans: 3,
+      fb: '✓ Correcto. El área de un círculo es A = πr². Si el diámetro (y por ende el radio) baja a 1/2, el área cae a (1/2)² = 1/4. Por la ecuación de continuidad, para mantener Q, la velocidad debe multiplicarse por 4.'
+    },
+    {
+      q: '¿Qué es el caudal (Gasto volumétrico)?',
+      opts: ['A) La fuerza con la que el agua golpea una pared', 'B) La cantidad de masa de agua en la tubería', 'C) El volumen de agua que pasa por una sección en un tiempo determinado', 'D) La presión interna de la tubería'],
+      ans: 2,
+      fb: '✓ Correcto. El caudal (Q = V/t) mide el volumen de líquido que atraviesa la tubería cada segundo.'
+    },
+    {
+      q: 'Un agricultor del Huila usa una manguera conectada a la llave. Si no varía la apertura de la llave, pero él cambia la boquilla por una más ancha, ¿qué le ocurre al caudal?',
+      opts: ['A) El caudal disminuye', 'B) El caudal aumenta', 'C) El caudal se mantiene constante', 'D) El caudal se vuelve cero'],
+      ans: 2,
+      fb: '✓ Correcto. En un sistema cerrado continuo el caudal lo impone la fuente (la llave de paso). Si cambia el ancho de la boquilla, cambia la VELOCIDAD del agua que sale, pero el CAUDAL general (litros por minuto) no varía.'
+    },
+    {
+      q: '¿Qué diferencia principal hay entre un fluido ideal y uno real en la hidrodinámica básica?',
+      opts: ['A) El fluido ideal tiene mayor densidad', 'B) El fluido ideal se asume sin viscosidad', 'C) El fluido ideal fluye hacia arriba', 'D) El fluido ideal no puede comprimirse nunca, los líquidos reales sí, muy fácilmente'],
+      ans: 1,
+      fb: '✓ Correcto. En la hidrodinámica de 10° simplificamos los fluidos asumiéndolos "ideales", lo cual significa que ignoramos su viscosidad (fricción interna).'
+    },
+    {
+      q: 'Se tiene un tubo con una sección A₁=10 m² donde el agua viaja a 2 m/s. Se estrecha a A₂=5 m². ¿Cuál es la velocidad en la segunda sección?',
+      opts: ['A) 1 m/s', 'B) 2 m/s', 'C) 4 m/s', 'D) 10 m/s'],
+      ans: 2,
+      fb: '✓ Correcto. A₁·v₁ = A₂·v₂  =>  10 · 2 = 5 · v₂  =>  20 = 5 · v₂  =>  v₂ = 4 m/s. Como el área se redujo a la mitad, la velocidad se duplicó.'
+    }
+  ];
+
+  let current = 0, score = 0, answered = false;
+  const qText = document.getElementById('qText'), qOpts = document.getElementById('qOpts');
+  const qFb = document.getElementById('qFb'), qNext = document.getElementById('qNext');
+  const quizFill = document.getElementById('quizFill'), quizCnt = document.getElementById('quizCnt');
+  const quizBody = document.getElementById('quizBody'), quizResult = document.getElementById('quizResult');
+  const scoreBig = document.getElementById('scoreBig'), scoreMsg = document.getElementById('scoreMsg');
+  const scoreHint = document.getElementById('scoreHint'), qRestart = document.getElementById('qRestart');
+  const L = ['A', 'B', 'C', 'D'];
+
+  function render() {
+    answered = false;
+    const p = Qs[current];
+    qText.textContent = p.q;
+    quizCnt.textContent = `Pregunta ${current + 1} de ${Qs.length}`;
+    quizFill.style.width = (current / Qs.length * 100) + '%';
+    qFb.className = 'quiz-fb'; qFb.textContent = ''; qNext.style.display = 'none';
+    qOpts.innerHTML = '';
+    p.opts.forEach((opt, i) => {
+      const btn = document.createElement('button'); btn.className = 'quiz-opt';
+      btn.style.cssText = 'display:flex;align-items:center;gap:.8rem;width:100%;padding:1rem 1.1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;cursor:pointer;font-size:1rem;font-family:inherit;color:#ffffff;text-align:left;min-height:54px;transition:all .2s;';
+      const ltr = document.createElement('span'); ltr.className = 'opt-ltr'; ltr.textContent = L[i];
+      ltr.style.cssText = 'display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#4361ee,#3a0ca3);color:#fff;font-weight:900;font-size:.9rem;box-shadow:0 0 12px rgba(67,97,238,.5);';
+      btn.appendChild(ltr); btn.appendChild(document.createTextNode(opt.replace(/^[ABCD]\) /, '')));
+      btn.addEventListener('click', () => {
+        if (answered) return; answered = true;
+        qOpts.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('answered'));
+        if (i === p.ans) {
+          btn.style.background = 'rgba(6,214,160,.18)'; btn.style.borderColor = '#06d6a0';
+          ltr.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)'; score++;
+          qFb.textContent = p.fb; qFb.className = 'quiz-fb ok-fb show';
+        } else {
+          btn.style.background = 'rgba(230,57,70,.18)'; btn.style.borderColor = '#e63946';
+          ltr.style.background = 'linear-gradient(135deg,#e63946,#9b2226)';
+          const cb = qOpts.querySelectorAll('.quiz-opt')[p.ans];
+          cb.style.background = 'rgba(6,214,160,.18)'; cb.style.borderColor = '#06d6a0';
+          const cl = cb.querySelector('.opt-ltr'); if (cl) cl.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)';
+          qFb.textContent = '✗ Incorrecto. ' + p.fb; qFb.className = 'quiz-fb err-fb show';
+        }
+        qNext.style.display = 'inline-flex';
+      });
+      qOpts.appendChild(btn);
+    });
+  }
+
+  qNext.addEventListener('click', () => { current++; if (current >= Qs.length) showResult(); else render(); });
+
+  function showResult() {
+    quizFill.style.width = '100%';
+    quizBody.style.display = 'none'; document.querySelector('.quiz-foot').style.display = 'none';
+    quizResult.classList.add('show'); scoreBig.textContent = score + '/' + Qs.length;
+    const pct = score / Qs.length;
+    if (pct === 1)       { scoreMsg.textContent = '🏆 ¡Excelente! Eres un experto en fluidos.'; scoreHint.textContent = 'Comprendes a la perfección la ecuación de continuidad. Ya estás listo para el último reto: Bernoulli.'; }
+    else if (pct >= 0.6) { scoreMsg.textContent = '👍 ¡Buen trabajo!'; scoreHint.textContent = 'Recuerda muy bien la relación cuadrática entre el área y el radio de la tubería.'; }
+    else                 { scoreMsg.textContent = '📖 Vuelve a repasar el tema.'; scoreHint.textContent = 'La relación área/velocidad es vital. Intenta usar el simulador de tuberías nuevamente prestando atención a los números.'; }
+  }
+
+  qRestart.addEventListener('click', () => {
+    current = 0; score = 0;
+    quizBody.style.display = ''; document.querySelector('.quiz-foot').style.display = '';
+    quizResult.classList.remove('show'); render();
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

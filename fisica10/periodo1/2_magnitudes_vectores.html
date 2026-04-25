@@ -257,7 +257,7 @@
       <span class="current">Magnitudes y Vectores</span>
     </div>
     <div class="nav-right">
-      <a class="v2-btn v2-btn-ghost" href="1_intro_fisica.html">← Anterior</a>
+      <a class="v2-btn v2-btn-ghost" href="1_intro_fisica.html">← Introducción</a>
       <a class="v2-btn v2-btn-primary" href="3_cinematica_v2.html">Cinemática →</a>
     </div>
   </div>
@@ -275,7 +275,7 @@
     <div class="hero-content-wrap">
       <div class="v2-badge">
         <span class="badge-dot"></span>
-        Física 10° &nbsp;·&nbsp; Período 1 &nbsp;·&nbsp; Tema 2
+        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 10°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 1</a> &nbsp;·&nbsp; Tema 2
       </div>
       <h1>Magnitudes, Unidades y Vectores</h1>
       <p class="hero-sub">
@@ -1057,10 +1057,15 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
     ctx.restore();
   }
 
-  function resize() { canvas.width = canvas.offsetWidth; canvas.height = 300; }
+  function resize() { 
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = canvas.offsetWidth * dpr; 
+    canvas.height = 300 * dpr; 
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+  }
 
   function draw() {
-    const W = canvas.width, H = canvas.height;
+    const W = canvas.offsetWidth, H = 300;
     ctx.clearRect(0, 0, W, H);
 
     ctx.fillStyle = 'rgba(0,0,0,.4)';

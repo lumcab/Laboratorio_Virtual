@@ -152,7 +152,7 @@
     <div class="hero-content-wrap">
       <div class="v2-badge">
         <span class="badge-dot"></span>
-        Física 10° &nbsp;·&nbsp; Período 2 &nbsp;·&nbsp; Tema 1
+        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 10°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 2</a> &nbsp;·&nbsp; Tema 1
       </div>
       <h1>Dinámica y Equilibrio</h1>
       <p class="hero-sub">
@@ -717,9 +717,13 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   }
 
   function resize() {
-    labC.width  = labC.offsetWidth; labC.height = 130;
-    dclC.width  = dclC.offsetWidth; dclC.height = 170;
-    bx = labC.width / 2;
+    const dpr = window.devicePixelRatio || 1;
+    labC.width  = labC.offsetWidth * dpr; labC.height = 130 * dpr;
+    dclC.width  = dclC.offsetWidth * dpr; dclC.height = 170 * dpr;
+    lc.setTransform(1, 0, 0, 1, 0, 0); lc.scale(dpr, dpr);
+    dc.setTransform(1, 0, 0, 1, 0, 0); dc.scale(dpr, dpr);
+    bx = labC.offsetWidth / 2;
+    if (!running && typeof mass !== 'undefined') { drawLab(); drawDCL(); }
   }
 
   function reset() {
@@ -745,7 +749,7 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   }
 
   function drawLab() {
-    const W = labC.width, H = labC.height;
+    const W = labC.offsetWidth, H = 130;
     lc.clearRect(0, 0, W, H);
     lc.fillStyle = 'rgba(0,0,0,.35)';
     lc.beginPath(); lc.roundRect(0, 0, W, H, 10); lc.fill();
@@ -798,7 +802,7 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   }
 
   function drawDCL() {
-    const W = dclC.width, H = dclC.height;
+    const W = dclC.offsetWidth, H = 170;
     dc.clearRect(0, 0, W, H);
     dc.fillStyle = 'rgba(0,0,0,.3)';
     dc.beginPath(); dc.roundRect(0, 0, W, H, 10); dc.fill();

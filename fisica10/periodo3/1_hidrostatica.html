@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hidrostática | Física 10° · VirtualLab</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/icons/favicon.ico">
+  <link rel="stylesheet" href="../../css/tema-v2.css">
+  <script src="../../js/theme.js"></script>
+  <style>
+    :root {
+      --accent-a: #4361ee;
+      --accent-b: #3a0ca3;
+      --accent-c: #4cc9f0;
+      --accent-grad: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+      --hero-c1: #4cc9f0;
+      --hero-c2: #4361ee;
+    }
+    .v2-badge      { background: rgba(67,97,238,.12); border-color: rgba(67,97,238,.35); color: #4cc9f0; }
+    .badge-dot     { background: #4cc9f0; }
+    .o-core        { background: var(--accent-grad); box-shadow: 0 0 40px rgba(67,97,238,.6); }
+    .o-ring-1      { width: 110px; height: 110px; border-color: rgba(67,97,238,.45); animation-duration: 4s; }
+    .o-ring-1::after { background: #4361ee; box-shadow: 0 0 14px #4361ee; }
+    .o-ring-2      { width: 190px; height: 190px; border-color: rgba(76,201,240,.35); animation-duration: 7s; animation-direction: reverse; }
+    .o-ring-2::after { background: #4cc9f0; box-shadow: 0 0 14px #4cc9f0; }
+    .o-ring-3      { width: 290px; height: 290px; border-color: rgba(58,12,163,.3); animation-duration: 13s; }
+    .o-ring-3::after { background: #3a0ca3; box-shadow: 0 0 14px #3a0ca3; width: 8px; height: 8px; top:-4px; left: calc(50% - 4px); }
+    .v2-tab.active { background: var(--accent-a); }
+    .f-eq          { color: #4cc9f0; }
+    .f-sym         { color: #ffd166; }
+    .quiz-prog-fill { background: var(--accent-grad); }
+    .score-ring    { background: var(--accent-grad); }
+
+    #simCanvas { border-radius: 10px; background: rgba(0,0,0,.4); display: block; }
+
+    .quiz-opt {
+      color: #ffffff !important; font-size: 1rem; min-height: 54px;
+      background: rgba(255,255,255,.05) !important; border-color: rgba(255,255,255,.12) !important;
+    }
+    .quiz-opt:hover:not(.answered) { background: rgba(67,97,238,.18) !important; border-color: #4361ee !important; }
+    .opt-ltr {
+      background: linear-gradient(135deg,#4361ee,#3a0ca3) !important; border: none !important;
+      color: #fff !important; font-weight: 900 !important; width: 36px !important; height: 36px !important;
+      font-size: .88rem !important; box-shadow: 0 0 10px rgba(67,97,238,.4);
+    }
+    .quiz-opt.correct           { background: rgba(6,214,160,.15) !important; border-color: #06d6a0 !important; }
+    .quiz-opt.correct .opt-ltr { background: linear-gradient(135deg,#06d6a0,#048a68) !important; }
+    .quiz-opt.wrong             { background: rgba(230,57,70,.15) !important; border-color: #e63946 !important; }
+    .quiz-opt.wrong   .opt-ltr { background: linear-gradient(135deg,#e63946,#9b2226) !important; }
+
+    .yt-player-wrap { border-radius: var(--r-md); overflow: hidden; }
+    .yt-thumb-card  { position: relative; aspect-ratio: 16/9; cursor: pointer; background: #000; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-thumb-img   { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease, filter .4s ease; filter: brightness(.75); }
+    .yt-thumb-card:hover .yt-thumb-img { transform: scale(1.04); filter: brightness(.6); }
+    .yt-thumb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+    .yt-big-play { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,0,0,.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #fff; box-shadow: 0 4px 30px rgba(0,0,0,.5); transition: transform .25s ease, background .25s ease; }
+    .yt-thumb-card:hover .yt-big-play { transform: scale(1.12); background: #ff0000; }
+    .yt-info-bar { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,.85), transparent); padding: 1.5rem 1rem .8rem; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    .yt-title-bar { font-size: .88rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .yt-ext-btn { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); color: #fff; padding: .35rem .8rem; border-radius: 6px; font-size: .75rem; font-weight: 600; text-decoration: none; white-space: nowrap; flex-shrink: 0; backdrop-filter: blur(6px); transition: background .2s; }
+    .yt-ext-btn:hover { background: rgba(255,255,255,.3); }
+    .yt-embed-frame { display: none; position: relative; aspect-ratio: 16/9; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .yt-embed-frame.visible { display: block; }
+
+    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .phet-mobile-note { display: none; background: rgba(255,209,102,.08); border: 1px solid rgba(255,209,102,.25); border-radius: var(--r-sm); padding: .7rem 1rem; margin-top: .8rem; font-size: .82rem; color: #ffd166; }
+
+    .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { display: flex; align-items: center; gap: .9rem; }
+    .footer-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-grad); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 900; color: #fff; box-shadow: 0 0 18px rgba(67,97,238,.5); flex-shrink: 0; }
+    .footer-name { font-weight: 800; font-size: .96rem; color: var(--text); }
+    .footer-role { font-size: .75rem; color: var(--text-muted); margin-top: .1rem; }
+    .footer-right { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .footer-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .28rem .75rem; border-radius: 100px; background: rgba(67,97,238,.12); border: 1px solid rgba(67,97,238,.28); font-size: .73rem; font-weight: 700; color: #4cc9f0; }
+    .footer-tag { font-size: .73rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); }
+
+    .sim-live-row { display: grid; grid-template-columns: repeat(3,1fr); gap: .6rem; margin-bottom: .8rem; }
+    .lv-box { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: .55rem .7rem; text-align: center; }
+    .lv-box .lbl { font-size: .7rem; color: var(--text-muted); margin-bottom: .2rem; }
+    .lv-box .val { font-size: .92rem; font-weight: 800; }
+
+    @media(max-width:700px) {
+      .sim-live-row { grid-template-columns: 1fr; }
+      .phet-mobile-note { display: block; }
+      .phet-wrap { padding-bottom: 80%; }
+      .yt-big-play { width: 60px; height: 60px; font-size: 1.3rem; }
+      .yt-title-bar { font-size: .8rem; }
+      .footer-role { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="page-progress"></div>
+
+<nav class="v2-nav">
+  <div class="inner">
+    <a class="nav-logo" href="../../index.html"><svg class="logo-atom" viewBox="0 0 40 40" width="26" height="26" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="3.2" fill="currentColor"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(120 20 20)"/></svg><span class="logo-text">VirtualLab</span></a>
+    <div class="nav-crumbs">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">›</span>
+      <a href="../index.html">Física 10°</a>
+      <span class="sep">›</span>
+      <a href="index.html">Período 3</a>
+      <span class="sep">›</span>
+      <span class="current">Hidrostática</span>
+    </div>
+    <div class="nav-right">
+      <a class="v2-btn v2-btn-ghost" href="index.html">← Índice Período 3</a>
+      <a class="v2-btn v2-btn-primary" href="2_hidrodinamica.html">Hidrodinámica →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="v2-hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-particles-layer" id="heroParticles"></div>
+  <div class="v2-wrap">
+    <div class="hero-content-wrap">
+      <div class="v2-badge">
+        <span class="badge-dot"></span>
+        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 10°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 3</a> &nbsp;·&nbsp; Tema 1
+      </div>
+      <h1>Hidrostática</h1>
+      <p class="hero-sub">
+        Sumérgete en el estudio de los fluidos en reposo. Descubre cómo la presión aumenta con la profundidad y por qué barcos pesados pueden flotar en el agua.
+      </p>
+      <div class="hero-tags">
+        <span class="h-tag">💧 Densidad</span>
+        <span class="h-tag">🌊 Presión</span>
+        <span class="h-tag">⚙️ Pascal</span>
+        <span class="h-tag">🚢 Arquímedes</span>
+        <span class="h-tag">⚖️ Flotación</span>
+      </div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-mouse"></div>
+        <span>Desliza para explorar</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual-wrap">
+    <div class="orbital">
+      <div class="o-core" style="background: linear-gradient(135deg, #06d6a0, #118ab2); box-shadow: 0 0 40px rgba(17,138,178,.6);"></div>
+      <div class="o-ring o-ring-1" style="border-color: rgba(17,138,178,.45);"></div>
+      <div class="o-ring o-ring-2" style="border-color: rgba(6,214,160,.35);"></div>
+      <div class="o-ring o-ring-3" style="border-color: rgba(17,138,178,.3);"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══ TEORÍA ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-teoria">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📖 Teoría</div>
+    <h2 class="v2-sec-title">Conceptos esenciales</h2>
+    <p class="v2-sec-desc">Haz clic en cada ficha para estudiar el tema. Puedes copiar el texto para tus apuntes.</p>
+  </div>
+
+  <div class="v2-tabs">
+    <button class="v2-tab active" data-tab="t-densidad">💧 Densidad</button>
+    <button class="v2-tab" data-tab="t-presion">🌊 Presión Hidrostática</button>
+    <button class="v2-tab" data-tab="t-pascal">⚙️ Principio de Pascal</button>
+    <button class="v2-tab" data-tab="t-arquimedes">🚢 Principio de Arquímedes</button>
+  </div>
+
+  <div class="v2-card">
+    <div id="t-densidad" class="v2-tab-panel active">
+      <button class="copy-teoria-btn" data-target="copy-densidad">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-densidad">
+        <h3>Densidad de los materiales</h3>
+        <p>La <strong>densidad (ρ)</strong> es una propiedad intrínseca de los materiales que relaciona la masa de un objeto con el volumen que ocupa.</p>
+        <div class="key-box">💡 Fórmula: <strong>ρ = m / V</strong>. Se mide en <strong>kg/m³</strong> o en <strong>g/cm³</strong>.</div>
+        <h3>Datos importantes</h3>
+        <ul>
+          <li>El agua pura tiene una densidad de <strong>1 000 kg/m³</strong> (o 1 g/cm³).</li>
+          <li>El hielo es menos denso que el agua líquida (aprox. 917 kg/m³), por eso los cubos de hielo flotan en tu bebida.</li>
+          <li>Los gases tienen densidades muy pequeñas comparadas con los líquidos y sólidos.</li>
+        </ul>
+        <h3>Ejemplo práctico</h3>
+        <p>Un kilogramo de plomo y un kilogramo de algodón tienen exactamente la misma masa, pero el algodón ocupa un volumen inmenso en comparación con el plomo porque su densidad es muchísimo menor.</p>
+      </div>
+    </div>
+
+    <div id="t-presion" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-presion">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-presion">
+        <h3>Presión Hidrostática</h3>
+        <p>Es la presión que ejerce un líquido en reposo sobre las paredes del recipiente que lo contiene y sobre cualquier objeto sumergido en él. Aumenta con la <strong>profundidad</strong>.</p>
+        <div class="key-box">💡 Fórmula: <strong>Ph = ρ · g · h</strong> — depende de la densidad del líquido, la gravedad y la profundidad (h).</div>
+        <h3>Conceptos Clave</h3>
+        <ul>
+          <li>A mayor profundidad, mayor es el peso de la columna de líquido por encima de ti, por lo tanto, mayor presión.</li>
+          <li>La <strong>Presión Absoluta</strong> es la suma de la presión hidrostática más la presión atmosférica que actúa sobre la superficie del líquido (P_abs = P_atm + Ph).</li>
+        </ul>
+        <h3>Ejemplo en el Huila</h3>
+        <p>Si nadas en la represa de Betania, a medida que te sumerges sientes que tus oídos se tapan. Esto ocurre porque la presión hidrostática aumenta rápidamente con cada metro de profundidad, presionando tus tímpanos.</p>
+      </div>
+    </div>
+
+    <div id="t-pascal" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-pascal">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-pascal">
+        <h3>Principio de Pascal</h3>
+        <p>Cualquier presión aplicada a un líquido encerrado en un recipiente se transmite <strong>sin disminución</strong> a todos los puntos del líquido y a las paredes del recipiente.</p>
+        <div class="key-box">💡 Ecuación de la prensa hidráulica: <strong>F₁ / A₁ = F₂ / A₂</strong>.</div>
+        <h3>¿Para qué sirve?</h3>
+        <ul>
+          <li>Nos permite multiplicar fuerzas. Si aplicamos una pequeña fuerza (F₁) sobre un pistón pequeño (A₁), obtendremos una gran fuerza (F₂) en un pistón grande (A₂).</li>
+          <li>Es la base de funcionamiento de los frenos de los carros, los gatos hidráulicos y las grúas pesadas.</li>
+        </ul>
+        <h3>Ejemplo práctico</h3>
+        <p>Al presionar suavemente el pedal del freno en un carro (fuerza pequeña), el líquido de frenos transmite esa presión hasta las llantas, generando una fuerza gigantesca capaz de detener un vehículo de 2 toneladas a alta velocidad.</p>
+      </div>
+    </div>
+
+    <div id="t-arquimedes" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-arquimedes">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-arquimedes">
+        <h3>Principio de Arquímedes y Empuje</h3>
+        <p>Todo cuerpo sumergido parcial o totalmente en un fluido experimenta una fuerza hacia arriba, llamada <strong>Empuje (E)</strong>, equivalente al peso del volumen del fluido que desplaza.</p>
+        <div class="key-box">💡 Fórmula: <strong>E = ρ_líquido · V_sumergido · g</strong>. El empuje DEPENDE del volumen del objeto, no de su masa.</div>
+        <h3>Reglas de Flotación</h3>
+        <ul>
+          <li>Si el <strong>Peso > Empuje</strong>: el objeto se hunde (su densidad es mayor a la del líquido).</li>
+          <li>Si el <strong>Peso < Empuje</strong>: el objeto sube y flota.</li>
+          <li>Si el <strong>Peso = Empuje</strong>: el objeto se mantiene flotando en equilibrio en el interior del líquido.</li>
+        </ul>
+        <h3>¿Por qué flotan los barcos?</h3>
+        <p>Aunque un barco esté hecho de acero (muy denso), su diseño incluye enormes cámaras de aire en su interior. Esto hace que el volumen total del barco sea gigante, por lo que su <em>densidad promedio</em> termina siendo menor que la del agua, generando un empuje capaz de soportar todo su peso.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FÓRMULAS ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-formulas">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📐 Fórmulas</div>
+    <h2 class="v2-sec-title">Ecuaciones de fluidos en reposo</h2>
+    <p class="v2-sec-desc">Pasa el cursor sobre cada tarjeta para ver el detalle de variables y unidades.</p>
+  </div>
+
+  <div class="formula-grid">
+
+    <div class="formula-card">
+      <div class="f-name">Densidad</div>
+      <div class="f-eq">ρ = m / V</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">ρ</span><span class="f-desc">densidad</span><span class="f-unit">kg/m³</span></div>
+        <div class="f-var"><span class="f-sym">m</span><span class="f-desc">masa</span><span class="f-unit">kg</span></div>
+        <div class="f-var"><span class="f-sym">V</span><span class="f-desc">volumen</span><span class="f-unit">m³</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Presión</div>
+      <div class="f-eq">P = F / A</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">P</span><span class="f-desc">presión</span><span class="f-unit">Pa (Pascales)</span></div>
+        <div class="f-var"><span class="f-sym">F</span><span class="f-desc">fuerza perpendicular</span><span class="f-unit">N</span></div>
+        <div class="f-var"><span class="f-sym">A</span><span class="f-desc">área sobre la que actúa</span><span class="f-unit">m²</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Presión Hidrostática</div>
+      <div class="f-eq">Ph = ρ · g · h</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">Ph</span><span class="f-desc">presión del fluido</span><span class="f-unit">Pa</span></div>
+        <div class="f-var"><span class="f-sym">ρ</span><span class="f-desc">densidad del líquido</span><span class="f-unit">kg/m³</span></div>
+        <div class="f-var"><span class="f-sym">h</span><span class="f-desc">profundidad</span><span class="f-unit">m</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Principio de Arquímedes</div>
+      <div class="f-eq">E = ρ_liq · V_sum · g</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">E</span><span class="f-desc">fuerza de empuje</span><span class="f-unit">N</span></div>
+        <div class="f-var"><span class="f-sym">ρ_liq</span><span class="f-desc">densidad del líquido</span><span class="f-unit">kg/m³</span></div>
+        <div class="f-var"><span class="f-sym">V_sum</span><span class="f-desc">volumen sumergido</span><span class="f-unit">m³</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SIMULADOR ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-sim">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">💧 Simulador de Flotación</div>
+    <h2 class="v2-sec-title">Flota o se hunde</h2>
+    <p class="v2-sec-desc">Ajusta las densidades del bloque y del líquido. Observa la fuerza de empuje vs el peso para entender por qué algunos objetos flotan.</p>
+  </div>
+
+  <div class="v2-sim">
+    <div class="sim-topbar">
+      <div class="sim-tag"><div class="sim-dot" style="background:#06d6a0;"></div> Principio de Arquímedes</div>
+      <div class="sim-ctrl-row">
+        <button class="s-btn on" id="btnPlay" title="Reproducir / Pausar">▶</button>
+        <button class="s-btn" id="btnReset" title="Reiniciar">↺</button>
+      </div>
+    </div>
+
+    <div class="sim-layout">
+      <div class="sim-sidebar">
+
+        <div class="s-label" style="color:#4cc9f0;">Densidad del Líquido (ρ_L)</div>
+        <input type="range" class="s-range" id="slRhoL" min="500" max="1500" value="1000" step="50">
+        <div class="s-val" id="valRhoL">1000 kg/m³ (Agua)</div>
+
+        <div class="s-label" style="color:#ffd166; margin-top:.8rem;">Densidad del Objeto (ρ_O)</div>
+        <input type="range" class="s-range" id="slRhoO" min="100" max="2500" value="600" step="100">
+        <div class="s-val" id="valRhoO">600 kg/m³ (Madera)</div>
+
+        <div class="s-label" style="margin-top:.8rem;">Volumen del Objeto (V)</div>
+        <input type="range" class="s-range" id="slVol" min="1" max="5" value="2" step="0.5">
+        <div class="s-val" id="valVol">2 m³</div>
+
+        <div style="margin-top:1.5rem; padding:.85rem; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:12px;">
+          <div style="font-size:.72rem; color:var(--text-muted); margin-bottom:.5rem; font-weight:700; letter-spacing:.05em;">FUERZAS ACTUALES</div>
+          <div style="display:flex;flex-direction:column;gap:.32rem;">
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:#ffd166;">Peso (W) ↓</span><span id="liveW" style="font-size:.82rem;font-weight:800;color:#fff;">0 N</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:#4cc9f0;">Empuje (E) ↑</span><span id="liveE" style="font-size:.82rem;font-weight:800;color:#fff;">0 N</span></div>
+            <div style="display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.08);padding-top:.32rem;margin-top:.1rem;"><span style="font-size:.78rem;color:var(--text-muted);">Aceleración Neta</span><span id="liveA" style="font-size:.82rem;font-weight:800;color:#fff;">0 m/s²</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sim-main">
+        <canvas id="simCanvas" height="310" style="width:100%;"></canvas>
+        <p class="text-muted" style="margin-top:1rem; font-size:.8rem; text-align:center;">
+          Nota: Si el objeto es menos denso que el líquido, flotará asomando una parte de su volumen.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VIDEO ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-video">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🎬 Video explicativo</div>
+    <h2 class="v2-sec-title">Mira, escucha y entiende</h2>
+    <p class="v2-sec-desc">Toca el botón para reproducir el video directamente aquí.</p>
+  </div>
+
+  <div class="yt-player-wrap" id="ytPlayerWrap">
+    <!-- REEMPLAZAR ID DEL VIDEO (aYjY3J22vIE u otro de tu canal) -->
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('f7FL-1vsw3M')">
+      <img class="yt-thumb-img"
+           src="https://img.youtube.com/vi/f7FL-1vsw3M/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/f7FL-1vsw3M/hqdefault.jpg'"
+           alt="Hidrostática — Física 10°">
+      <div class="yt-thumb-overlay">
+        <div class="yt-big-play">&#9654;</div>
+      </div>
+      <div class="yt-info-bar">
+        <div class="yt-title-bar">Hidrostática y Principio de Arquímedes<br>
+          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Fluidos en reposo · Toca para reproducir</span>
+        </div>
+        <a class="yt-ext-btn"
+           href="https://www.youtube.com/watch?v=f7FL-1vsw3M"
+           target="_blank" rel="noopener"
+           onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
+      </div>
+    </div>
+    <div class="yt-embed-frame" id="ytEmbedFrame">
+      <iframe id="ytIframe" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+  <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
+    * ⚠️ <strong>Nota para docente:</strong> Actualiza el ID del video si subes uno específico de Hidrostática a tu canal.
+  </p>
+</section>
+
+<!-- ═══ PhET ═══ -->
+<section class="v2-section-sm v2-wrap anim-scroll" id="sec-phet">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🧪 Laboratorio PhET</div>
+    <h2 class="v2-sec-title">Bajo Presión</h2>
+    <p class="v2-sec-desc">Explora cómo la presión cambia en líquidos como agua, miel o gasolina, o en planetas con diferente gravedad.</p>
+  </div>
+  <div class="phet-wrap">
+    <iframe
+      src="https://phet.colorado.edu/sims/html/under-pressure/latest/under-pressure_es.html"
+      title="Bajo Presión - PhET"
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+  <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
+    💡 <strong>Actividad sugerida:</strong> Llena el tanque con agua. Usa el medidor de presión y observa cómo aumenta al bajarlo hacia el fondo. Cambia el fluido a miel y nota la diferencia radical en la presión hidrostática.
+  </p>
+  <p class="phet-mobile-note">📱 Esta simulación funciona mejor en pantallas grandes o en un computador.</p>
+</section>
+
+<!-- ═══ TIPS ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-tips">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">💡 Tips y errores</div>
+    <h2 class="v2-sec-title">Lo que debes saber bien</h2>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:2rem;">
+    <div class="tip-card">
+      <div class="t-icon">⚓</div>
+      <h4>El volumen desplazado es clave</h4>
+      <p>Un objeto que se hunde completamente desplaza un volumen de agua igual a su volumen total. Un objeto que flota solo desplaza la parte sumergida de su volumen.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🏗️</div>
+      <h4>La forma importa para flotar</h4>
+      <p>Una bola de acero se hunde. Pero si le das forma de casco de barco, atrapa mucho aire en su interior. Esto baja la densidad total del barco por debajo de la del agua, permitiendo que flote.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🗻</div>
+      <h4>Atmosférica + Hidrostática</h4>
+      <p>En el fondo de una piscina sientes la presión del agua (hidrostática) y también todo el peso del aire de la atmósfera. Presión absoluta = P_atm + Ph.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">⚖️</div>
+      <h4>Fuerza vs. Presión</h4>
+      <p>Te puedes parar sobre un piso plano sin dañarlo, pero con tacones finos de aguja puedes dejar marcas. Tu fuerza (peso) es la misma, pero la presión aumenta drásticamente al disminuir el área.</p>
+    </div>
+  </div>
+
+  <div class="v2-sec-label text-accent" style="margin-bottom:1rem;">❌ Errores frecuentes en el ICFES</div>
+  <div class="error-table-card">
+    <div class="err-row">
+      <div class="err-cell err-head err-bad">❌ Error frecuente</div>
+      <div class="err-cell err-head err-good">✅ Lo correcto</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Pensar que los objetos pesados siempre se hunden.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Depende de la DENSIDAD, no de la masa. Un portaaviones pesa toneladas pero flota. Una pequeña piedra pesa gramos pero se hunde.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Creer que la presión en el fondo de un vaso grande es mayor que en un vaso angosto.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>La presión hidrostática depende de la PROFUNDIDAD y la DENSIDAD del líquido, no de la forma ni la cantidad de agua total del recipiente.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Asumir que el empuje es mayor mientras más profundo se hunda un objeto.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Una vez que el objeto está COMPLETAMENTE sumergido, su volumen bajo el agua ya no cambia, por lo que el Empuje se mantiene constante sin importar qué tan abajo esté.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUIZ ICFES ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-quiz">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📝 Quiz ICFES</div>
+    <h2 class="v2-sec-title">¿Entendiste el tema?</h2>
+    <p class="v2-sec-desc">5 preguntas estilo ICFES. Léelas con calma, no hay tiempo límite.</p>
+  </div>
+
+  <div class="quiz-v2" id="quizBox">
+    <div class="quiz-top">
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizFill" style="width:0%"></div></div>
+      <div class="quiz-cnt" id="quizCnt">Pregunta 1 de 5</div>
+    </div>
+    <div class="quiz-body" id="quizBody">
+      <div class="quiz-q" id="qText"></div>
+      <div class="quiz-opts" id="qOpts"></div>
+      <div class="quiz-fb" id="qFb"></div>
+    </div>
+    <div class="quiz-foot">
+      <button class="v2-btn v2-btn-primary" id="qNext" style="display:none">Siguiente →</button>
+    </div>
+    <div class="quiz-result-screen" id="quizResult">
+      <div class="score-ring" id="scoreRing">
+        <div class="score-big" id="scoreBig">0/5</div>
+        <div class="score-sub">respuestas correctas</div>
+      </div>
+      <div class="score-msg" id="scoreMsg"></div>
+      <div class="score-hint" id="scoreHint"></div>
+      <button class="v2-btn v2-btn-primary" id="qRestart">🔄 Intentar de nuevo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NAVEGACIÓN ═══ -->
+<div class="v2-wrap">
+  <hr class="v2-hr">
+  <div class="v2-page-nav">
+    <a class="nav-btn-card" href="index.html">
+      <span class="nbc-arr">←</span>
+      <div>
+        <div class="nbc-sub">Volver al índice</div>
+        <div class="nbc-title">Período 3</div>
+      </div>
+    </a>
+    <a class="nav-btn-card right" href="2_hidrodinamica.html">
+      <div>
+        <div class="nbc-sub">Siguiente tema</div>
+        <div class="nbc-title">Hidrodinámica</div>
+      </div>
+      <span class="nbc-arr">→</span>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="v2-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-avatar">LC</div>
+      <div>
+        <div class="footer-name">Docente Luis Miguel Cabrera</div>
+        <div class="footer-role">I.E. Paulo VI &nbsp;·&nbsp; Huila, Colombia &nbsp;·&nbsp; Física & Matemáticas</div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">⚛️ VirtualLab 2026</span>
+      <span class="footer-tag">lumcab</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+/* VIDEO */
+function ytLoadEmbed(id) {
+  const thumb = document.getElementById('ytThumbCard'), frame = document.getElementById('ytEmbedFrame'), iframe = document.getElementById('ytIframe');
+  if (!thumb || !frame || !iframe) return;
+  thumb.style.display = 'none'; frame.classList.add('visible');
+  iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&color=white';
+}
+
+/* PROGRESS BAR */
+(function () {
+  const bar = document.getElementById('page-progress');
+  window.addEventListener('scroll', () => { const h = document.documentElement.scrollHeight - window.innerHeight; bar.style.width = (window.scrollY / h * 100) + '%'; }, { passive: true });
+})();
+
+/* SCROLL ANIM */
+(function () {
+  const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }), { threshold: 0.1 });
+  document.querySelectorAll('.anim-scroll').forEach(el => obs.observe(el));
+})();
+
+/* TABS */
+(function () {
+  document.querySelectorAll('.v2-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const g = btn.closest('section') || btn.parentElement.parentElement;
+      g.querySelectorAll('.v2-tab').forEach(b => b.classList.remove('active'));
+      g.querySelectorAll('.v2-tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = g.querySelector('#' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+})();
+
+/* COPIAR */
+document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const t = document.getElementById(btn.dataset.target); if (!t) return;
+    navigator.clipboard.writeText(t.innerText).then(() => {
+      btn.textContent = '✅ ¡Copiado!'; btn.classList.add('done');
+      setTimeout(() => { btn.textContent = '📋 Copiar para mis apuntes'; btn.classList.remove('done'); }, 2500);
+    }).catch(() => { btn.textContent = '⚠️ Copia manualmente'; });
+  });
+});
+
+/* ==========================================
+   SIMULADOR DE FLOTACIÓN (Arquímedes)
+========================================== */
+(function () {
+  const canvas = document.getElementById('simCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  const inputs = {
+    rhoL: document.getElementById('slRhoL'),
+    rhoO: document.getElementById('slRhoO'),
+    vol: document.getElementById('slVol')
+  };
+  
+  const vals = {
+    rhoL: document.getElementById('valRhoL'),
+    rhoO: document.getElementById('valRhoO'),
+    vol: document.getElementById('valVol')
+  };
+
+  const lives = {
+    w: document.getElementById('liveW'),
+    e: document.getElementById('liveE'),
+    a: document.getElementById('liveA')
+  };
+
+  const btnPlay = document.getElementById('btnPlay');
+  const btnReset = document.getElementById('btnReset');
+
+  const g = 9.8;
+  let running = false;
+  let raf;
+
+  // Variables de la simulación
+  let rhoL, rhoO, vol;
+  let mass, weight, buoyancy, netAcc;
+  let yPos;     // Posición vertical del bloque (0 en el fondo, 100 en la superficie)
+  let vY = 0;   // Velocidad vertical
+  
+  const tankDepth = 150; // pixeles virtuales de profundidad
+  
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = canvas.offsetWidth * dpr;
+    canvas.height = 310 * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); 
+    ctx.scale(dpr, dpr);
+  }
+
+  function formatMaterial(density) {
+    if (density < 300) return 'Corcho';
+    if (density < 800) return 'Madera';
+    if (density == 1000) return 'Agua';
+    if (density < 1500) return 'Plástico/Miel';
+    if (density < 2500) return 'Piedra ligera';
+    return 'Aluminio/Vidrio';
+  }
+
+  function readInputs() {
+    rhoL = parseFloat(inputs.rhoL.value);
+    rhoO = parseFloat(inputs.rhoO.value);
+    vol = parseFloat(inputs.vol.value);
+    
+    vals.rhoL.textContent = `${rhoL} kg/m³ (${rhoL == 1000 ? 'Agua' : (rhoL<1000?'Aceite/Alcohol':'Glicerina/Miel')})`;
+    vals.rhoO.textContent = `${rhoO} kg/m³ (${formatMaterial(rhoO)})`;
+    vals.vol.textContent = `${vol} m³`;
+    
+    mass = rhoO * vol;
+    weight = mass * g;
+    
+    // El empuje depende de qué tanto esté sumergido.
+    // Asumiremos un bloque cúbico. Para simplificar, la profundidad determina el % sumergido.
+    // Pero el simulador calcula el empuje máximo primero:
+    const maxBuoyancy = rhoL * vol * g;
+    
+    // Aceleración cuando está 100% sumergido:
+    netAcc = (maxBuoyancy - weight) / mass; 
+    
+    lives.w.textContent = weight.toFixed(0) + ' N';
+    lives.e.textContent = maxBuoyancy.toFixed(0) + ' N (Máx)';
+    
+    let aStr = netAcc > 0 ? `+${netAcc.toFixed(1)} (Sube)` : netAcc < 0 ? `${netAcc.toFixed(1)} (Hunde)` : `0 (Equilibrio)`;
+    lives.a.textContent = aStr;
+    lives.a.style.color = netAcc > 0 ? '#06d6a0' : netAcc < 0 ? '#e63946' : '#fff';
+  }
+
+  function resetSim() {
+    readInputs();
+    yPos = tankDepth * 0.8; // Empieza cayendo desde arriba (20% hundido)
+    vY = 0;
+    running = false;
+    btnPlay.textContent = '▶'; btnPlay.classList.remove('on');
+    draw();
+  }
+
+  function drawArrow(x, y, len, color, label) {
+    if (Math.abs(len) < 2) return;
+    const sign = len > 0 ? 1 : -1;
+    const l = Math.abs(len);
+    ctx.strokeStyle = color; ctx.fillStyle = color;
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - len); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x, y - len); 
+    ctx.lineTo(x - 5, y - len + 8*sign);
+    ctx.lineTo(x + 5, y - len + 8*sign);
+    ctx.fill();
+    ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText(label, x + 15, y - len/2);
+  }
+
+  function draw() {
+    const W = canvas.offsetWidth, H = 310;
+    ctx.clearRect(0, 0, W, H);
+
+    const cx = W / 2;
+    const tankTop = 60;
+    const tankH = 200;
+    const tankW = 160;
+    const waterLevel = tankTop + 20;
+
+    // Fondo del tanque (cristal)
+    ctx.fillStyle = 'rgba(255,255,255,.05)';
+    ctx.beginPath(); ctx.roundRect(cx - tankW/2, tankTop, tankW, tankH, 8); ctx.fill();
+
+    // Líquido
+    const hColor = rhoL == 1000 ? 'rgba(76,201,240,.4)' : (rhoL < 1000 ? 'rgba(255,209,102,.3)' : 'rgba(155,93,229,.4)');
+    ctx.fillStyle = hColor;
+    ctx.beginPath(); ctx.roundRect(cx - tankW/2 + 2, waterLevel, tankW - 4, tankH - 22, [0,0,6,6]); ctx.fill();
+
+    // Superficie del agua
+    ctx.strokeStyle = 'rgba(255,255,255,.3)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx - tankW/2, waterLevel); ctx.lineTo(cx + tankW/2, waterLevel); ctx.stroke();
+
+    // Bloque
+    const bSize = 35 + vol * 5; 
+    let bY = waterLevel + tankDepth - yPos; // yPos es altura desde fondo de simulación
+    
+    // Porcentaje sumergido
+    let pSumergido = 1.0;
+    const bBottom = bY + bSize/2;
+    const bTop = bY - bSize/2;
+    
+    if (bBottom < waterLevel) pSumergido = 0; // totalmente fuera
+    else if (bTop > waterLevel) pSumergido = 1; // totalmente dentro
+    else pSumergido = (bBottom - waterLevel) / bSize;
+
+    // Dibujar bloque
+    ctx.fillStyle = rhoO < 800 ? '#ffd166' : (rhoO < 1500 ? '#ef476f' : '#6c757d');
+    ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 8;
+    ctx.beginPath(); ctx.roundRect(cx - bSize/2, bTop, bSize, bSize, 4); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(0,0,0,.3)'; ctx.stroke();
+
+    // Calcular Empuje real (depende de pSumergido)
+    let actBuoyancy = rhoL * (vol * pSumergido) * g;
+    let actAcc = (actBuoyancy - weight) / mass;
+
+    // Actualizar labels en vivo si corre
+    if (running || !running) {
+      lives.e.textContent = actBuoyancy.toFixed(0) + ' N';
+      let actAccStr = actAcc > 0 ? `+${actAcc.toFixed(1)}` : actAcc.toFixed(1);
+      lives.a.textContent = Math.abs(actAcc)<0.1 && pSumergido>0 ? '0 (Equilibrio)' : `${actAccStr} m/s²`;
+    }
+
+    // Dibujar Flechas
+    const scaleF = 0.005; // Escala visual para fuerzas
+    // Peso (Hacia abajo, valor len negativo para mi función)
+    drawArrow(cx, bY, -(weight * scaleF), '#ffd166', 'W');
+    // Empuje (Hacia arriba)
+    if (actBuoyancy > 0) {
+      drawArrow(cx, bY, actBuoyancy * scaleF, '#4cc9f0', 'E');
+    }
+  }
+
+  function step() {
+    if (!running) return;
+
+    const bSize = 35 + vol * 5; 
+    let bY = 60 + 20 + tankDepth - yPos; 
+    let pSumergido = 1.0;
+    if (bY + bSize/2 < 80) pSumergido = 0;
+    else if (bY - bSize/2 > 80) pSumergido = 1;
+    else pSumergido = (bY + bSize/2 - 80) / bSize;
+
+    let actBuoyancy = rhoL * (vol * pSumergido) * g;
+    let actAcc = (actBuoyancy - weight) / mass;
+
+    // Euler integration (yPos positivo hacia arriba)
+    vY += actAcc * 0.05;
+    
+    // Fricción / Amortiguamiento viscoso del agua
+    if (pSumergido > 0) vY *= 0.95; 
+
+    yPos += vY;
+
+    // Limites del tanque
+    if (yPos < bSize/2) {
+      yPos = bSize/2;
+      vY = -vY * 0.3; // Rebotar un poco en el fondo
+    }
+
+    // Detener completamente si velocidades son mínimas (equilibrio)
+    if (Math.abs(vY) < 0.05 && Math.abs(actAcc) < 0.1) {
+      vY = 0;
+      // No pausar visualmente el reproductor, para permitir que mueva sliders y reaccione en vivo
+    }
+
+    draw();
+    raf = requestAnimationFrame(step);
+  }
+
+  btnPlay.addEventListener('click', () => {
+    running = !running;
+    if (running) { btnPlay.textContent = '⏸'; btnPlay.classList.add('on'); raf = requestAnimationFrame(step); }
+    else         { btnPlay.textContent = '▶'; btnPlay.classList.remove('on'); cancelAnimationFrame(raf); }
+  });
+
+  btnReset.addEventListener('click', () => { cancelAnimationFrame(raf); resetSim(); });
+  
+  [inputs.rhoL, inputs.rhoO, inputs.vol].forEach(el => {
+    el.addEventListener('input', () => {
+      readInputs();
+      if (!running) draw();
+    });
+  });
+
+  window.addEventListener('resize', () => { resize(); draw(); });
+  resize(); resetSim();
+})();
+
+/* ==========================================
+   QUIZ ICFES
+========================================== */
+(function () {
+  const Qs = [
+    {
+      q: '¿Qué determina principalmente la presión hidrostática en el fondo de una piscina de agua dulce?',
+      opts: ['A) El área superficial de la piscina', 'B) La profundidad del agua', 'C) El volumen total de agua contenida', 'D) La temperatura ambiente'],
+      ans: 1,
+      fb: '✓ Correcto. La presión hidrostática (Ph = ρ·g·h) solo depende de la densidad del fluido, la gravedad y la profundidad (h). No importa qué tan ancha sea la piscina.'
+    },
+    {
+      q: 'Un cubo de madera (densidad = 600 kg/m³) se coloca en agua (1000 kg/m³). ¿Qué ocurre?',
+      opts: ['A) Se hunde hasta el fondo rápidamente', 'B) Se hunde hasta la mitad y allí se queda', 'C) Flota manteniendo sumergido el 60% de su volumen', 'D) Flota manteniéndose completamente por encima del agua'],
+      ans: 2,
+      fb: '✓ Correcto. Para flotar, el empuje debe igualar el peso. ρ_O / ρ_L = 600/1000 = 0.6 (o 60%). Ese es exactamente el porcentaje del volumen que debe sumergirse para alcanzar el equilibrio.'
+    },
+    {
+      q: 'Según el Principio de Pascal, la presión ejercida sobre un fluido incompresible encerrado se transmite:',
+      opts: ['A) Solo hacia el fondo del recipiente', 'B) Con intensidad decreciente hacia los lados', 'C) En todas las direcciones con la misma intensidad', 'D) Solo si la temperatura es muy alta'],
+      ans: 2,
+      fb: '✓ Correcto. Pascal demostró que la presión se transmite por igual y sin disminución a todas partes del fluido y a las paredes del recipiente.'
+    },
+    {
+      q: 'Un bloque de metal de 2 kg desplaza 0.5 litros de agua al sumergirse totalmente. Otro bloque de plástico de 0.5 kg también desplaza 0.5 litros de agua. ¿Qué podemos afirmar sobre la fuerza de Empuje?',
+      opts: ['A) Es mayor para el bloque de metal porque pesa más', 'B) Es mayor para el bloque de plástico porque flota', 'C) Es idéntica para ambos bloques', 'D) El empuje no aplica para objetos metálicos'],
+      ans: 2,
+      fb: '✓ Correcto. El empuje (E = ρ_L · V_sum · g) DEPENDE SOLO DEL VOLUMEN DESPLAZADO. Como ambos desplazan 0.5 litros (mismo volumen), experimentan exactamente el mismo empuje.'
+    },
+    {
+      q: 'En una prensa hidráulica, un área pequeña recibe una fuerza pequeña, lo que genera una presión. Esa misma presión se transmite a un pistón mucho más grande, ocasionando que:',
+      opts: ['A) La fuerza de salida sea mucho menor', 'B) La fuerza de salida sea mucho mayor', 'C) El líquido se comprima y reduzca su volumen', 'D) La presión de salida se reduzca'],
+      ans: 1,
+      fb: '✓ Correcto. Como P = F/A y la presión es igual en ambos lados (P₁ = P₂), un área más grande (A₂) multiplicará la fuerza resultante (F₂).'
+    }
+  ];
+
+  let current = 0, score = 0, answered = false;
+  const qText = document.getElementById('qText'), qOpts = document.getElementById('qOpts');
+  const qFb = document.getElementById('qFb'), qNext = document.getElementById('qNext');
+  const quizFill = document.getElementById('quizFill'), quizCnt = document.getElementById('quizCnt');
+  const quizBody = document.getElementById('quizBody'), quizResult = document.getElementById('quizResult');
+  const scoreBig = document.getElementById('scoreBig'), scoreMsg = document.getElementById('scoreMsg');
+  const scoreHint = document.getElementById('scoreHint'), qRestart = document.getElementById('qRestart');
+  const L = ['A', 'B', 'C', 'D'];
+
+  function render() {
+    answered = false;
+    const p = Qs[current];
+    qText.textContent = p.q;
+    quizCnt.textContent = `Pregunta ${current + 1} de ${Qs.length}`;
+    quizFill.style.width = (current / Qs.length * 100) + '%';
+    qFb.className = 'quiz-fb'; qFb.textContent = ''; qNext.style.display = 'none';
+    qOpts.innerHTML = '';
+    p.opts.forEach((opt, i) => {
+      const btn = document.createElement('button'); btn.className = 'quiz-opt';
+      btn.style.cssText = 'display:flex;align-items:center;gap:.8rem;width:100%;padding:1rem 1.1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;cursor:pointer;font-size:1rem;font-family:inherit;color:#ffffff;text-align:left;min-height:54px;transition:all .2s;';
+      const ltr = document.createElement('span'); ltr.className = 'opt-ltr'; ltr.textContent = L[i];
+      ltr.style.cssText = 'display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#4361ee,#3a0ca3);color:#fff;font-weight:900;font-size:.9rem;box-shadow:0 0 12px rgba(67,97,238,.5);';
+      btn.appendChild(ltr); btn.appendChild(document.createTextNode(opt.replace(/^[ABCD]\) /, '')));
+      btn.addEventListener('click', () => {
+        if (answered) return; answered = true;
+        qOpts.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('answered'));
+        if (i === p.ans) {
+          btn.style.background = 'rgba(6,214,160,.18)'; btn.style.borderColor = '#06d6a0';
+          ltr.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)'; score++;
+          qFb.textContent = p.fb; qFb.className = 'quiz-fb ok-fb show';
+        } else {
+          btn.style.background = 'rgba(230,57,70,.18)'; btn.style.borderColor = '#e63946';
+          ltr.style.background = 'linear-gradient(135deg,#e63946,#9b2226)';
+          const cb = qOpts.querySelectorAll('.quiz-opt')[p.ans];
+          cb.style.background = 'rgba(6,214,160,.18)'; cb.style.borderColor = '#06d6a0';
+          const cl = cb.querySelector('.opt-ltr'); if (cl) cl.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)';
+          qFb.textContent = '✗ Incorrecto. ' + p.fb; qFb.className = 'quiz-fb err-fb show';
+        }
+        qNext.style.display = 'inline-flex';
+      });
+      qOpts.appendChild(btn);
+    });
+  }
+
+  qNext.addEventListener('click', () => { current++; if (current >= Qs.length) showResult(); else render(); });
+
+  function showResult() {
+    quizFill.style.width = '100%';
+    quizBody.style.display = 'none'; document.querySelector('.quiz-foot').style.display = 'none';
+    quizResult.classList.add('show'); scoreBig.textContent = score + '/' + Qs.length;
+    const pct = score / Qs.length;
+    if (pct === 1)       { scoreMsg.textContent = '🏆 ¡Excelente! Dominas los fluidos en reposo.'; scoreHint.textContent = 'Entendiste a la perfección la presión hidrostática y Arquímedes. ¡Listo para hidrodinámica!'; }
+    else if (pct >= 0.6) { scoreMsg.textContent = '👍 ¡Bien hecho!'; scoreHint.textContent = 'Repasa las leyes de Arquímedes y Pascal en los apuntes para afianzar conceptos.'; }
+    else                 { scoreMsg.textContent = '📖 Hay conceptos por repasar.'; scoreHint.textContent = 'Tranquilo, la hidrostática es engañosa. Vuelve a probar el simulador para visualizar las fuerzas.'; }
+  }
+
+  qRestart.addEventListener('click', () => {
+    current = 0; score = 0;
+    quizBody.style.display = ''; document.querySelector('.quiz-foot').style.display = '';
+    quizResult.classList.remove('show'); render();
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
