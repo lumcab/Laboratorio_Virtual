@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(ls -la \"c:\\\\Users\\\\lumca\\\\OneDrive\\\\Documents\\\\Programación\\\\Laboratorio_Virtual\\\\assets\\\\icons\\\\\\\\\")",
+      "Bash(ls -la \"c:\\\\Users\\\\lumca\\\\OneDrive\\\\Documents\\\\Programación\\\\Laboratorio_Virtual\\\\fisica11\\\\\\\\\" \"c:\\\\Users\\\\lumca\\\\OneDrive\\\\Documents\\\\Programación\\\\Laboratorio_Virtual\\\\matematicas6\\\\\\\\\" \"c:\\\\Users\\\\lumca\\\\OneDrive\\\\Documents\\\\Programación\\\\Laboratorio_Virtual\\\\geometria6\\\\\\\\\")",
+      "Bash(grep -E \"\\\\.\\(html|css|js|json|md\\)$\")"
+    ]
+  }
+}
