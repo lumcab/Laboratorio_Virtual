@@ -66,9 +66,9 @@
 | Archivo | Tema | Estado |
 |---|---|---|
 | `fisica10/periodo2/index.html` | Índice período | ⬜ Pendiente |
-| `fisica10/periodo2/1_estatica_dinamica.html` | Estática y dinámica | ⬜ Pendiente |
-| `fisica10/periodo2/2_trabajo_energia.html` | Trabajo y energía | ⬜ Pendiente |
-| `fisica10/periodo2/3_impulso_gravitacion.html` | Impulso y gravitación | ⬜ Pendiente |
+| `fisica10/periodo2/1_estatica_dinamica.html` | Dinámica y Equilibrio | ✅ Completo |
+| `fisica10/periodo2/2_trabajo_energia.html` | Trabajo y energía | ✅ Completo |
+| `fisica10/periodo2/3_impulso_gravitacion.html` | Impulso y gravitación | ✅ Completo |
 
 ### Física 10° — Período 3 · Mecánica de fluidos
 | Archivo | Tema | Estado |
@@ -187,11 +187,11 @@
 | Materia | Completadas | Total temas | Progreso |
 |---|---|---|---|
 | Infraestructura | 7 | 7 | 100% |
-| Física 10° | 4 | 11 | 36% |
+| Física 10° | 7 | 11 | 63% |
 | Física 11° | 0 | 9 | 0% |
 | Matemáticas 6° | 0 | 12 | 0% |
 | Geometría 6° | 0 | 8 | 0% |
-| **Total** | **11** | **47** | **23%** |
+| **Total** | **14** | **47** | **30%** |
 
 ---
 

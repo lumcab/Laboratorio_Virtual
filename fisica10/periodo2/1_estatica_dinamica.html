@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dinámica y Equilibrio | Física 10° · VirtualLab</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/icons/favicon.ico">
+  <link rel="stylesheet" href="../../css/tema-v2.css">
+  <script src="../../js/theme.js"></script>
+  <style>
+    :root {
+      --accent-a: #4361ee;
+      --accent-b: #3a0ca3;
+      --accent-c: #4cc9f0;
+      --accent-grad: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+      --hero-c1: #4cc9f0;
+      --hero-c2: #4361ee;
+    }
+    .v2-badge      { background: rgba(67,97,238,.12); border-color: rgba(67,97,238,.35); color: #4cc9f0; }
+    .badge-dot     { background: #4cc9f0; }
+    .o-core        { background: var(--accent-grad); box-shadow: 0 0 40px rgba(67,97,238,.6); }
+    .o-ring-1      { width: 110px; height: 110px; border-color: rgba(67,97,238,.45); animation-duration: 4s; }
+    .o-ring-1::after { background: #4361ee; box-shadow: 0 0 14px #4361ee; }
+    .o-ring-2      { width: 190px; height: 190px; border-color: rgba(76,201,240,.35); animation-duration: 7s; animation-direction: reverse; }
+    .o-ring-2::after { background: #4cc9f0; box-shadow: 0 0 14px #4cc9f0; }
+    .o-ring-3      { width: 290px; height: 290px; border-color: rgba(58,12,163,.3); animation-duration: 13s; }
+    .o-ring-3::after { background: #3a0ca3; box-shadow: 0 0 14px #3a0ca3; width: 8px; height: 8px; top:-4px; left: calc(50% - 4px); }
+    .v2-tab.active { background: var(--accent-a); }
+    .f-eq          { color: #4cc9f0; }
+    .f-sym         { color: #ffd166; }
+    .quiz-prog-fill { background: var(--accent-grad); }
+    .score-ring    { background: var(--accent-grad); }
+
+    #labCanvas { border-radius: 10px; background: rgba(0,0,0,.4); }
+    #dclCanvas  { border-radius: 10px; background: rgba(0,0,0,.3); }
+
+    .quiz-opt {
+      color: #ffffff !important;
+      font-size: 1rem;
+      min-height: 54px;
+      background: rgba(255,255,255,.05) !important;
+      border-color: rgba(255,255,255,.12) !important;
+    }
+    .quiz-opt:hover:not(.answered) {
+      background: rgba(67,97,238,.18) !important;
+      border-color: #4361ee !important;
+    }
+    .opt-ltr {
+      background: linear-gradient(135deg,#4361ee,#3a0ca3) !important;
+      border: none !important; color: #fff !important; font-weight: 900 !important;
+      width: 36px !important; height: 36px !important; font-size: .88rem !important;
+      box-shadow: 0 0 10px rgba(67,97,238,.4);
+    }
+    .quiz-opt.correct            { background: rgba(6,214,160,.15) !important; border-color: #06d6a0 !important; }
+    .quiz-opt.correct .opt-ltr  { background: linear-gradient(135deg,#06d6a0,#048a68) !important; }
+    .quiz-opt.wrong              { background: rgba(230,57,70,.15) !important; border-color: #e63946 !important; }
+    .quiz-opt.wrong   .opt-ltr  { background: linear-gradient(135deg,#e63946,#9b2226) !important; }
+
+    .yt-player-wrap { border-radius: var(--r-md); overflow: hidden; }
+    .yt-thumb-card {
+      position: relative; aspect-ratio: 16/9; cursor: pointer;
+      background: #000; border-radius: var(--r-md); overflow: hidden;
+      border: 1px solid rgba(255,255,255,.1);
+    }
+    .yt-thumb-img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease, filter .4s ease; filter: brightness(.75); }
+    .yt-thumb-card:hover .yt-thumb-img { transform: scale(1.04); filter: brightness(.6); }
+    .yt-thumb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+    .yt-big-play {
+      width: 72px; height: 72px; border-radius: 50%; background: rgba(255,0,0,.9);
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: #fff; box-shadow: 0 4px 30px rgba(0,0,0,.5);
+      transition: transform .25s ease, background .25s ease;
+    }
+    .yt-thumb-card:hover .yt-big-play { transform: scale(1.12); background: #ff0000; }
+    .yt-info-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.85), transparent);
+      padding: 1.5rem 1rem .8rem;
+      display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+    }
+    .yt-title-bar { font-size: .88rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .yt-ext-btn {
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); color: #fff;
+      padding: .35rem .8rem; border-radius: 6px; font-size: .75rem; font-weight: 600;
+      text-decoration: none; white-space: nowrap; flex-shrink: 0; backdrop-filter: blur(6px); transition: background .2s;
+    }
+    .yt-ext-btn:hover { background: rgba(255,255,255,.3); }
+    .yt-embed-frame { display: none; position: relative; aspect-ratio: 16/9; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .yt-embed-frame.visible { display: block; }
+
+    .phet-wrap {
+      position: relative; width: 100%; padding-bottom: 62%;
+      border-radius: var(--r-md); overflow: hidden;
+      border: 1px solid var(--border); box-shadow: var(--shadow-md);
+    }
+    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .phet-mobile-note { display: none; background: rgba(255,209,102,.08); border: 1px solid rgba(255,209,102,.25); border-radius: var(--r-sm); padding: .7rem 1rem; margin-top: .8rem; font-size: .82rem; color: #ffd166; }
+
+    .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { display: flex; align-items: center; gap: .9rem; }
+    .footer-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-grad); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 900; color: #fff; box-shadow: 0 0 18px rgba(67,97,238,.5); flex-shrink: 0; }
+    .footer-name  { font-weight: 800; font-size: .96rem; color: var(--text); }
+    .footer-role  { font-size: .75rem; color: var(--text-muted); margin-top: .1rem; }
+    .footer-right { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .footer-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .28rem .75rem; border-radius: 100px; background: rgba(67,97,238,.12); border: 1px solid rgba(67,97,238,.28); font-size: .73rem; font-weight: 700; color: #4cc9f0; }
+    .footer-tag   { font-size: .73rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); }
+
+    .sim-results { margin-top: .8rem; padding: .8rem 1rem; background: rgba(76,201,240,.07); border: 1px solid rgba(76,201,240,.14); border-radius: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: .35rem .8rem; }
+    .sim-results .r-row { display: flex; justify-content: space-between; align-items: center; }
+    .sim-results .r-lbl { font-size: .76rem; color: var(--text-muted); }
+    .sim-results .r-val { font-size: .82rem; font-weight: 700; color: #fff; }
+
+    @media(max-width:600px) {
+      .phet-mobile-note { display: block; }
+      .phet-wrap { padding-bottom: 80%; }
+      .yt-big-play { width: 60px; height: 60px; font-size: 1.3rem; }
+      .yt-title-bar { font-size: .8rem; }
+      .footer-role { display: none; }
+      .sim-results { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="page-progress"></div>
+
+<nav class="v2-nav">
+  <div class="inner">
+    <a class="nav-logo" href="../../index.html"><svg class="logo-atom" viewBox="0 0 40 40" width="26" height="26" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="3.2" fill="currentColor"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(120 20 20)"/></svg><span class="logo-text">VirtualLab</span></a>
+    <div class="nav-crumbs">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">›</span>
+      <a href="../index.html">Física 10°</a>
+      <span class="sep">›</span>
+      <a href="index.html">Período 2</a>
+      <span class="sep">›</span>
+      <span class="current">Dinámica y Equilibrio</span>
+    </div>
+    <div class="nav-right">
+      <a class="v2-btn v2-btn-ghost" href="../periodo1/3_cinematica_v2.html">← Cinemática</a>
+      <a class="v2-btn v2-btn-primary" href="2_trabajo_energia.html">Trabajo →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="v2-hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-particles-layer" id="heroParticles"></div>
+  <div class="v2-wrap">
+    <div class="hero-content-wrap">
+      <div class="v2-badge">
+        <span class="badge-dot"></span>
+        Física 10° &nbsp;·&nbsp; Período 2 &nbsp;·&nbsp; Tema 1
+      </div>
+      <h1>Dinámica y Equilibrio</h1>
+      <p class="hero-sub">
+        Descubre por qué los cuerpos se mueven o permanecen quietos, domina las tres Leyes de Newton y aprende a construir diagramas de cuerpo libre paso a paso.
+      </p>
+      <div class="hero-tags">
+        <span class="h-tag">🍎 1ª Ley</span>
+        <span class="h-tag">⚡ 2ª Ley: F=ma</span>
+        <span class="h-tag">↔️ 3ª Ley</span>
+        <span class="h-tag">📐 DCL</span>
+        <span class="h-tag">⚖️ Equilibrio</span>
+        <span class="h-tag">🔬 Lab Newton</span>
+      </div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-mouse"></div>
+        <span>Desliza para explorar</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual-wrap">
+    <div class="orbital">
+      <div class="o-core"></div>
+      <div class="o-ring o-ring-1"></div>
+      <div class="o-ring o-ring-2"></div>
+      <div class="o-ring o-ring-3"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══ TEORÍA ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-teoria">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📖 Teoría</div>
+    <h2 class="v2-sec-title">Conceptos esenciales</h2>
+    <p class="v2-sec-desc">Haz clic en cada ficha para estudiar el tema. Puedes copiar el texto para tus apuntes.</p>
+  </div>
+
+  <div class="v2-tabs">
+    <button class="v2-tab active" data-tab="t-fuerzas">💪 Fuerzas</button>
+    <button class="v2-tab" data-tab="t-ley1">🍎 1ª Ley</button>
+    <button class="v2-tab" data-tab="t-ley2">⚡ 2ª Ley</button>
+    <button class="v2-tab" data-tab="t-ley3">↔️ 3ª Ley</button>
+    <button class="v2-tab" data-tab="t-dcl">📐 DCL</button>
+  </div>
+
+  <div class="v2-card">
+
+    <div id="t-fuerzas" class="v2-tab-panel active">
+      <button class="copy-teoria-btn" data-target="copy-fuerzas">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-fuerzas">
+        <h3>¿Qué es una fuerza?</h3>
+        <p>Una fuerza es una interacción capaz de cambiar el <strong>estado de movimiento</strong> o la <strong>forma</strong> de un objeto. Se mide en <strong>Newtons (N)</strong> y es una magnitud vectorial: tiene magnitud, dirección y sentido.</p>
+        <div class="key-box">💡 Idea clave: las fuerzas son <strong>interacciones entre dos cuerpos</strong>. Siempre hay un agente que ejerce y un objeto que recibe. No existen fuerzas aisladas.</div>
+        <h3>Fuerzas comunes</h3>
+        <ul>
+          <li><strong>Peso (P):</strong> fuerza con que la Tierra atrae al objeto hacia su centro. P = m·g. Siempre apunta hacia abajo.</li>
+          <li><strong>Normal (N):</strong> fuerza perpendicular a la superficie de contacto, que impide que el objeto la atraviese.</li>
+          <li><strong>Tensión (T):</strong> fuerza transmitida por una cuerda o cable. Actúa a lo largo de la cuerda, alejándose del objeto.</li>
+          <li><strong>Fricción (f):</strong> fuerza que se opone al movimiento relativo o a la tendencia de moverse. f = μ·N.</li>
+          <li><strong>Fuerza aplicada (F):</strong> fuerza ejercida directamente por un agente externo (una persona, un motor).</li>
+        </ul>
+        <h3>Ejemplo del contexto colombiano</h3>
+        <p>Un campesino huilense empuja un bulto de café de 40 kg sobre el suelo. El peso del bulto es P = 40 × 9.8 = 392 N ↓. La superficie ejerce la normal N = 392 N ↑. Si el campesino empuja con F = 80 N y la fricción es f = 50 N, la <strong>fuerza neta es 30 N hacia adelante</strong>, produciendo aceleración.</p>
+      </div>
+    </div>
+
+    <div id="t-ley1" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-ley1">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-ley1">
+        <h3>Primera Ley de Newton — Ley de la Inercia</h3>
+        <p>Un cuerpo permanece en <strong>reposo</strong> o en <strong>movimiento rectilíneo uniforme</strong> a menos que una fuerza neta no nula actúe sobre él.</p>
+        <div class="key-box">💡 La <strong>inercia</strong> es la resistencia de un cuerpo a cambiar su estado de movimiento. A mayor masa, mayor inercia.</div>
+        <h3>¿Qué implica la 1ª Ley?</h3>
+        <ul>
+          <li>Si la fuerza neta es <strong>cero</strong>, la velocidad no cambia (el objeto sigue en reposo o en MRU).</li>
+          <li>Para <strong>cambiar la velocidad</strong> (arrancar, frenar, girar) se necesita una fuerza neta distinta de cero.</li>
+          <li>El reposo y el MRU son equivalentes bajo la 1ª Ley: ambos requieren ΣF = 0.</li>
+        </ul>
+        <h3>Ejemplo cotidiano</h3>
+        <p>En un bus que frena bruscamente, los pasajeros se inclinan hacia adelante. Sus cuerpos "quieren" seguir moviéndose (inercia). El bus les aplica la fuerza de frenado a través del asiento, pero el cuerpo tarda en reaccionar. Por eso son obligatorios los <strong>cinturones de seguridad</strong>.</p>
+      </div>
+    </div>
+
+    <div id="t-ley2" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-ley2">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-ley2">
+        <h3>Segunda Ley de Newton — Ley Fundamental de la Dinámica</h3>
+        <p>La aceleración de un cuerpo es <strong>directamente proporcional</strong> a la fuerza neta aplicada e <strong>inversamente proporcional</strong> a su masa.</p>
+        <div class="key-box">💡 Fórmula clave: <strong>ΣF = m · a</strong> — La aceleración tiene la misma dirección y sentido que la fuerza neta.</div>
+        <h3>Puntos esenciales</h3>
+        <ul>
+          <li>Doble fuerza sobre la misma masa → doble aceleración.</li>
+          <li>Doble masa con la misma fuerza → la mitad de aceleración.</li>
+          <li>Si ΣF = 0, entonces a = 0 (equilibrio o MRU, nunca aceleración).</li>
+          <li>La unidad del Newton: <strong>1 N = 1 kg · m/s²</strong>.</li>
+        </ul>
+        <h3>Ejemplo del contexto colombiano</h3>
+        <p>Un carro de 1 200 kg sube la vía al Macizo Colombiano con una fuerza neta de 2 400 N. Su aceleración es: <strong>a = F/m = 2 400 / 1 200 = 2 m/s²</strong>. Si la misma fuerza actúa sobre un carro de 800 kg, la aceleración sería 3 m/s².</p>
+      </div>
+    </div>
+
+    <div id="t-ley3" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-ley3">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-ley3">
+        <h3>Tercera Ley de Newton — Ley de Acción y Reacción</h3>
+        <p>Cuando un cuerpo A ejerce una fuerza sobre un cuerpo B, el cuerpo B ejerce sobre A una fuerza de <strong>igual magnitud, misma línea de acción, pero sentido opuesto</strong>.</p>
+        <div class="key-box">💡 Clave: las fuerzas de acción y reacción actúan sobre <strong>cuerpos distintos</strong>. Por eso no se cancelan en el mismo diagrama.</div>
+        <h3>Propiedades del par acción-reacción</h3>
+        <ul>
+          <li>Tienen la <strong>misma magnitud</strong> (si A empuja con 80 N, B devuelve 80 N).</li>
+          <li>Actúan en <strong>sentidos opuestos</strong>.</li>
+          <li>Son del <strong>mismo tipo</strong> de fuerza.</li>
+          <li>Ocurren <strong>simultáneamente</strong>: no hay primero una acción y luego una reacción.</li>
+        </ul>
+        <h3>Ejemplos cotidianos</h3>
+        <ul>
+          <li>🚀 Un cohete expulsa gases ↓ (acción) → los gases empujan el cohete ↑ (reacción).</li>
+          <li>👣 Al caminar, el pie empuja el suelo ← → el suelo empuja el pie → (hacia adelante).</li>
+          <li>🏊 El nadador empuja el agua ← → el agua lo impulsa → hacia adelante.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="t-dcl" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-dcl">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-dcl">
+        <h3>Diagrama de Cuerpo Libre (DCL)</h3>
+        <p>El DCL es la representación gráfica de <strong>todas las fuerzas que actúan sobre un objeto</strong>. Es la herramienta más importante para resolver problemas de dinámica.</p>
+        <h3>Pasos para construir un DCL</h3>
+        <ul>
+          <li><strong>1.</strong> Identifica el objeto de interés y <em>aíslalo</em> del entorno.</li>
+          <li><strong>2.</strong> Dibuja el objeto como un punto o rectángulo simple.</li>
+          <li><strong>3.</strong> Identifica <em>todas</em> las fuerzas que actúan <strong>sobre</strong> el objeto (no las que él ejerce).</li>
+          <li><strong>4.</strong> Dibuja cada fuerza como un vector desde el centro de masa.</li>
+          <li><strong>5.</strong> Etiqueta cada vector con su nombre y magnitud conocida.</li>
+        </ul>
+        <h3>Condición de equilibrio</h3>
+        <p>Un cuerpo está en equilibrio cuando la fuerza neta es cero en <strong>cada eje</strong>:</p>
+        <ul>
+          <li><strong>ΣFₓ = 0</strong> (fuerzas horizontales se cancelan)</li>
+          <li><strong>ΣFᵧ = 0</strong> (fuerzas verticales se cancelan)</li>
+        </ul>
+        <p>Ejemplo: un cuadro colgado de dos cuerdas verticales iguales — la tensión total T₁ + T₂ = mg.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ FÓRMULAS ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-formulas">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📐 Fórmulas</div>
+    <h2 class="v2-sec-title">Ecuaciones de la dinámica</h2>
+    <p class="v2-sec-desc">Pasa el cursor sobre cada tarjeta para ver el detalle de variables y unidades.</p>
+  </div>
+
+  <div class="formula-grid">
+
+    <div class="formula-card">
+      <div class="f-name">Segunda Ley de Newton</div>
+      <div class="f-eq">ΣF = m · a</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">ΣF</span><span class="f-desc">fuerza neta (suma vectorial)</span><span class="f-unit">N</span></div>
+        <div class="f-var"><span class="f-sym">m</span><span class="f-desc">masa del objeto</span><span class="f-unit">kg</span></div>
+        <div class="f-var"><span class="f-sym">a</span><span class="f-desc">aceleración resultante</span><span class="f-unit">m/s²</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Peso</div>
+      <div class="f-eq">P = m · g</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">P</span><span class="f-desc">peso del objeto</span><span class="f-unit">N</span></div>
+        <div class="f-var"><span class="f-sym">m</span><span class="f-desc">masa</span><span class="f-unit">kg</span></div>
+        <div class="f-var"><span class="f-sym">g</span><span class="f-desc">aceleración gravitacional</span><span class="f-unit">9.8 m/s²</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Fricción cinética</div>
+      <div class="f-eq">f = μ · N</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">f</span><span class="f-desc">fuerza de fricción</span><span class="f-unit">N</span></div>
+        <div class="f-var"><span class="f-sym">μ</span><span class="f-desc">coef. de rozamiento</span><span class="f-unit">adimensional</span></div>
+        <div class="f-var"><span class="f-sym">N</span><span class="f-desc">fuerza normal</span><span class="f-unit">N</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Equilibrio estático</div>
+      <div class="f-eq" style="font-size:1.15rem;">ΣFₓ = 0 &nbsp;·&nbsp; ΣFᵧ = 0</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">ΣFₓ</span><span class="f-desc">suma fuerzas horizontales</span><span class="f-unit">= 0</span></div>
+        <div class="f-var"><span class="f-sym">ΣFᵧ</span><span class="f-desc">suma fuerzas verticales</span><span class="f-unit">= 0</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Normal en plano inclinado</div>
+      <div class="f-eq">N = m · g · cos θ</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">N</span><span class="f-desc">fuerza normal</span><span class="f-unit">N</span></div>
+        <div class="f-var"><span class="f-sym">m·g</span><span class="f-desc">peso del objeto</span><span class="f-unit">N</span></div>
+        <div class="f-var"><span class="f-sym">θ</span><span class="f-desc">ángulo de inclinación</span><span class="f-unit">°</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Tensión — objeto colgante</div>
+      <div class="f-eq">T = m · (g + a)</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">T</span><span class="f-desc">tensión en la cuerda</span><span class="f-unit">N</span></div>
+        <div class="f-var"><span class="f-sym">m</span><span class="f-desc">masa colgante</span><span class="f-unit">kg</span></div>
+        <div class="f-var"><span class="f-sym">a</span><span class="f-desc">aceleración (0 si equilibrio)</span><span class="f-unit">m/s²</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SIMULADOR ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-sim">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🔬 Laboratorio Newton</div>
+    <h2 class="v2-sec-title">Experimenta con fuerzas</h2>
+    <p class="v2-sec-desc">Ajusta la masa, la fuerza y la fricción. El DCL se actualiza en tiempo real mostrando cada vector.</p>
+  </div>
+
+  <div class="v2-sim">
+    <div class="sim-topbar">
+      <div class="sim-tag"><div class="sim-dot"></div> Laboratorio Newton — F = m·a</div>
+      <div class="sim-ctrl-row">
+        <button class="s-btn on" id="btnPlay" title="Reproducir / Pausar">▶</button>
+        <button class="s-btn" id="btnReset" title="Reiniciar">↺</button>
+      </div>
+    </div>
+
+    <div class="sim-layout">
+      <div class="sim-sidebar">
+
+        <div class="s-label">Masa (kg)</div>
+        <input type="range" class="s-range" id="slMass" min="1" max="20" value="5" step="1">
+        <div class="s-val" id="valMass">m = 5 kg</div>
+
+        <div class="s-label">Fuerza aplicada (N)</div>
+        <input type="range" class="s-range" id="slForce" min="0" max="100" value="30" step="1">
+        <div class="s-val" id="valForce">F = 30 N</div>
+
+        <div class="s-label">Coef. de rozamiento (μ)</div>
+        <input type="range" class="s-range" id="slMu" min="0" max="0.8" value="0.2" step="0.05">
+        <div class="s-val" id="valMu">μ = 0.20</div>
+
+        <div class="sim-results">
+          <div class="r-row"><span class="r-lbl">F neta</span><span class="r-val" id="liveFnet" style="color:#ffd166">0.0 N</span></div>
+          <div class="r-row"><span class="r-lbl">Aceleración</span><span class="r-val" id="liveAcc" style="color:#4cc9f0">0.0 m/s²</span></div>
+          <div class="r-row"><span class="r-lbl">Velocidad</span><span class="r-val" id="liveVel" style="color:#06d6a0">0.0 m/s</span></div>
+          <div class="r-row"><span class="r-lbl">Estado</span><span class="r-val" id="liveState">—</span></div>
+        </div>
+      </div>
+
+      <div class="sim-main">
+        <canvas id="labCanvas" height="130" style="width:100%; margin-bottom:.8rem;"></canvas>
+        <canvas id="dclCanvas"  height="170" style="width:100%;"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VIDEO ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-video">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🎬 Video explicativo</div>
+    <h2 class="v2-sec-title">Mira, escucha y entiende</h2>
+    <p class="v2-sec-desc">Toca el botón para ver el video directamente aquí.</p>
+  </div>
+
+  <div class="yt-player-wrap" id="ytPlayerWrap">
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('iqqI9oluBIw')">
+      <img class="yt-thumb-img"
+           src="https://img.youtube.com/vi/iqqI9oluBIw/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/iqqI9oluBIw/hqdefault.jpg'"
+           alt="Leyes de Newton — Física 10°">
+      <div class="yt-thumb-overlay">
+        <div class="yt-big-play">&#9654;</div>
+      </div>
+      <div class="yt-info-bar">
+        <div class="yt-title-bar">Leyes de Newton — Dinámica y Equilibrio<br>
+          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Explicación completa con ejemplos · Toca para reproducir</span>
+        </div>
+        <a class="yt-ext-btn"
+           href="https://www.youtube.com/watch?v=iqqI9oluBIw"
+           target="_blank" rel="noopener"
+           onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
+      </div>
+    </div>
+    <div class="yt-embed-frame" id="ytEmbedFrame">
+      <iframe id="ytIframe" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PhET ═══ -->
+<section class="v2-section-sm v2-wrap anim-scroll" id="sec-phet">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🧪 Laboratorio PhET</div>
+    <h2 class="v2-sec-title">Fuerzas y Movimiento</h2>
+    <p class="v2-sec-desc">Aplica fuerzas a objetos de distinta masa y activa o desactiva la fricción. Observa la aceleración directamente.</p>
+  </div>
+  <div class="phet-wrap">
+    <iframe
+      src="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_es.html"
+      title="Fuerzas y Movimiento - PhET"
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+  <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
+    💡 <strong>Actividad sugerida:</strong> Aplica 50 N a un objeto de 10 kg sin fricción. ¿Cuánto acelera? Activa la fricción y repite. ¿Qué cambia? Verifica con F = m·a.
+  </p>
+  <p class="phet-mobile-note">📱 Esta simulación funciona mejor en pantallas grandes. Si no carga, usa el botón de PhET de arriba.</p>
+</section>
+
+<!-- ═══ TIPS ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-tips">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">💡 Tips y errores</div>
+    <h2 class="v2-sec-title">Lo que debes saber bien</h2>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:2rem;">
+    <div class="tip-card">
+      <div class="t-icon">📐</div>
+      <h4>Dibuja el DCL antes de calcular</h4>
+      <p>Antes de plantear cualquier ecuación, dibuja todas las fuerzas sobre el objeto. Un DCL claro elimina el 80% de los errores de signo y de dirección.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">↔️</div>
+      <h4>Acción y reacción: cuerpos distintos</h4>
+      <p>Las fuerzas del par acción-reacción actúan sobre cuerpos <em>diferentes</em>. Si aparecen en el mismo DCL, algo está mal: no pueden cancelarse entre sí.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">⚖️</div>
+      <h4>La masa NO es el peso</h4>
+      <p>La masa (kg) es la cantidad de materia. El peso (N) es la fuerza gravitacional sobre esa masa: P = m × g. En la Luna tendrías la misma masa pero menor peso.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🎯</div>
+      <h4>ΣF = 0 no significa sin fuerzas</h4>
+      <p>En equilibrio hay fuerzas reales que se cancelan. Un libro sobre una mesa siente su peso Y la normal. La suma da cero, pero ambas fuerzas existen.</p>
+    </div>
+  </div>
+
+  <div class="v2-sec-label text-accent" style="margin-bottom:1rem;">❌ Errores frecuentes en el ICFES</div>
+  <div class="error-table-card">
+    <div class="err-row">
+      <div class="err-cell err-head err-bad">❌ Error frecuente</div>
+      <div class="err-cell err-head err-good">✅ Lo correcto</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Afirmar que la fuerza normal siempre es igual al peso.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>N = mg solo en plano horizontal sin aceleración vertical. En planos inclinados o con aceleración, N ≠ mg.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Creer que la fricción siempre detiene el movimiento.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Si F aplicada > f, el objeto acelera a pesar de la fricción. La fricción reduce pero no necesariamente elimina la aceleración.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Incluir en el DCL fuerzas que el objeto ejerce sobre otros.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>En el DCL solo van las fuerzas que actúan <em>sobre</em> el objeto analizado. Las fuerzas que él ejerce van en el DCL del otro cuerpo.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Confundir "sin aceleración" con "sin fuerzas".</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Un objeto puede tener muchas fuerzas y no acelerar si su suma vectorial es cero. Eso es el equilibrio.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUIZ ICFES ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-quiz">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📝 Quiz ICFES</div>
+    <h2 class="v2-sec-title">¿Entendiste el tema?</h2>
+    <p class="v2-sec-desc">5 preguntas estilo ICFES. Léelas con calma, no hay tiempo límite. Al final verás tu puntaje.</p>
+  </div>
+
+  <div class="quiz-v2" id="quizBox">
+    <div class="quiz-top">
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizFill" style="width:0%"></div></div>
+      <div class="quiz-cnt" id="quizCnt">Pregunta 1 de 5</div>
+    </div>
+    <div class="quiz-body" id="quizBody">
+      <div class="quiz-q" id="qText"></div>
+      <div class="quiz-opts" id="qOpts"></div>
+      <div class="quiz-fb" id="qFb"></div>
+    </div>
+    <div class="quiz-foot">
+      <button class="v2-btn v2-btn-primary" id="qNext" style="display:none">Siguiente →</button>
+    </div>
+    <div class="quiz-result-screen" id="quizResult">
+      <div class="score-ring" id="scoreRing">
+        <div class="score-big" id="scoreBig">0/5</div>
+        <div class="score-sub">respuestas correctas</div>
+      </div>
+      <div class="score-msg" id="scoreMsg"></div>
+      <div class="score-hint" id="scoreHint"></div>
+      <button class="v2-btn v2-btn-primary" id="qRestart">🔄 Intentar de nuevo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NAVEGACIÓN ═══ -->
+<div class="v2-wrap">
+  <hr class="v2-hr">
+  <div class="v2-page-nav">
+    <a class="nav-btn-card" href="../periodo1/3_cinematica_v2.html">
+      <span class="nbc-arr">←</span>
+      <div>
+        <div class="nbc-sub">Tema anterior</div>
+        <div class="nbc-title">Cinemática MRU / MRUV</div>
+      </div>
+    </a>
+    <a class="nav-btn-card right" href="2_trabajo_energia.html">
+      <div>
+        <div class="nbc-sub">Siguiente tema</div>
+        <div class="nbc-title">Trabajo y Energía</div>
+      </div>
+      <span class="nbc-arr">→</span>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="v2-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-avatar">LC</div>
+      <div>
+        <div class="footer-name">Docente Luis Miguel Cabrera</div>
+        <div class="footer-role">I.E. Paulo VI &nbsp;·&nbsp; Huila, Colombia &nbsp;·&nbsp; Física & Matemáticas</div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">⚛️ VirtualLab 2026</span>
+      <span class="footer-tag">lumcab</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+/* VIDEO CLICK-TO-PLAY */
+function ytLoadEmbed(id) {
+  const thumb = document.getElementById('ytThumbCard');
+  const frame = document.getElementById('ytEmbedFrame');
+  const iframe = document.getElementById('ytIframe');
+  if (!thumb || !frame || !iframe) return;
+  thumb.style.display = 'none';
+  frame.classList.add('visible');
+  iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&color=white';
+}
+
+/* BARRA DE PROGRESO */
+(function () {
+  const bar = document.getElementById('page-progress');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (window.scrollY / h * 100) + '%';
+  }, { passive: true });
+})();
+
+/* PARTÍCULAS */
+(function () {
+  const layer = document.getElementById('heroParticles');
+  const colors = ['#4361ee', '#4cc9f0', '#3a0ca3', 'rgba(76,201,240,.5)'];
+  for (let i = 0; i < 22; i++) {
+    const d = document.createElement('div');
+    d.className = 'p-dot';
+    const s = Math.random() * 5 + 2;
+    d.style.cssText = `width:${s}px;height:${s}px;background:${colors[Math.floor(Math.random() * colors.length)]};left:${Math.random() * 100}%;bottom:-20px;animation-duration:${7 + Math.random() * 10}s;animation-delay:${Math.random() * 8}s;opacity:${.3 + Math.random() * .5};`;
+    layer.appendChild(d);
+  }
+})();
+
+/* SCROLL ANIMATIONS */
+(function () {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.anim-scroll').forEach(el => obs.observe(el));
+})();
+
+/* TABS */
+(function () {
+  document.querySelectorAll('.v2-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const g = btn.closest('section') || btn.parentElement.parentElement;
+      g.querySelectorAll('.v2-tab').forEach(b => b.classList.remove('active'));
+      g.querySelectorAll('.v2-tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = g.querySelector('#' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+})();
+
+/* COPIAR TEORÍA */
+document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const t = document.getElementById(btn.dataset.target);
+    if (!t) return;
+    navigator.clipboard.writeText(t.innerText).then(() => {
+      btn.textContent = '✅ ¡Copiado!'; btn.classList.add('done');
+      setTimeout(() => { btn.textContent = '📋 Copiar para mis apuntes'; btn.classList.remove('done'); }, 2500);
+    }).catch(() => { btn.textContent = '⚠️ Copia manualmente'; });
+  });
+});
+
+/* ==========================================
+   LABORATORIO NEWTON
+========================================== */
+(function () {
+  const labC = document.getElementById('labCanvas');
+  const dclC = document.getElementById('dclCanvas');
+  const lc   = labC.getContext('2d');
+  const dc   = dclC.getContext('2d');
+
+  const btnPlay  = document.getElementById('btnPlay');
+  const btnReset = document.getElementById('btnReset');
+  const slMass   = document.getElementById('slMass');
+  const slForce  = document.getElementById('slForce');
+  const slMu     = document.getElementById('slMu');
+  const valMass  = document.getElementById('valMass');
+  const valForce = document.getElementById('valForce');
+  const valMu    = document.getElementById('valMu');
+  const liveFnet = document.getElementById('liveFnet');
+  const liveAcc  = document.getElementById('liveAcc');
+  const liveVel  = document.getElementById('liveVel');
+  const liveState = document.getElementById('liveState');
+
+  const G = 9.8, DT = 0.033;
+  let running = true, raf;
+  let mass = 5, appliedF = 30, mu = 0.2, vel = 0, bx = 0;
+
+  function readParams() {
+    mass     = +slMass.value;
+    appliedF = +slForce.value;
+    mu       = +slMu.value;
+    valMass.textContent  = `m = ${mass} kg`;
+    valForce.textContent = `F = ${appliedF} N`;
+    valMu.textContent    = `μ = ${mu.toFixed(2)}`;
+  }
+
+  function resize() {
+    labC.width  = labC.offsetWidth; labC.height = 130;
+    dclC.width  = dclC.offsetWidth; dclC.height = 170;
+    bx = labC.width / 2;
+  }
+
+  function reset() {
+    readParams(); vel = 0; bx = labC.width / 2;
+    if (!running) { running = true; btnPlay.textContent = '⏸'; btnPlay.classList.add('on'); }
+  }
+
+  /* ── Dibuja flecha con punta ── */
+  function arrow(ctx, x1, y1, x2, y2, color, lw) {
+    const dx = x2 - x1, dy = y2 - y1;
+    if (Math.sqrt(dx * dx + dy * dy) < 4) return;
+    const ang = Math.atan2(dy, dx);
+    ctx.strokeStyle = color; ctx.fillStyle = color;
+    ctx.lineWidth = lw || 2;
+    ctx.shadowColor = color; ctx.shadowBlur = 7;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 9 * Math.cos(ang - 0.42), y2 - 9 * Math.sin(ang - 0.42));
+    ctx.lineTo(x2 - 9 * Math.cos(ang + 0.42), y2 - 9 * Math.sin(ang + 0.42));
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+
+  function drawLab() {
+    const W = labC.width, H = labC.height;
+    lc.clearRect(0, 0, W, H);
+    lc.fillStyle = 'rgba(0,0,0,.35)';
+    lc.beginPath(); lc.roundRect(0, 0, W, H, 10); lc.fill();
+
+    const floorY = H * .72;
+    lc.strokeStyle = 'rgba(255,255,255,.12)'; lc.lineWidth = 2;
+    lc.beginPath(); lc.moveTo(0, floorY); lc.lineTo(W, floorY); lc.stroke();
+
+    /* textura piso */
+    lc.fillStyle = 'rgba(255,255,255,.03)';
+    for (let sx = 0; sx < W; sx += 18) lc.fillRect(sx, floorY + 1, 9, H - floorY);
+
+    /* bloque */
+    const bw = 44 + mass * 1.8, bh = 30 + mass * 0.6;
+    const cx = Math.max(bw / 2 + 8, Math.min(W - bw / 2 - 8, bx));
+    const by = floorY - bh;
+
+    const gr = lc.createLinearGradient(cx - bw / 2, by, cx + bw / 2, by + bh);
+    gr.addColorStop(0, '#4361ee'); gr.addColorStop(1, '#3a0ca3');
+    lc.fillStyle = gr;
+    lc.beginPath(); lc.roundRect(cx - bw / 2, by, bw, bh, 5); lc.fill();
+    lc.strokeStyle = 'rgba(76,201,240,.4)'; lc.lineWidth = 1.5; lc.stroke();
+
+    lc.fillStyle = '#fff'; lc.font = `bold ${Math.min(13, bw / 4)}px Segoe UI`;
+    lc.textAlign = 'center'; lc.fillText(`${mass} kg`, cx, by + bh / 2 + 5);
+
+    const N2    = mass * G;
+    const fric2 = mu * N2;
+    const fnet2 = appliedF - fric2;
+    const mid   = by + bh / 2;
+
+    /* flecha F aplicada */
+    if (appliedF > 0) {
+      arrow(lc, cx + bw / 2, mid, cx + bw / 2 + Math.min(52, appliedF * 0.55), mid, '#ffd166', 2.5);
+      lc.fillStyle = '#ffd166'; lc.font = '9px Segoe UI'; lc.textAlign = 'left';
+      lc.fillText(`F=${appliedF}N`, cx + bw / 2 + Math.min(52, appliedF * 0.55) + 4, mid - 4);
+    }
+    /* flecha fricción */
+    if (fric2 > 0.1 && (appliedF > 0 || Math.abs(vel) > 0.05)) {
+      arrow(lc, cx - bw / 2, mid, cx - bw / 2 - Math.min(44, fric2 * 0.5), mid, '#e63946', 2.5);
+      lc.fillStyle = '#e63946'; lc.font = '9px Segoe UI'; lc.textAlign = 'right';
+      lc.fillText(`f=${fric2.toFixed(0)}N`, cx - bw / 2 - Math.min(44, fric2 * 0.5) - 4, mid - 4);
+    }
+
+    /* etiqueta estado */
+    lc.fillStyle = Math.abs(fnet2) < 0.5 ? '#06d6a0' : '#ffd166';
+    lc.font = 'bold 10px Segoe UI'; lc.textAlign = 'center';
+    const label = Math.abs(fnet2) < 0.5 ? '⚖ EQUILIBRIO' : `a = ${(fnet2 / mass).toFixed(1)} m/s²`;
+    lc.fillText(label, cx, by - 7);
+  }
+
+  function drawDCL() {
+    const W = dclC.width, H = dclC.height;
+    dc.clearRect(0, 0, W, H);
+    dc.fillStyle = 'rgba(0,0,0,.3)';
+    dc.beginPath(); dc.roundRect(0, 0, W, H, 10); dc.fill();
+
+    const cx = W / 2, cy = H / 2 - 4;
+    const N2    = mass * G;
+    const fric2 = vel === 0 ? Math.min(appliedF, mu * N2) : mu * N2;
+    const fnet2 = appliedF - fric2;
+
+    /* título */
+    dc.fillStyle = 'rgba(255,255,255,.38)'; dc.font = 'bold 10px Segoe UI'; dc.textAlign = 'center';
+    dc.fillText('DIAGRAMA DE CUERPO LIBRE', cx, 14);
+
+    /* cuerpo central */
+    dc.fillStyle = 'rgba(67,97,238,.35)'; dc.strokeStyle = 'rgba(76,201,240,.5)'; dc.lineWidth = 1.5;
+    dc.beginPath(); dc.roundRect(cx - 18, cy - 18, 36, 36, 4); dc.fill(); dc.stroke();
+
+    const scale = (v) => Math.max(18, Math.min(60, v * 0.13));
+
+    /* Peso ↓ verde */
+    const Plen = scale(N2);
+    arrow(dc, cx, cy + 18, cx, cy + 18 + Plen, '#06d6a0', 2);
+    dc.fillStyle = '#06d6a0'; dc.font = 'bold 10px Segoe UI'; dc.textAlign = 'center';
+    dc.fillText(`P = ${N2.toFixed(0)} N`, cx, cy + 18 + Plen + 13);
+
+    /* Normal ↑ azul */
+    arrow(dc, cx, cy - 18, cx, cy - 18 - Plen, '#4cc9f0', 2);
+    dc.fillStyle = '#4cc9f0'; dc.textAlign = 'center';
+    dc.fillText(`N = ${N2.toFixed(0)} N`, cx, cy - 18 - Plen - 6);
+
+    /* F aplicada → naranja */
+    if (appliedF > 0) {
+      const Flen = scale(appliedF);
+      arrow(dc, cx + 18, cy, cx + 18 + Flen, cy, '#ffd166', 2);
+      dc.fillStyle = '#ffd166'; dc.textAlign = 'left';
+      dc.fillText(`F = ${appliedF} N`, cx + 18 + Flen + 5, cy - 4);
+    }
+
+    /* Fricción ← roja */
+    if (fric2 > 0.5) {
+      const flen = scale(fric2);
+      arrow(dc, cx - 18, cy, cx - 18 - flen, cy, '#e63946', 2);
+      dc.fillStyle = '#e63946'; dc.textAlign = 'right';
+      dc.fillText(`f = ${fric2.toFixed(0)} N`, cx - 18 - flen - 5, cy - 4);
+    }
+
+    /* ΣF en la base */
+    dc.fillStyle = Math.abs(fnet2) < 0.5 ? '#06d6a0' : '#ffd166';
+    dc.font = 'bold 10px Segoe UI'; dc.textAlign = 'center';
+    dc.fillText(`ΣF = ${fnet2.toFixed(1)} N`, cx, H - 8);
+  }
+
+  function step() {
+    if (!running) return;
+    const N2     = mass * G;
+    const maxF   = mu * N2;
+    let fric2;
+    if (vel === 0) {
+      fric2 = appliedF > maxF ? maxF : appliedF;
+    } else {
+      fric2 = maxF * (vel > 0 ? 1 : -1);
+    }
+    const fnet2 = appliedF - fric2;
+    const acc   = fnet2 / mass;
+
+    vel += acc * DT;
+    if (Math.abs(vel) < 0.015 && Math.abs(fnet2) < 0.5) vel = 0;
+    bx += vel * DT * 14;
+
+    /* rebotar en bordes */
+    const bw = 44 + mass * 1.8;
+    if (bx < bw / 2 + 8)           { bx = bw / 2 + 8; vel = Math.abs(vel) * 0.25; }
+    if (bx > labC.width - bw / 2 - 8) { bx = labC.width - bw / 2 - 8; vel = -Math.abs(vel) * 0.25; }
+
+    liveFnet.textContent  = fnet2.toFixed(1) + ' N';
+    liveAcc.textContent   = acc.toFixed(2) + ' m/s²';
+    liveVel.textContent   = vel.toFixed(2) + ' m/s';
+    liveState.textContent = Math.abs(fnet2) < 0.5 ? '⚖️ Equilibrio' : vel > 0.1 ? '→ Acelerando' : vel < -0.1 ? '← Movimiento' : '🔴 Estático';
+
+    drawLab(); drawDCL();
+    raf = requestAnimationFrame(step);
+  }
+
+  btnPlay.addEventListener('click', () => {
+    running = !running;
+    if (running) { btnPlay.textContent = '⏸'; btnPlay.classList.add('on'); raf = requestAnimationFrame(step); }
+    else         { btnPlay.textContent = '▶'; btnPlay.classList.remove('on'); cancelAnimationFrame(raf); }
+  });
+  btnReset.addEventListener('click', () => { cancelAnimationFrame(raf); reset(); drawLab(); drawDCL(); raf = requestAnimationFrame(step); });
+  [slMass, slForce, slMu].forEach(s => s.addEventListener('input', () => {
+    cancelAnimationFrame(raf); readParams(); vel = 0;
+    if (running) raf = requestAnimationFrame(step); else { drawLab(); drawDCL(); }
+  }));
+  window.addEventListener('resize', () => { resize(); drawLab(); drawDCL(); });
+  resize(); reset(); drawLab(); drawDCL(); raf = requestAnimationFrame(step);
+})();
+
+/* ==========================================
+   QUIZ ICFES
+========================================== */
+(function () {
+  const Qs = [
+    {
+      q: 'Un bloque de 8 kg se empuja sobre una superficie horizontal sin fricción con una fuerza de 24 N. ¿Cuál es la aceleración del bloque?',
+      opts: ['A) 0.33 m/s²', 'B) 3 m/s²', 'C) 192 m/s²', 'D) 16 m/s²'],
+      ans: 1,
+      fb: '✓ Correcto. Por la 2ª Ley de Newton: a = ΣF / m = 24 / 8 = 3 m/s². Sin fricción, toda la fuerza aplicada produce aceleración.'
+    },
+    {
+      q: 'Una mochila tiene una masa de 15 kg. ¿Cuál es su peso en Newtons? (g = 9.8 m/s²)',
+      opts: ['A) 15 N', 'B) 1.53 N', 'C) 147 N', 'D) 980 N'],
+      ans: 2,
+      fb: '✓ Correcto. P = m × g = 15 × 9.8 = 147 N. Recuerda: la masa (kg) y el peso (N) no son lo mismo.'
+    },
+    {
+      q: 'Un pasajero en un bus que frena bruscamente se inclina hacia adelante. Esta situación ilustra principalmente:',
+      opts: ['A) La 2ª Ley: la fuerza es igual a masa por aceleración', 'B) La 1ª Ley: el cuerpo tiende a mantener su estado de movimiento (inercia)', 'C) La 3ª Ley: acción y reacción entre pasajero y bus', 'D) La Ley de Gravitación Universal'],
+      ans: 1,
+      fb: '✓ Correcto. Ilustra la inercia (1ª Ley). El cuerpo del pasajero "quiere" seguir en movimiento cuando el bus frena. Para cambiar su velocidad se necesita una fuerza neta, que en este caso actúa demasiado tarde.'
+    },
+    {
+      q: 'Un nadador empuja el agua hacia atrás con 80 N. Según la 3ª Ley de Newton, ¿qué fuerza ejerce el agua sobre el nadador?',
+      opts: ['A) 0 N — el agua no puede hacer fuerza sobre personas', 'B) 40 N hacia atrás', 'C) 80 N hacia adelante', 'D) 160 N hacia adelante'],
+      ans: 2,
+      fb: '✓ Correcto. Por la 3ª Ley: si el nadador empuja el agua con 80 N hacia atrás, el agua empuja al nadador con 80 N hacia adelante. Igual magnitud, sentido contrario, cuerpos distintos.'
+    },
+    {
+      q: 'Un bloque de 10 kg está sobre una mesa horizontal. La fricción estática máxima es de 30 N. Si se aplica una fuerza horizontal de 20 N, ¿cuál es la aceleración del bloque?',
+      opts: ['A) 2 m/s²', 'B) 5 m/s²', 'C) 0 m/s² — permanece en reposo', 'D) 1 m/s²'],
+      ans: 2,
+      fb: '✓ Correcto. La fricción estática puede oponerse hasta 30 N. Como la fuerza aplicada (20 N) es menor que la fricción máxima (30 N), la fricción se iguala a 20 N y la fuerza neta es cero: el bloque no se mueve, a = 0.'
+    }
+  ];
+
+  let current = 0, score = 0, answered = false;
+  const qText = document.getElementById('qText'), qOpts = document.getElementById('qOpts');
+  const qFb = document.getElementById('qFb'), qNext = document.getElementById('qNext');
+  const quizFill = document.getElementById('quizFill'), quizCnt = document.getElementById('quizCnt');
+  const quizBody = document.getElementById('quizBody'), quizResult = document.getElementById('quizResult');
+  const scoreBig = document.getElementById('scoreBig'), scoreMsg = document.getElementById('scoreMsg');
+  const scoreHint = document.getElementById('scoreHint'), qRestart = document.getElementById('qRestart');
+  const L = ['A', 'B', 'C', 'D'];
+
+  function render() {
+    answered = false;
+    const p = Qs[current];
+    qText.textContent = p.q;
+    quizCnt.textContent = `Pregunta ${current + 1} de ${Qs.length}`;
+    quizFill.style.width = (current / Qs.length * 100) + '%';
+    qFb.className = 'quiz-fb'; qFb.textContent = ''; qNext.style.display = 'none';
+    qOpts.innerHTML = '';
+    p.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-opt';
+      btn.style.cssText = 'display:flex;align-items:center;gap:.8rem;width:100%;padding:1rem 1.1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;cursor:pointer;font-size:1rem;font-family:inherit;color:#ffffff;text-align:left;min-height:54px;transition:all .2s;';
+      const ltr = document.createElement('span'); ltr.className = 'opt-ltr'; ltr.textContent = L[i];
+      ltr.style.cssText = 'display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#4361ee,#3a0ca3);color:#fff;font-weight:900;font-size:.9rem;box-shadow:0 0 12px rgba(67,97,238,.5);';
+      btn.appendChild(ltr); btn.appendChild(document.createTextNode(opt.replace(/^[ABCD]\) /, '')));
+      btn.addEventListener('click', () => {
+        if (answered) return; answered = true;
+        qOpts.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('answered'));
+        if (i === p.ans) {
+          btn.style.background = 'rgba(6,214,160,.18)'; btn.style.borderColor = '#06d6a0';
+          ltr.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)'; score++;
+          qFb.textContent = p.fb; qFb.className = 'quiz-fb ok-fb show';
+        } else {
+          btn.style.background = 'rgba(230,57,70,.18)'; btn.style.borderColor = '#e63946';
+          ltr.style.background = 'linear-gradient(135deg,#e63946,#9b2226)';
+          const cb = qOpts.querySelectorAll('.quiz-opt')[p.ans];
+          cb.style.background = 'rgba(6,214,160,.18)'; cb.style.borderColor = '#06d6a0';
+          const cl = cb.querySelector('.opt-ltr'); if (cl) cl.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)';
+          qFb.textContent = '✗ Incorrecto. ' + p.fb; qFb.className = 'quiz-fb err-fb show';
+        }
+        qNext.style.display = 'inline-flex';
+      });
+      qOpts.appendChild(btn);
+    });
+  }
+
+  qNext.addEventListener('click', () => { current++; if (current >= Qs.length) showResult(); else render(); });
+
+  function showResult() {
+    quizFill.style.width = '100%';
+    quizBody.style.display = 'none'; document.querySelector('.quiz-foot').style.display = 'none';
+    quizResult.classList.add('show'); scoreBig.textContent = score + '/' + Qs.length;
+    const pct = score / Qs.length;
+    if (pct === 1)       { scoreMsg.textContent = '🏆 ¡Perfecto! Dominaste las Leyes de Newton.'; scoreHint.textContent = 'Comprensión excelente. Estás listo para el ICFES.'; }
+    else if (pct >= 0.6) { scoreMsg.textContent = '👍 ¡Bien! Vas por buen camino.'; scoreHint.textContent = 'Repasa los ítems en que fallaste y vuelve a intentarlo.'; }
+    else                 { scoreMsg.textContent = '📖 Necesitas repasar más.'; scoreHint.textContent = 'Vuelve a leer la teoría y los DCL. ¡Tú puedes mejorar!'; }
+  }
+
+  qRestart.addEventListener('click', () => {
+    current = 0; score = 0;
+    quizBody.style.display = ''; document.querySelector('.quiz-foot').style.display = '';
+    quizResult.classList.remove('show'); render();
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>

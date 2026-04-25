@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabajo y Energía | Física 10° · VirtualLab</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/icons/favicon.ico">
+  <link rel="stylesheet" href="../../css/tema-v2.css">
+  <script src="../../js/theme.js"></script>
+  <style>
+    :root {
+      --accent-a: #4361ee;
+      --accent-b: #3a0ca3;
+      --accent-c: #4cc9f0;
+      --accent-grad: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+      --hero-c1: #4cc9f0;
+      --hero-c2: #4361ee;
+    }
+    .v2-badge      { background: rgba(67,97,238,.12); border-color: rgba(67,97,238,.35); color: #4cc9f0; }
+    .badge-dot     { background: #4cc9f0; }
+    .o-core        { background: var(--accent-grad); box-shadow: 0 0 40px rgba(67,97,238,.6); }
+    .o-ring-1      { width: 110px; height: 110px; border-color: rgba(67,97,238,.45); animation-duration: 4s; }
+    .o-ring-1::after { background: #4361ee; box-shadow: 0 0 14px #4361ee; }
+    .o-ring-2      { width: 190px; height: 190px; border-color: rgba(76,201,240,.35); animation-duration: 7s; animation-direction: reverse; }
+    .o-ring-2::after { background: #4cc9f0; box-shadow: 0 0 14px #4cc9f0; }
+    .o-ring-3      { width: 290px; height: 290px; border-color: rgba(58,12,163,.3); animation-duration: 13s; }
+    .o-ring-3::after { background: #3a0ca3; box-shadow: 0 0 14px #3a0ca3; width: 8px; height: 8px; top:-4px; left: calc(50% - 4px); }
+    .v2-tab.active { background: var(--accent-a); }
+    .f-eq          { color: #4cc9f0; }
+    .f-sym         { color: #ffd166; }
+    .quiz-prog-fill { background: var(--accent-grad); }
+    .score-ring    { background: var(--accent-grad); }
+
+    #energyCanvas { border-radius: 10px; background: rgba(0,0,0,.4); display: block; }
+
+    .quiz-opt {
+      color: #ffffff !important; font-size: 1rem; min-height: 54px;
+      background: rgba(255,255,255,.05) !important; border-color: rgba(255,255,255,.12) !important;
+    }
+    .quiz-opt:hover:not(.answered) { background: rgba(67,97,238,.18) !important; border-color: #4361ee !important; }
+    .opt-ltr {
+      background: linear-gradient(135deg,#4361ee,#3a0ca3) !important; border: none !important;
+      color: #fff !important; font-weight: 900 !important; width: 36px !important; height: 36px !important;
+      font-size: .88rem !important; box-shadow: 0 0 10px rgba(67,97,238,.4);
+    }
+    .quiz-opt.correct           { background: rgba(6,214,160,.15) !important; border-color: #06d6a0 !important; }
+    .quiz-opt.correct .opt-ltr { background: linear-gradient(135deg,#06d6a0,#048a68) !important; }
+    .quiz-opt.wrong             { background: rgba(230,57,70,.15) !important; border-color: #e63946 !important; }
+    .quiz-opt.wrong   .opt-ltr { background: linear-gradient(135deg,#e63946,#9b2226) !important; }
+
+    .yt-player-wrap { border-radius: var(--r-md); overflow: hidden; }
+    .yt-thumb-card  { position: relative; aspect-ratio: 16/9; cursor: pointer; background: #000; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-thumb-img   { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease, filter .4s ease; filter: brightness(.75); }
+    .yt-thumb-card:hover .yt-thumb-img { transform: scale(1.04); filter: brightness(.6); }
+    .yt-thumb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+    .yt-big-play { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,0,0,.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #fff; box-shadow: 0 4px 30px rgba(0,0,0,.5); transition: transform .25s ease, background .25s ease; }
+    .yt-thumb-card:hover .yt-big-play { transform: scale(1.12); background: #ff0000; }
+    .yt-info-bar { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,.85), transparent); padding: 1.5rem 1rem .8rem; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    .yt-title-bar { font-size: .88rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .yt-ext-btn { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); color: #fff; padding: .35rem .8rem; border-radius: 6px; font-size: .75rem; font-weight: 600; text-decoration: none; white-space: nowrap; flex-shrink: 0; backdrop-filter: blur(6px); transition: background .2s; }
+    .yt-ext-btn:hover { background: rgba(255,255,255,.3); }
+    .yt-embed-frame { display: none; position: relative; aspect-ratio: 16/9; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .yt-embed-frame.visible { display: block; }
+
+    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .phet-mobile-note { display: none; background: rgba(255,209,102,.08); border: 1px solid rgba(255,209,102,.25); border-radius: var(--r-sm); padding: .7rem 1rem; margin-top: .8rem; font-size: .82rem; color: #ffd166; }
+
+    .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { display: flex; align-items: center; gap: .9rem; }
+    .footer-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-grad); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 900; color: #fff; box-shadow: 0 0 18px rgba(67,97,238,.5); flex-shrink: 0; }
+    .footer-name { font-weight: 800; font-size: .96rem; color: var(--text); }
+    .footer-role { font-size: .75rem; color: var(--text-muted); margin-top: .1rem; }
+    .footer-right { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .footer-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .28rem .75rem; border-radius: 100px; background: rgba(67,97,238,.12); border: 1px solid rgba(67,97,238,.28); font-size: .73rem; font-weight: 700; color: #4cc9f0; }
+    .footer-tag { font-size: .73rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); }
+
+    .sim-live-row { display: grid; grid-template-columns: repeat(4,1fr); gap: .6rem; margin-bottom: .8rem; }
+    .lv-box { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: .55rem .7rem; text-align: center; }
+    .lv-box .lbl { font-size: .7rem; color: var(--text-muted); margin-bottom: .2rem; }
+    .lv-box .val { font-size: .92rem; font-weight: 800; }
+
+    @media(max-width:700px) {
+      .sim-live-row { grid-template-columns: repeat(2,1fr); }
+      .phet-mobile-note { display: block; }
+      .phet-wrap { padding-bottom: 80%; }
+      .yt-big-play { width: 60px; height: 60px; font-size: 1.3rem; }
+      .yt-title-bar { font-size: .8rem; }
+      .footer-role { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="page-progress"></div>
+
+<nav class="v2-nav">
+  <div class="inner">
+    <a class="nav-logo" href="../../index.html"><svg class="logo-atom" viewBox="0 0 40 40" width="26" height="26" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="3.2" fill="currentColor"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(120 20 20)"/></svg><span class="logo-text">VirtualLab</span></a>
+    <div class="nav-crumbs">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">›</span>
+      <a href="../index.html">Física 10°</a>
+      <span class="sep">›</span>
+      <a href="index.html">Período 2</a>
+      <span class="sep">›</span>
+      <span class="current">Trabajo y Energía</span>
+    </div>
+    <div class="nav-right">
+      <a class="v2-btn v2-btn-ghost" href="1_estatica_dinamica.html">← Dinámica</a>
+      <a class="v2-btn v2-btn-primary" href="3_impulso_gravitacion.html">Impulso →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="v2-hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-particles-layer" id="heroParticles"></div>
+  <div class="v2-wrap">
+    <div class="hero-content-wrap">
+      <div class="v2-badge">
+        <span class="badge-dot"></span>
+        Física 10° &nbsp;·&nbsp; Período 2 &nbsp;·&nbsp; Tema 2
+      </div>
+      <h1>Trabajo y Energía</h1>
+      <p class="hero-sub">
+        Comprende cómo las fuerzas transfieren energía, visualiza la transformación entre energía potencial y cinética, y aplica el principio de conservación.
+      </p>
+      <div class="hero-tags">
+        <span class="h-tag">🔧 Trabajo W=F·d·cosθ</span>
+        <span class="h-tag">⚡ E. Cinética</span>
+        <span class="h-tag">🏔️ E. Potencial</span>
+        <span class="h-tag">🔄 Conservación</span>
+        <span class="h-tag">⚙️ Potencia</span>
+        <span class="h-tag">🎿 Simulador</span>
+      </div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-mouse"></div>
+        <span>Desliza para explorar</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual-wrap">
+    <div class="orbital">
+      <div class="o-core"></div>
+      <div class="o-ring o-ring-1"></div>
+      <div class="o-ring o-ring-2"></div>
+      <div class="o-ring o-ring-3"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══ TEORÍA ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-teoria">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📖 Teoría</div>
+    <h2 class="v2-sec-title">Conceptos esenciales</h2>
+    <p class="v2-sec-desc">Haz clic en cada ficha para estudiar el tema. Puedes copiar el texto para tus apuntes.</p>
+  </div>
+
+  <div class="v2-tabs">
+    <button class="v2-tab active" data-tab="t-trabajo">🔧 Trabajo</button>
+    <button class="v2-tab" data-tab="t-ec">⚡ E. Cinética</button>
+    <button class="v2-tab" data-tab="t-ep">🏔️ E. Potencial</button>
+    <button class="v2-tab" data-tab="t-conserv">🔄 Conservación</button>
+    <button class="v2-tab" data-tab="t-potencia">⚙️ Potencia</button>
+  </div>
+
+  <div class="v2-card">
+
+    <div id="t-trabajo" class="v2-tab-panel active">
+      <button class="copy-teoria-btn" data-target="copy-trabajo">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-trabajo">
+        <h3>¿Qué es el trabajo mecánico?</h3>
+        <p>El trabajo mecánico es la energía transferida a un objeto cuando una fuerza lo desplaza. Se mide en <strong>Joules (J)</strong>. No todo esfuerzo físico es trabajo en el sentido de la física.</p>
+        <div class="key-box">💡 Fórmula: <strong>W = F · d · cos θ</strong> — donde θ es el ángulo entre la fuerza y el desplazamiento.</div>
+        <h3>Tipos de trabajo</h3>
+        <ul>
+          <li><strong>Trabajo positivo (W &gt; 0):</strong> la fuerza tiene componente en el sentido del movimiento. Ej: empujar un cajón hacia adelante.</li>
+          <li><strong>Trabajo negativo (W &lt; 0):</strong> la fuerza se opone al movimiento. Ej: la fricción. El objeto pierde energía.</li>
+          <li><strong>Trabajo nulo (W = 0):</strong> la fuerza es perpendicular al desplazamiento (θ = 90°). Ej: la fuerza normal cuando el objeto avanza horizontalmente.</li>
+        </ul>
+        <h3>Ejemplo colombiano</h3>
+        <p>Un minero en el Huila empuja un carro de mina con F = 200 N en la dirección del movimiento durante d = 15 m. El trabajo realizado es: <strong>W = 200 × 15 × cos 0° = 3 000 J</strong>. Si la fuerza estuviera a 60° del desplazamiento, el trabajo sería: W = 200 × 15 × cos 60° = 1 500 J.</p>
+      </div>
+    </div>
+
+    <div id="t-ec" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-ec">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-ec">
+        <h3>Energía Cinética (Ec)</h3>
+        <p>La energía cinética es la energía que posee un objeto <strong>por estar en movimiento</strong>. Depende de la masa y del cuadrado de la velocidad.</p>
+        <div class="key-box">💡 Fórmula: <strong>Ec = ½ · m · v²</strong> — la velocidad tiene más peso que la masa porque está elevada al cuadrado.</div>
+        <h3>Propiedades esenciales</h3>
+        <ul>
+          <li>Siempre es <strong>mayor o igual a cero</strong> (el movimiento no puede ser negativo en energía).</li>
+          <li>Si la velocidad se <strong>duplica</strong>, la Ec se <strong>cuadruplica</strong>.</li>
+          <li>Un objeto en reposo tiene Ec = 0.</li>
+          <li>La unidad del Joule: <strong>1 J = 1 kg · m²/s²</strong>.</li>
+        </ul>
+        <h3>Ejemplo práctico</h3>
+        <p>Un carro de 1 000 kg viaja a 20 m/s por la vía Neiva–Bogotá. Su Ec = ½ × 1 000 × 20² = <strong>200 000 J = 200 kJ</strong>. Si duplica su velocidad a 40 m/s, su energía cinética se cuadruplica: Ec = 800 kJ. ¡Por eso es peligroso el exceso de velocidad!</p>
+      </div>
+    </div>
+
+    <div id="t-ep" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-ep">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-ep">
+        <h3>Energía Potencial (Ep)</h3>
+        <p>La energía potencial es la energía <strong>almacenada</strong> en un objeto como consecuencia de su posición o estado. Al liberarse, puede convertirse en energía cinética u otros tipos de energía.</p>
+        <h3>Energía potencial gravitacional</h3>
+        <div class="key-box">💡 Fórmula: <strong>Ep = m · g · h</strong> — depende de la masa, la gravedad y la altura sobre el nivel de referencia.</div>
+        <ul>
+          <li>La altura <strong>h</strong> se mide desde el nivel de referencia elegido (puede ser el suelo, una mesa, etc.).</li>
+          <li>A mayor altura, mayor energía almacenada.</li>
+        </ul>
+        <h3>Energía potencial elástica</h3>
+        <p>Un resorte comprimido o estirado almacena energía: <strong>Ep = ½ · k · x²</strong>, donde k es la constante del resorte y x es la deformación.</p>
+        <h3>Ejemplo del Huila</h3>
+        <p>El embalse de Betania retiene agua a 120 m de altura. Una masa de agua de 1 000 kg tiene: Ep = 1 000 × 9.8 × 120 = <strong>1 176 000 J</strong>. Al caer, esa energía potencial se transforma en energía cinética que mueve las turbinas generadoras.</p>
+      </div>
+    </div>
+
+    <div id="t-conserv" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-conserv">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-conserv">
+        <h3>Principio de Conservación de la Energía Mecánica</h3>
+        <p>En un sistema sin fricción ni fuerzas externas, la <strong>energía mecánica total se conserva</strong>: la suma de energía cinética y potencial permanece constante.</p>
+        <div class="key-box">💡 Clave: <strong>Em = Ec + Ep = constante</strong> (sin fricción). Lo que pierde de Ep, lo gana de Ec, y viceversa.</div>
+        <h3>¿Qué implica esto?</h3>
+        <ul>
+          <li>Al <strong>bajar</strong> de altura, Ep↓ → Ec↑ (se gana velocidad).</li>
+          <li>Al <strong>subir</strong> de altura, Ec↓ → Ep↑ (se pierde velocidad).</li>
+          <li>La energía no desaparece: se <strong>transforma</strong>.</li>
+        </ul>
+        <h3>Teorema trabajo–energía</h3>
+        <p>El trabajo neto realizado sobre un objeto es igual al cambio en su energía cinética:</p>
+        <p><strong>W_neto = ΔEc = Ec_f − Ec_i</strong></p>
+        <h3>Con fricción</h3>
+        <p>Cuando hay fricción, parte de la energía mecánica se convierte en calor: <strong>Em_f = Em_i − W_fricción</strong>. La energía total del universo se conserva, pero la energía mecánica útil disminuye.</p>
+      </div>
+    </div>
+
+    <div id="t-potencia" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-potencia">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-potencia">
+        <h3>Potencia</h3>
+        <p>La potencia es la <strong>rapidez con que se realiza trabajo</strong> o con que se transforma energía. Mide cuántos Joules se transfieren por segundo.</p>
+        <div class="key-box">💡 Fórmulas: <strong>P = W / t</strong> y equivalentemente <strong>P = F · v</strong>. Se mide en Watts (W): 1 W = 1 J/s.</div>
+        <h3>Puntos clave</h3>
+        <ul>
+          <li>Dos personas pueden realizar el mismo trabajo; la más potente lo hace en <strong>menos tiempo</strong>.</li>
+          <li>La potencia de un motor indica qué tan rápido puede mover cargas.</li>
+          <li>1 hp (caballo de vapor) = 746 W.</li>
+          <li>El kilovatio-hora (kWh) es una unidad de <strong>energía</strong>, no de potencia: 1 kWh = 3 600 000 J.</li>
+        </ul>
+        <h3>Ejemplo colombiano</h3>
+        <p>La hidroeléctrica de Betania tiene una potencia instalada de 540 MW. En 1 hora produce: E = P × t = 540 × 10⁶ W × 3 600 s = <strong>1.944 × 10¹² J ≈ 540 000 kWh</strong>.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ FÓRMULAS ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-formulas">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📐 Fórmulas</div>
+    <h2 class="v2-sec-title">Ecuaciones del trabajo y la energía</h2>
+    <p class="v2-sec-desc">Pasa el cursor sobre cada tarjeta para ver el detalle de variables y unidades.</p>
+  </div>
+
+  <div class="formula-grid">
+
+    <div class="formula-card">
+      <div class="f-name">Trabajo mecánico</div>
+      <div class="f-eq">W = F · d · cos θ</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">W</span><span class="f-desc">trabajo realizado</span><span class="f-unit">J</span></div>
+        <div class="f-var"><span class="f-sym">F</span><span class="f-desc">magnitud de la fuerza</span><span class="f-unit">N</span></div>
+        <div class="f-var"><span class="f-sym">d</span><span class="f-desc">desplazamiento</span><span class="f-unit">m</span></div>
+        <div class="f-var"><span class="f-sym">θ</span><span class="f-desc">ángulo entre F y d</span><span class="f-unit">°</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Energía cinética</div>
+      <div class="f-eq">Ec = ½ · m · v²</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">Ec</span><span class="f-desc">energía cinética</span><span class="f-unit">J</span></div>
+        <div class="f-var"><span class="f-sym">m</span><span class="f-desc">masa del objeto</span><span class="f-unit">kg</span></div>
+        <div class="f-var"><span class="f-sym">v</span><span class="f-desc">velocidad del objeto</span><span class="f-unit">m/s</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Energía potencial gravitacional</div>
+      <div class="f-eq">Ep = m · g · h</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">Ep</span><span class="f-desc">energía potencial</span><span class="f-unit">J</span></div>
+        <div class="f-var"><span class="f-sym">m</span><span class="f-desc">masa</span><span class="f-unit">kg</span></div>
+        <div class="f-var"><span class="f-sym">g</span><span class="f-desc">gravedad</span><span class="f-unit">9.8 m/s²</span></div>
+        <div class="f-var"><span class="f-sym">h</span><span class="f-desc">altura sobre referencia</span><span class="f-unit">m</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Conservación de energía</div>
+      <div class="f-eq" style="font-size:1.1rem;">Ec₁ + Ep₁ = Ec₂ + Ep₂</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">Ec₁</span><span class="f-desc">E. cinética inicial</span><span class="f-unit">J</span></div>
+        <div class="f-var"><span class="f-sym">Ep₁</span><span class="f-desc">E. potencial inicial</span><span class="f-unit">J</span></div>
+        <div class="f-var"><span class="f-sym">Ec₂, Ep₂</span><span class="f-desc">valores en punto final</span><span class="f-unit">J</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Teorema trabajo–energía</div>
+      <div class="f-eq" style="font-size:1.1rem;">W_neto = Ec_f − Ec_i</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">W_neto</span><span class="f-desc">trabajo neto sobre el objeto</span><span class="f-unit">J</span></div>
+        <div class="f-var"><span class="f-sym">Ec_f</span><span class="f-desc">energía cinética final</span><span class="f-unit">J</span></div>
+        <div class="f-var"><span class="f-sym">Ec_i</span><span class="f-desc">energía cinética inicial</span><span class="f-unit">J</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Potencia</div>
+      <div class="f-eq">P = W / t = F · v</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">P</span><span class="f-desc">potencia</span><span class="f-unit">W (Watts)</span></div>
+        <div class="f-var"><span class="f-sym">W</span><span class="f-desc">trabajo realizado</span><span class="f-unit">J</span></div>
+        <div class="f-var"><span class="f-sym">t</span><span class="f-desc">tiempo transcurrido</span><span class="f-unit">s</span></div>
+        <div class="f-var"><span class="f-sym">v</span><span class="f-desc">velocidad del objeto</span><span class="f-unit">m/s</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SIMULADOR ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-sim">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🎿 Simulador de Energía</div>
+    <h2 class="v2-sec-title">Conservación en acción</h2>
+    <p class="v2-sec-desc">Ajusta la altura y la masa. Observa cómo la energía potencial se convierte en cinética en tiempo real.</p>
+  </div>
+
+  <div class="v2-sim">
+    <div class="sim-topbar">
+      <div class="sim-tag"><div class="sim-dot"></div> Transformación Ep ↔ Ec</div>
+      <div class="sim-ctrl-row">
+        <button class="s-btn on" id="btnPlay" title="Reproducir / Pausar">▶</button>
+        <button class="s-btn" id="btnReset" title="Reiniciar">↺</button>
+      </div>
+    </div>
+
+    <div class="sim-layout">
+      <div class="sim-sidebar">
+
+        <div class="s-label">Masa (kg)</div>
+        <input type="range" class="s-range" id="slMass" min="1" max="20" value="5" step="1">
+        <div class="s-val" id="valMass">m = 5 kg</div>
+
+        <div class="s-label">Altura inicial (m)</div>
+        <input type="range" class="s-range" id="slH0" min="2" max="15" value="10" step="0.5">
+        <div class="s-val" id="valH0">h₀ = 10 m</div>
+
+        <div class="s-label">Pérdida por rebote (%)</div>
+        <input type="range" class="s-range" id="slLoss" min="0" max="60" value="15" step="5">
+        <div class="s-val" id="valLoss">pérdida = 15 %</div>
+
+        <div style="margin-top:1rem; padding:.85rem; background:rgba(76,201,240,.07); border:1px solid rgba(76,201,240,.14); border-radius:12px;">
+          <div style="font-size:.72rem; color:var(--text-muted); margin-bottom:.5rem; font-weight:700; letter-spacing:.05em;">ENERGÍA ACTUAL</div>
+          <div style="display:flex;flex-direction:column;gap:.32rem;">
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:#4cc9f0;">Ep (potencial)</span><span id="liveEp" style="font-size:.82rem;font-weight:800;color:#fff;">0 J</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:#ffd166;">Ec (cinética)</span><span id="liveEc" style="font-size:.82rem;font-weight:800;color:#fff;">0 J</span></div>
+            <div style="display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.08);padding-top:.32rem;margin-top:.1rem;"><span style="font-size:.78rem;color:#06d6a0;">Em (mecánica)</span><span id="liveEm" style="font-size:.82rem;font-weight:800;color:#fff;">0 J</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:var(--text-muted);">Velocidad</span><span id="liveV" style="font-size:.82rem;font-weight:800;color:#fff;">0 m/s</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:var(--text-muted);">Altura</span><span id="liveH" style="font-size:.82rem;font-weight:800;color:#fff;">0 m</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sim-main">
+        <canvas id="energyCanvas" height="310" style="width:100%;"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VIDEO ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-video">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🎬 Video explicativo</div>
+    <h2 class="v2-sec-title">Mira, escucha y entiende</h2>
+    <p class="v2-sec-desc">Toca el botón para reproducir el video directamente aquí.</p>
+  </div>
+
+  <div class="yt-player-wrap" id="ytPlayerWrap">
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('9uKYbe-w1co')">
+      <img class="yt-thumb-img"
+           src="https://img.youtube.com/vi/9uKYbe-w1co/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/9uKYbe-w1co/hqdefault.jpg'"
+           alt="Trabajo y Energía — Física 10°">
+      <div class="yt-thumb-overlay">
+        <div class="yt-big-play">&#9654;</div>
+      </div>
+      <div class="yt-info-bar">
+        <div class="yt-title-bar">Trabajo y Energía — Energía cinética y potencial<br>
+          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Conservación de la energía mecánica · Toca para reproducir</span>
+        </div>
+        <a class="yt-ext-btn"
+           href="https://www.youtube.com/watch?v=9uKYbe-w1co"
+           target="_blank" rel="noopener"
+           onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
+      </div>
+    </div>
+    <div class="yt-embed-frame" id="ytEmbedFrame">
+      <iframe id="ytIframe" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PhET ═══ -->
+<section class="v2-section-sm v2-wrap anim-scroll" id="sec-phet">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🧪 Laboratorio PhET</div>
+    <h2 class="v2-sec-title">Parque de Patinaje — Energía</h2>
+    <p class="v2-sec-desc">Observa cómo la Ep y la Ec se intercambian en una rampa. Activa o desactiva la fricción y compara.</p>
+  </div>
+  <div class="phet-wrap">
+    <iframe
+      src="https://phet.colorado.edu/sims/html/energy-skate-park-basics/latest/energy-skate-park-basics_es.html"
+      title="Parque de Patinaje - Energía PhET"
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+  <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
+    💡 <strong>Actividad sugerida:</strong> Coloca al patinador en la cima de la rampa y suéltalo. Anota su velocidad en el punto más bajo. Verifica con v = √(2gh). Luego activa la fricción y compara.
+  </p>
+  <p class="phet-mobile-note">📱 Esta simulación funciona mejor en pantallas grandes o en un computador.</p>
+</section>
+
+<!-- ═══ TIPS ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-tips">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">💡 Tips y errores</div>
+    <h2 class="v2-sec-title">Lo que debes saber bien</h2>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:2rem;">
+    <div class="tip-card">
+      <div class="t-icon">📐</div>
+      <h4>El ángulo θ es clave en el trabajo</h4>
+      <p>Si la fuerza es paralela al movimiento (θ = 0°), cos θ = 1 y W es máximo. Si es perpendicular (θ = 90°), cos θ = 0 y el trabajo es cero. Siempre verifica el ángulo antes de calcular.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">⚡</div>
+      <h4>La velocidad importa más que la masa en Ec</h4>
+      <p>En Ec = ½mv², la velocidad está al cuadrado. Duplicar la masa duplica la Ec, pero duplicar la velocidad la cuadruplica. Por eso los autos a alta velocidad son mucho más peligrosos.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🔄</div>
+      <h4>Define bien tu nivel de referencia</h4>
+      <p>Para Ep = mgh, debes elegir dónde h = 0. No importa qué nivel elijas, pero debes ser consistente durante todo el problema. Lo más común es tomar el punto más bajo como h = 0.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🎯</div>
+      <h4>Conservación: aplica punto a punto</h4>
+      <p>Em = Ec + Ep = constante significa que puedes comparar cualquier dos puntos del trayecto: Ec₁ + Ep₁ = Ec₂ + Ep₂. No necesitas conocer lo que pasa en el trayecto, solo los puntos inicial y final.</p>
+    </div>
+  </div>
+
+  <div class="v2-sec-label text-accent" style="margin-bottom:1rem;">❌ Errores frecuentes en el ICFES</div>
+  <div class="error-table-card">
+    <div class="err-row">
+      <div class="err-cell err-head err-bad">❌ Error frecuente</div>
+      <div class="err-cell err-head err-good">✅ Lo correcto</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Confundir energía con potencia. "Una planta de 100 W produce 100 J al día."</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Potencia (W) es rapidez de transferencia de energía. Energía = potencia × tiempo. En un día: E = 100 W × 86 400 s = 8 640 000 J.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Olvidar el coseno en el trabajo: W = F × d (sin θ).</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>W = F · d · cos θ. Si la fuerza no es paralela al desplazamiento, solo la componente paralela realiza trabajo.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Aplicar conservación de energía cuando hay fricción sin ajustar.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Con fricción: Em_f = Em_i − W_rozamiento. La energía mecánica disminuye por la energía disipada como calor.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Pensar que a mayor altura siempre hay mayor velocidad al bajar.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Solo si ambos trayectos tienen la misma fricción. Con diferentes superficies, el cuerpo que pierde menos energía alcanza mayor velocidad.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUIZ ICFES ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-quiz">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📝 Quiz ICFES</div>
+    <h2 class="v2-sec-title">¿Entendiste el tema?</h2>
+    <p class="v2-sec-desc">5 preguntas estilo ICFES. Léelas con calma, no hay tiempo límite. Al final verás tu puntaje.</p>
+  </div>
+
+  <div class="quiz-v2" id="quizBox">
+    <div class="quiz-top">
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizFill" style="width:0%"></div></div>
+      <div class="quiz-cnt" id="quizCnt">Pregunta 1 de 5</div>
+    </div>
+    <div class="quiz-body" id="quizBody">
+      <div class="quiz-q" id="qText"></div>
+      <div class="quiz-opts" id="qOpts"></div>
+      <div class="quiz-fb" id="qFb"></div>
+    </div>
+    <div class="quiz-foot">
+      <button class="v2-btn v2-btn-primary" id="qNext" style="display:none">Siguiente →</button>
+    </div>
+    <div class="quiz-result-screen" id="quizResult">
+      <div class="score-ring" id="scoreRing">
+        <div class="score-big" id="scoreBig">0/5</div>
+        <div class="score-sub">respuestas correctas</div>
+      </div>
+      <div class="score-msg" id="scoreMsg"></div>
+      <div class="score-hint" id="scoreHint"></div>
+      <button class="v2-btn v2-btn-primary" id="qRestart">🔄 Intentar de nuevo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NAVEGACIÓN ═══ -->
+<div class="v2-wrap">
+  <hr class="v2-hr">
+  <div class="v2-page-nav">
+    <a class="nav-btn-card" href="1_estatica_dinamica.html">
+      <span class="nbc-arr">←</span>
+      <div>
+        <div class="nbc-sub">Tema anterior</div>
+        <div class="nbc-title">Dinámica y Equilibrio</div>
+      </div>
+    </a>
+    <a class="nav-btn-card right" href="3_impulso_gravitacion.html">
+      <div>
+        <div class="nbc-sub">Siguiente tema</div>
+        <div class="nbc-title">Impulso y Gravitación</div>
+      </div>
+      <span class="nbc-arr">→</span>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="v2-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-avatar">LC</div>
+      <div>
+        <div class="footer-name">Docente Luis Miguel Cabrera</div>
+        <div class="footer-role">I.E. Paulo VI &nbsp;·&nbsp; Huila, Colombia &nbsp;·&nbsp; Física & Matemáticas</div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">⚛️ VirtualLab 2026</span>
+      <span class="footer-tag">lumcab</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+/* VIDEO */
+function ytLoadEmbed(id) {
+  const thumb = document.getElementById('ytThumbCard'), frame = document.getElementById('ytEmbedFrame'), iframe = document.getElementById('ytIframe');
+  if (!thumb || !frame || !iframe) return;
+  thumb.style.display = 'none'; frame.classList.add('visible');
+  iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&color=white';
+}
+
+/* PROGRESS BAR */
+(function () {
+  const bar = document.getElementById('page-progress');
+  window.addEventListener('scroll', () => { const h = document.documentElement.scrollHeight - window.innerHeight; bar.style.width = (window.scrollY / h * 100) + '%'; }, { passive: true });
+})();
+
+/* PARTÍCULAS */
+(function () {
+  const layer = document.getElementById('heroParticles');
+  const colors = ['#4361ee', '#4cc9f0', '#3a0ca3', 'rgba(76,201,240,.5)'];
+  for (let i = 0; i < 22; i++) {
+    const d = document.createElement('div'); d.className = 'p-dot';
+    const s = Math.random() * 5 + 2;
+    d.style.cssText = `width:${s}px;height:${s}px;background:${colors[Math.floor(Math.random() * colors.length)]};left:${Math.random() * 100}%;bottom:-20px;animation-duration:${7 + Math.random() * 10}s;animation-delay:${Math.random() * 8}s;opacity:${.3 + Math.random() * .5};`;
+    layer.appendChild(d);
+  }
+})();
+
+/* SCROLL ANIM */
+(function () {
+  const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }), { threshold: 0.1 });
+  document.querySelectorAll('.anim-scroll').forEach(el => obs.observe(el));
+})();
+
+/* TABS */
+(function () {
+  document.querySelectorAll('.v2-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const g = btn.closest('section') || btn.parentElement.parentElement;
+      g.querySelectorAll('.v2-tab').forEach(b => b.classList.remove('active'));
+      g.querySelectorAll('.v2-tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = g.querySelector('#' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+})();
+
+/* COPIAR */
+document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const t = document.getElementById(btn.dataset.target); if (!t) return;
+    navigator.clipboard.writeText(t.innerText).then(() => {
+      btn.textContent = '✅ ¡Copiado!'; btn.classList.add('done');
+      setTimeout(() => { btn.textContent = '📋 Copiar para mis apuntes'; btn.classList.remove('done'); }, 2500);
+    }).catch(() => { btn.textContent = '⚠️ Copia manualmente'; });
+  });
+});
+
+/* ==========================================
+   SIMULADOR DE ENERGÍA — física corregida
+   Usa integración de velocidad (Euler) en vez
+   de derivar velocidad desde energía (que daba
+   v=0 al inicio y la pelota nunca arrancaba).
+========================================== */
+(function () {
+  const canvas  = document.getElementById('energyCanvas');
+  const ctx     = canvas.getContext('2d');
+  const btnPlay  = document.getElementById('btnPlay');
+  const btnReset = document.getElementById('btnReset');
+  const slMass   = document.getElementById('slMass');
+  const slH0     = document.getElementById('slH0');
+  const slLoss   = document.getElementById('slLoss');
+  const valMass  = document.getElementById('valMass');
+  const valH0    = document.getElementById('valH0');
+  const valLoss  = document.getElementById('valLoss');
+  const liveEp   = document.getElementById('liveEp');
+  const liveEc   = document.getElementById('liveEc');
+  const liveEm   = document.getElementById('liveEm');
+  const liveV    = document.getElementById('liveV');
+  const liveH    = document.getElementById('liveH');
+
+  const G = 9.8, DT = 0.02;
+  let running = true, raf;
+  let mass, h0, loss;
+  let curH, vy, Em0;   // vy: velocidad vertical (+ = subir, − = bajar)
+
+  /* ── roundRect compatible ── */
+  function rrect(x, y, w, h, r) {
+    if (typeof ctx.roundRect === 'function') {
+      ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
+    } else {
+      ctx.beginPath(); ctx.rect(x, y, w, h);
+    }
+  }
+
+  function readParams() {
+    mass = +slMass.value;
+    h0   = +slH0.value;
+    loss = +slLoss.value / 100;
+    valMass.textContent = `m = ${mass} kg`;
+    valH0.textContent   = `h₀ = ${h0} m`;
+    valLoss.textContent = `pérdida = ${+slLoss.value} %`;
+  }
+
+  function reset() {
+    readParams();
+    curH = h0;
+    vy   = 0;           // reposo — la gravedad arranca en el primer step()
+    Em0  = mass * G * h0;
+    if (!running) { running = true; btnPlay.textContent = '⏸'; btnPlay.classList.add('on'); }
+  }
+
+  function resize() {
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = 310;
+  }
+
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    /* fondo */
+    ctx.fillStyle = 'rgba(0,0,0,.4)';
+    rrect(0, 0, W, H, 10); ctx.fill();
+
+    const PAD    = 36;
+    const trackH = H - PAD * 2;
+    const pHalf  = Math.floor(W * 0.44);
+
+    /* energías actuales */
+    const Ep_now = mass * G * Math.max(0, curH);
+    const v_now  = Math.abs(vy);
+    const Ec_now = 0.5 * mass * v_now * v_now;
+    const Em_now = Ep_now + Ec_now;
+
+    /* ── PANEL IZQUIERDO: pista de altura ── */
+    const maxHscale = h0 + 1;
+    const axisX     = PAD + 18;
+    const colW      = pHalf - axisX - 12;
+
+    /* eje Y */
+    ctx.strokeStyle = 'rgba(255,255,255,.15)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(axisX, PAD); ctx.lineTo(axisX, PAD + trackH); ctx.stroke();
+
+    /* marcas */
+    for (let i = 0; i <= 5; i++) {
+      const hv = (i / 5) * maxHscale;
+      const py = PAD + trackH - (hv / maxHscale) * trackH;
+      ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(axisX, py); ctx.lineTo(axisX + colW, py); ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'right';
+      ctx.fillText(hv.toFixed(1) + 'm', axisX - 2, py + 3);
+    }
+
+    /* suelo */
+    const floorY = PAD + trackH;
+    ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(axisX, floorY); ctx.lineTo(axisX + colW, floorY); ctx.stroke();
+    /* textura suelo */
+    ctx.fillStyle = 'rgba(255,255,255,.03)';
+    for (let sx = axisX; sx < axisX + colW; sx += 10) ctx.fillRect(sx, floorY + 1, 5, 4);
+
+    /* pelota */
+    const ballX = axisX + colW / 2;
+    const frac  = Math.min(1, Math.max(0, curH) / maxHscale);
+    const ballY = PAD + trackH - frac * trackH;
+
+    /* sombra en suelo */
+    const shadowW = 9 + (1 - frac) * 5;
+    ctx.beginPath(); ctx.ellipse(ballX, floorY - 2, shadowW, 3, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.fill();
+
+    /* color: azul(Ep) → naranja(Ec) según proporción cinética */
+    const tRatio = Em0 > 0.1 ? Math.min(1, Ec_now / Em0) : 0;
+    const rc = Math.round(67  + tRatio * 188);
+    const gc = 130;
+    const bc = Math.round(238 - tRatio * 218);
+    const bColor = `rgb(${rc},${gc},${bc})`;
+    const bg = ctx.createRadialGradient(ballX - 3, ballY - 3, 1, ballX, ballY, 13);
+    bg.addColorStop(0, 'rgba(255,255,255,.95)');
+    bg.addColorStop(0.5, bColor);
+    bg.addColorStop(1, `rgb(${Math.round(rc*.6)},${Math.round(gc*.6)},${Math.round(bc*.6)})`);
+    ctx.beginPath(); ctx.arc(ballX, ballY, 13, 0, Math.PI * 2);
+    ctx.fillStyle = bg; ctx.shadowColor = bColor; ctx.shadowBlur = 16; ctx.fill(); ctx.shadowBlur = 0;
+
+    /* etiquetas sobre la pelota */
+    ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#4cc9f0'; ctx.fillText(`h=${Math.max(0,curH).toFixed(1)}m`, ballX, ballY - 20);
+    ctx.fillStyle = '#ffd166'; ctx.fillText(`v=${v_now.toFixed(1)}m/s`,          ballX, ballY - 8);
+
+    /* título */
+    ctx.fillStyle = 'rgba(255,255,255,.3)'; ctx.fillText('POSICIÓN', ballX, PAD - 10);
+
+    /* ── PANEL DERECHO: barras de energía ── */
+    const barAreaX = pHalf + 18;
+    const barAreaW = W - barAreaX - 16;
+    const barTop   = PAD + 12;
+    const barMaxH  = trackH - 26;
+    const barW     = Math.max(20, Math.floor((barAreaW - 20) / 3));
+    const gap      = Math.max(4, Math.floor((barAreaW - barW * 3) / 2));
+
+    ctx.fillStyle = 'rgba(255,255,255,.3)'; ctx.font = 'bold 10px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText('ENERGÍA', barAreaX + barAreaW / 2, PAD - 10);
+
+    /* línea de referencia Em0 */
+    ctx.strokeStyle = 'rgba(6,214,160,.22)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(barAreaX, barTop); ctx.lineTo(barAreaX + barAreaW, barTop); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(6,214,160,.4)'; ctx.font = '8px Segoe UI'; ctx.textAlign = 'right';
+    ctx.fillText('Em₀', barAreaX - 2, barTop + 3);
+
+    function drawBar(idx, label, value, color, glow) {
+      const bx   = barAreaX + idx * (barW + gap);
+      const frac = Em0 > 0.1 ? Math.min(1, Math.max(0, value) / Em0) : 0;
+      const bh   = frac * barMaxH;
+      const by   = barTop + barMaxH - bh;
+
+      /* fondo */
+      ctx.fillStyle = 'rgba(255,255,255,.05)';
+      ctx.fillRect(bx, barTop, barW, barMaxH);
+
+      /* borde fondo */
+      ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.lineWidth = 1;
+      ctx.strokeRect(bx, barTop, barW, barMaxH);
+
+      /* barra llena */
+      if (bh > 1) {
+        const gr = ctx.createLinearGradient(bx, by, bx, by + bh);
+        gr.addColorStop(0, color); gr.addColorStop(1, glow);
+        ctx.fillStyle = gr;
+        ctx.shadowColor = color; ctx.shadowBlur = 8;
+        ctx.fillRect(bx, by, barW, bh);
+        ctx.shadowBlur = 0;
+      }
+
+      /* valor */
+      ctx.fillStyle = color; ctx.font = `bold ${barW > 38 ? 10 : 8}px Segoe UI`; ctx.textAlign = 'center';
+      ctx.fillText(value.toFixed(0) + 'J', bx + barW / 2, Math.max(barTop + 12, by - 3));
+
+      /* etiqueta inferior */
+      ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.font = `${barW > 38 ? 9 : 8}px Segoe UI`;
+      ctx.fillText(label, bx + barW / 2, barTop + barMaxH + 14);
+    }
+
+    drawBar(0, 'Ep', Ep_now, '#4cc9f0', '#3a0ca3');
+    drawBar(1, 'Ec', Ec_now, '#ffd166', '#f77f00');
+    drawBar(2, 'Em', Em_now, '#06d6a0', '#048a68');
+
+    /* separador */
+    ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pHalf, 10); ctx.lineTo(pHalf, H - 10); ctx.stroke();
+
+    /* panel lateral */
+    liveEp.textContent = Ep_now.toFixed(1) + ' J';
+    liveEc.textContent = Ec_now.toFixed(1) + ' J';
+    liveEm.textContent = Em_now.toFixed(1) + ' J';
+    liveV.textContent  = v_now.toFixed(2)  + ' m/s';
+    liveH.textContent  = Math.max(0, curH).toFixed(2) + ' m';
+  }
+
+  function step() {
+    if (!running) return;
+
+    /* integración de velocidad — gravedad acelera hacia abajo */
+    vy   -= G * DT;
+    curH += vy * DT;
+
+    /* rebote en suelo */
+    if (curH <= 0) {
+      curH = 0;
+      vy   = -vy * (1 - loss);   /* invertir + disipar energía */
+    }
+
+    /* detener cuando la energía restante es despreciable */
+    if (curH <= 0.01 && Math.abs(vy) < 0.08) {
+      curH = 0; vy = 0;
+      running = false; btnPlay.textContent = '▶'; btnPlay.classList.remove('on');
+    }
+
+    draw();
+    raf = requestAnimationFrame(step);
+  }
+
+  btnPlay.addEventListener('click', () => {
+    running = !running;
+    if (running) { btnPlay.textContent = '⏸'; btnPlay.classList.add('on'); raf = requestAnimationFrame(step); }
+    else         { btnPlay.textContent = '▶'; btnPlay.classList.remove('on'); cancelAnimationFrame(raf); }
+  });
+  btnReset.addEventListener('click', () => { cancelAnimationFrame(raf); reset(); draw(); raf = requestAnimationFrame(step); });
+  [slMass, slH0, slLoss].forEach(s => s.addEventListener('input', () => {
+    cancelAnimationFrame(raf); readParams();
+    curH = h0; vy = 0; Em0 = mass * G * h0;
+    if (running) raf = requestAnimationFrame(step); else draw();
+  }));
+  window.addEventListener('resize', () => { resize(); draw(); });
+  resize(); reset(); draw(); raf = requestAnimationFrame(step);
+})();
+
+/* ==========================================
+   QUIZ ICFES
+========================================== */
+(function () {
+  const Qs = [
+    {
+      q: 'Un operario empuja un carro con una fuerza de 50 N en la dirección del desplazamiento durante 12 m. ¿Cuánto trabajo realiza la fuerza?',
+      opts: ['A) 4.2 J', 'B) 600 J', 'C) 62 J', 'D) 300 J'],
+      ans: 1,
+      fb: '✓ Correcto. W = F · d · cos θ = 50 × 12 × cos 0° = 50 × 12 × 1 = 600 J. Como la fuerza es paralela al movimiento (θ = 0°), cos θ = 1.'
+    },
+    {
+      q: 'Una motocicleta de 200 kg viaja a 10 m/s. ¿Cuál es su energía cinética?',
+      opts: ['A) 2 000 J', 'B) 1 000 J', 'C) 10 000 J', 'D) 4 000 J'],
+      ans: 2,
+      fb: '✓ Correcto. Ec = ½ · m · v² = ½ × 200 × (10)² = ½ × 200 × 100 = 10 000 J. Recuerda que la velocidad se eleva al cuadrado antes de multiplicar.'
+    },
+    {
+      q: 'Una piedra de 2 kg se suelta desde 20 m de altura (sin fricción). ¿Cuál es su velocidad al llegar al suelo? (g = 9.8 m/s²)',
+      opts: ['A) 9.8 m/s', 'B) 14 m/s', 'C) 19.8 m/s', 'D) 196 m/s'],
+      ans: 2,
+      fb: '✓ Correcto. Por conservación: mgh = ½mv² → v = √(2gh) = √(2 × 9.8 × 20) = √392 ≈ 19.8 m/s. La masa se cancela.'
+    },
+    {
+      q: 'Una grúa levanta una carga de 500 kg a 10 m en 25 segundos. ¿Cuál es la potencia mínima de la grúa? (g = 9.8 m/s²)',
+      opts: ['A) 196 W', 'B) 1 960 W', 'C) 49 000 W', 'D) 12 250 W'],
+      ans: 1,
+      fb: '✓ Correcto. Trabajo: W = mgh = 500 × 9.8 × 10 = 49 000 J. Potencia: P = W/t = 49 000 / 25 = 1 960 W. Es la potencia mínima necesaria.'
+    },
+    {
+      q: 'Un bloque se lanza horizontalmente desde una mesa de 1.25 m de altura. Usando conservación de energía, ¿cuál es la velocidad del bloque justo antes de tocar el suelo si partió del reposo desde esa altura?',
+      opts: ['A) 3.13 m/s', 'B) 4.95 m/s', 'C) 12.25 m/s', 'D) Depende de la masa del bloque'],
+      ans: 1,
+      fb: '✓ Correcto. v = √(2gh) = √(2 × 9.8 × 1.25) = √24.5 ≈ 4.95 m/s. La masa no importa porque se cancela en la conservación de energía mecánica.'
+    }
+  ];
+
+  let current = 0, score = 0, answered = false;
+  const qText = document.getElementById('qText'), qOpts = document.getElementById('qOpts');
+  const qFb = document.getElementById('qFb'), qNext = document.getElementById('qNext');
+  const quizFill = document.getElementById('quizFill'), quizCnt = document.getElementById('quizCnt');
+  const quizBody = document.getElementById('quizBody'), quizResult = document.getElementById('quizResult');
+  const scoreBig = document.getElementById('scoreBig'), scoreMsg = document.getElementById('scoreMsg');
+  const scoreHint = document.getElementById('scoreHint'), qRestart = document.getElementById('qRestart');
+  const L = ['A', 'B', 'C', 'D'];
+
+  function render() {
+    answered = false;
+    const p = Qs[current];
+    qText.textContent = p.q;
+    quizCnt.textContent = `Pregunta ${current + 1} de ${Qs.length}`;
+    quizFill.style.width = (current / Qs.length * 100) + '%';
+    qFb.className = 'quiz-fb'; qFb.textContent = ''; qNext.style.display = 'none';
+    qOpts.innerHTML = '';
+    p.opts.forEach((opt, i) => {
+      const btn = document.createElement('button'); btn.className = 'quiz-opt';
+      btn.style.cssText = 'display:flex;align-items:center;gap:.8rem;width:100%;padding:1rem 1.1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;cursor:pointer;font-size:1rem;font-family:inherit;color:#ffffff;text-align:left;min-height:54px;transition:all .2s;';
+      const ltr = document.createElement('span'); ltr.className = 'opt-ltr'; ltr.textContent = L[i];
+      ltr.style.cssText = 'display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#4361ee,#3a0ca3);color:#fff;font-weight:900;font-size:.9rem;box-shadow:0 0 12px rgba(67,97,238,.5);';
+      btn.appendChild(ltr); btn.appendChild(document.createTextNode(opt.replace(/^[ABCD]\) /, '')));
+      btn.addEventListener('click', () => {
+        if (answered) return; answered = true;
+        qOpts.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('answered'));
+        if (i === p.ans) {
+          btn.style.background = 'rgba(6,214,160,.18)'; btn.style.borderColor = '#06d6a0';
+          ltr.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)'; score++;
+          qFb.textContent = p.fb; qFb.className = 'quiz-fb ok-fb show';
+        } else {
+          btn.style.background = 'rgba(230,57,70,.18)'; btn.style.borderColor = '#e63946';
+          ltr.style.background = 'linear-gradient(135deg,#e63946,#9b2226)';
+          const cb = qOpts.querySelectorAll('.quiz-opt')[p.ans];
+          cb.style.background = 'rgba(6,214,160,.18)'; cb.style.borderColor = '#06d6a0';
+          const cl = cb.querySelector('.opt-ltr'); if (cl) cl.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)';
+          qFb.textContent = '✗ Incorrecto. ' + p.fb; qFb.className = 'quiz-fb err-fb show';
+        }
+        qNext.style.display = 'inline-flex';
+      });
+      qOpts.appendChild(btn);
+    });
+  }
+
+  qNext.addEventListener('click', () => { current++; if (current >= Qs.length) showResult(); else render(); });
+
+  function showResult() {
+    quizFill.style.width = '100%';
+    quizBody.style.display = 'none'; document.querySelector('.quiz-foot').style.display = 'none';
+    quizResult.classList.add('show'); scoreBig.textContent = score + '/' + Qs.length;
+    const pct = score / Qs.length;
+    if (pct === 1)       { scoreMsg.textContent = '🏆 ¡Perfecto! Dominas el trabajo y la energía.'; scoreHint.textContent = 'Excelente. Estás listo para resolver cualquier problema de conservación de energía.'; }
+    else if (pct >= 0.6) { scoreMsg.textContent = '👍 ¡Bien! Vas por buen camino.'; scoreHint.textContent = 'Repasa los ítems que fallaste, especialmente conservación de energía.'; }
+    else                 { scoreMsg.textContent = '📖 Necesitas repasar más.'; scoreHint.textContent = 'Vuelve a leer la teoría. Enfócate en las fórmulas y los ejemplos con números.'; }
+  }
+
+  qRestart.addEventListener('click', () => {
+    current = 0; score = 0;
+    quizBody.style.display = ''; document.querySelector('.quiz-foot').style.display = '';
+    quizResult.classList.remove('show'); render();
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
