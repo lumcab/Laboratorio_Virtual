@@ -1,4 +1,4 @@
-# ⚗️ VirtualLab 3.0
+# ⚛️ VirtualLab 3.0
 
 **Laboratorio virtual educativo para estudiantes de secundaria**
 **I.E. Paulo VI · Huila, Colombia**

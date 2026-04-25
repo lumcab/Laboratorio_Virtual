@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Período 3 — Electricidad | Física 11° · VirtualLab</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/icons/favicon.ico">
+  <link rel="stylesheet" href="../../css/tema-v2.css">
+  <script src="../../js/theme.js"></script>
+  <style>
+    :root { --accent-a: #7209b7; --accent-b: #560bad; --accent-c: #f72585; --accent-grad: linear-gradient(135deg, #7209b7 0%, #f72585 100%); }
+    .per-hero { min-height: 44vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; padding: 5rem 1.5rem 3rem; gap: 1.1rem; }
+    .per-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 55% at 50% 20%, rgba(114,9,183,.2) 0%, transparent 70%), radial-gradient(ellipse 45% 40% at 85% 80%, rgba(247,37,133,.12) 0%, transparent 65%); pointer-events: none; }
+    .particle { position: absolute; border-radius: 50%; animation: particle-rise var(--dur,8s) ease-in-out infinite; animation-delay: var(--delay,0s); opacity: .35; }
+    .p1{width:5px;height:5px;background:#7209b7;left:8%;top:80%;--dur:9s;--delay:0s} .p2{width:4px;height:4px;background:#f72585;left:25%;top:88%;--dur:7s;--delay:1s} .p3{width:7px;height:7px;background:#560bad;left:52%;top:84%;--dur:11s;--delay:.5s} .p4{width:4px;height:4px;background:#f72585;left:72%;top:91%;--dur:8s;--delay:2s} .p5{width:6px;height:6px;background:#7209b7;left:88%;top:82%;--dur:10s;--delay:.8s}
+    .per-badge { display: inline-flex; align-items: center; gap: .5rem; background: rgba(114,9,183,.13); border: 1px solid rgba(114,9,183,.35); color: #e9d5ff; font-size: .74rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: .36rem 1.1rem; border-radius: 50px; animation: fadeInUp .5s ease both; }
+    .per-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #f72585; position: relative; }
+    .per-badge-dot::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; background: rgba(247,37,133,.4); animation: ping 1.8s ease infinite; }
+    .per-title { font-size: clamp(1.9rem, 6vw, 3.5rem); font-weight: 900; line-height: 1.05; background: linear-gradient(135deg, #e9d5ff 0%, #f72585 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: fadeInUp .6s .08s ease both; }
+    .per-sub { font-size: clamp(.88rem, 2.5vw, 1.05rem); color: var(--text-muted); max-width: 480px; line-height: 1.6; animation: fadeInUp .6s .16s ease both; }
+    .topics-wrap { max-width: 860px; margin: 0 auto; padding: 3.5rem 1.2rem; }
+    .sec-label { font-size: .72rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: #e9d5ff; margin-bottom: .5rem; }
+    .sec-title { font-size: clamp(1.4rem,3.5vw,1.9rem); font-weight: 900; margin-bottom: .4rem; }
+    .sec-desc { color: var(--text-muted); font-size: .92rem; margin-bottom: 2rem; }
+    .topics-list { display: flex; flex-direction: column; gap: 1rem; }
+    .topic-card { display: flex; align-items: center; gap: 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.4rem 1.6rem; text-decoration: none; color: var(--text); transition: border-color .25s, transform .25s, box-shadow .25s; position: relative; overflow: hidden; }
+    .topic-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent-grad); }
+    .topic-card:hover { border-color: rgba(114,9,183,.5); transform: translateX(4px); box-shadow: 0 8px 32px rgba(114,9,183,.18); }
+    .topic-num { width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(135deg, #7209b7, #560bad); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.05rem; color: #fff; box-shadow: 0 0 14px rgba(114,9,183,.4); }
+    .topic-info { flex: 1; min-width: 0; }
+    .topic-name { font-weight: 800; font-size: 1.05rem; margin-bottom: .25rem; }
+    .topic-desc { font-size: .83rem; color: var(--text-muted); line-height: 1.45; }
+    .topic-tags { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .5rem; }
+    .topic-tag { font-size: .7rem; background: rgba(114,9,183,.1); border: 1px solid rgba(114,9,183,.2); color: #e9d5ff; padding: .18rem .6rem; border-radius: 50px; }
+    .topic-go { color: #f72585; font-size: 1.3rem; flex-shrink: 0; transition: transform .2s; }
+    .topic-card:hover .topic-go { transform: translateX(4px); }
+    .topic-soon { font-size: .68rem; font-weight: 700; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); color: var(--text-dim); padding: .15rem .55rem; border-radius: 50px; margin-left: .6rem; flex-shrink: 0; }
+    .period-nav { max-width: 860px; margin: 0 auto; padding: 0 1.2rem 3.5rem; display: flex; gap: 1rem; justify-content: space-between; flex-wrap: wrap; }
+    .period-nav-card { flex: 1; min-width: 200px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 1.1rem 1.3rem; text-decoration: none; color: var(--text); display: flex; align-items: center; gap: .8rem; transition: border-color .2s, transform .2s; }
+    .period-nav-card:hover { border-color: rgba(114,9,183,.45); transform: translateY(-2px); }
+    .pnc-arr { font-size: 1.3rem; color: #f72585; flex-shrink: 0; }
+    .pnc-label { font-size: .7rem; color: var(--text-dim); }
+    .pnc-name { font-weight: 700; font-size: .9rem; }
+    .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { display: flex; align-items: center; gap: .9rem; }
+    .footer-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-grad); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 900; color: #fff; box-shadow: 0 0 18px rgba(114,9,183,.5); flex-shrink: 0; }
+    .footer-name { font-weight: 800; font-size: .96rem; color: var(--text); }
+    .footer-role { font-size: .75rem; color: var(--text-muted); margin-top: .1rem; }
+    .footer-right { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .footer-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .28rem .75rem; border-radius: 100px; background: rgba(114,9,183,.12); border: 1px solid rgba(114,9,183,.28); font-size: .73rem; font-weight: 700; color: #f72585; }
+    .footer-tag { font-size: .73rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); }
+    @media(max-width:600px){ .topic-card{flex-wrap:wrap;} .footer-role{display:none;} }
+  </style>
+</head>
+<body>
+<div id="page-progress"></div>
+<nav class="v2-nav">
+  <div class="inner">
+    <a class="nav-logo" href="../../index.html"><svg class="logo-atom" viewBox="0 0 40 40" width="26" height="26" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="3.2" fill="currentColor"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(120 20 20)"/></svg><span class="logo-text">VirtualLab</span></a>
+    <div class="nav-crumbs">
+      <a href="../../index.html">Inicio</a><span class="sep">›</span>
+      <a href="../index.html">Física 11°</a><span class="sep">›</span>
+      <span class="current">Período 3</span>
+    </div>
+    <div class="nav-right">
+      <a class="v2-btn v2-btn-ghost" href="../index.html">← Física 11°</a>
+    </div>
+  </div>
+</nav>
+<section class="per-hero">
+  <div class="particle p1"></div><div class="particle p2"></div>
+  <div class="particle p3"></div><div class="particle p4"></div><div class="particle p5"></div>
+  <div class="per-badge"><div class="per-badge-dot"></div>Física 11° &nbsp;·&nbsp; Tercer período &nbsp;·&nbsp; 2 temas</div>
+  <h1 class="per-title">Electricidad</h1>
+  <p class="per-sub">Comprende la naturaleza de las cargas eléctricas, los campos eléctricos, circuitos y la ley de Ohm que gobierna los dispositivos del hogar.</p>
+</section>
+<hr class="v2-hr">
+<div class="topics-wrap">
+  <p class="sec-label">Contenido del período</p>
+  <h2 class="sec-title">Temas del Período 3</h2>
+  <p class="sec-desc">Selecciona un tema para estudiar la teoría, interactuar con simuladores y practicar con el quiz ICFES.</p>
+  <div class="topics-list">
+    <a href="1_electrostatica.html" class="topic-card anim-scroll">
+      <div class="topic-num">1</div>
+      <div class="topic-info">
+        <div class="topic-name">Electrostática<span class="topic-soon">Próximamente</span></div>
+        <div class="topic-desc">Cargas eléctricas, ley de Coulomb, campo eléctrico, potencial eléctrico y capacitores.</div>
+        <div class="topic-tags">
+          <span class="topic-tag">⚡ Cargas</span>
+          <span class="topic-tag">🧲 Campo eléctrico</span>
+          <span class="topic-tag">🔋 Potencial</span>
+          <span class="topic-tag">📐 Coulomb</span>
+        </div>
+      </div>
+      <span class="topic-go">→</span>
+    </a>
+    <a href="2_electrodinamica.html" class="topic-card anim-scroll">
+      <div class="topic-num">2</div>
+      <div class="topic-info">
+        <div class="topic-name">Electrodinámica<span class="topic-soon">Próximamente</span></div>
+        <div class="topic-desc">Corriente eléctrica, resistencia, ley de Ohm, circuitos en serie y paralelo, potencia eléctrica.</div>
+        <div class="topic-tags">
+          <span class="topic-tag">🔌 Circuitos</span>
+          <span class="topic-tag">⚡ Corriente</span>
+          <span class="topic-tag">🔋 Resistencia</span>
+          <span class="topic-tag">💡 Ley de Ohm</span>
+        </div>
+      </div>
+      <span class="topic-go">→</span>
+    </a>
+  </div>
+</div>
+<div class="period-nav">
+  <a href="../periodo2/index.html" class="period-nav-card anim-scroll">
+    <span class="pnc-arr">←</span>
+    <div><div class="pnc-label">Período anterior</div><div class="pnc-name">Período 2 — Óptica</div></div>
+  </a>
+  <a href="../periodo4/index.html" class="period-nav-card anim-scroll" style="justify-content:flex-end;text-align:right;">
+    <div><div class="pnc-label">Siguiente período</div><div class="pnc-name">Período 4 — Magnetismo</div></div>
+    <span class="pnc-arr">→</span>
+  </a>
+</div>
+<footer class="v2-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-avatar">LC</div>
+      <div>
+        <div class="footer-name">Docente Luis Miguel Cabrera</div>
+        <div class="footer-role">I.E. Paulo VI · Huila, Colombia · Física &amp; Matemáticas</div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">⚛️ VirtualLab 2026</span>
+      <span class="footer-tag">lumcab</span>
+    </div>
+  </div>
+</footer>
+<script>
+  const bar = document.getElementById('page-progress');
+  window.addEventListener('scroll', () => { const total = document.documentElement.scrollHeight - window.innerHeight; bar.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%'; }, { passive: true });
+  const io = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } }); }, { threshold: 0.1 });
+  document.querySelectorAll('.anim-scroll').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
