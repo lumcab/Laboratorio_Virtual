@@ -1,404 +1,645 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laboratorio Virtual | I.E. Paulo VI</title>
-    <link rel="icon" type="image/png" href="icon.png">
-    <link rel="apple-touch-icon" href="icon.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;600&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            background-color: #0f172a; 
-            color: white; 
-            font-family: 'Exo 2', sans-serif; 
-        }
-        .tech-font { font-family: 'Orbitron', sans-serif; }
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .glass-card:hover {
-            transform: translateY(-5px);
-            border-color: #22d3ee;
-            box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
-        }
-        .period-badge {
-            background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
-            color: #0f172a;
-            font-weight: bold;
-            font-size: 0.7rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .coming-soon {
-            opacity: 0.5;
-            pointer-events: none;
-            position: relative;
-        }
-        .coming-soon::after {
-            content: 'PRÓXIMAMENTE';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: #22d3ee;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        .grade-section {
-            border-left: 4px solid;
-            padding-left: 1.5rem;
-            margin-bottom: 3rem;
-        }
-        .grade-math { border-color: #f59e0b; }
-        .grade-geo { border-color: #0ea5e9; }
-        .grade-fis10 { border-color: #3b82f6; }
-        .grade-fis11 { border-color: #a855f7; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VirtualLab · I.E. Paulo VI</title>
+  <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="assets/icons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/tema-v2.css">
+  <script src="js/theme.js"></script>
+
+  <style>
+    /* ── Colores del home: gradiente multimateria ── */
+    :root {
+      --accent-a: #4361ee;
+      --accent-b: #3a0ca3;
+      --accent-c: #4cc9f0;
+      --accent-grad: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+    }
+
+    /* ══════════════════════════════════════════════
+       NAVBAR HOME — usa las clases de tema-v2.css
+    ══════════════════════════════════════════════ */
+    /* El home no tiene breadcrumbs; mostramos los links de materia a la derecha */
+    .nav-subject-links {
+      display: flex; gap: .4rem; align-items: center; flex-wrap: wrap;
+    }
+    .nav-subject-links a {
+      font-size: .78rem; font-weight: 600; text-decoration: none;
+      padding: .38rem .8rem; border-radius: var(--r-sm);
+      border: 1px solid var(--border); color: var(--text-muted);
+      transition: all .2s; white-space: nowrap;
+    }
+    .nav-subject-links a:hover { color: var(--text); background: var(--surface); }
+    @media(max-width:600px) {
+      .nav-subject-links { display: none; }
+    }
+
+    /* ══════════════════════════════════════════════
+       HERO HOME
+    ══════════════════════════════════════════════ */
+    .home-hero {
+      min-height: 92vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      position: relative; overflow: hidden;
+      padding: 6rem 1.5rem 4rem;
+      gap: 1.4rem;
+    }
+    .home-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 55% at 50% 25%, rgba(67,97,238,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 70%,  rgba(76,201,240,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 35% at 15% 60%,  rgba(114,9,183,.1)   0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Partículas flotantes */
+    .particle {
+      position: absolute; border-radius: 50%;
+      animation: particle-rise var(--dur,8s) ease-in-out infinite;
+      animation-delay: var(--delay,0s); opacity: .35;
+    }
+    .p1{width:6px;height:6px;background:#4361ee;left:10%;top:80%;--dur:9s;--delay:0s}
+    .p2{width:4px;height:4px;background:#4cc9f0;left:26%;top:88%;--dur:7s;--delay:1.2s}
+    .p3{width:8px;height:8px;background:#7209b7;left:48%;top:84%;--dur:11s;--delay:.5s}
+    .p4{width:5px;height:5px;background:#f77f00;left:64%;top:91%;--dur:8s;--delay:2s}
+    .p5{width:7px;height:7px;background:#0096c7;left:81%;top:87%;--dur:10s;--delay:.8s}
+    .p6{width:4px;height:4px;background:#f72585;left:19%;top:74%;--dur:6s;--delay:3s}
+    .p7{width:6px;height:6px;background:#4cc9f0;left:72%;top:77%;--dur:9s;--delay:1.5s}
+    .p8{width:5px;height:5px;background:#fcbf49;left:37%;top:94%;--dur:12s;--delay:.3s}
+
+    /* Sello institucional */
+    .hero-seal {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(67,97,238,.12); border: 1px solid rgba(67,97,238,.3);
+      color: #a5b4fc; font-size: .75rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .4rem 1.1rem; border-radius: 50px;
+      animation: fadeInUp .5s ease both;
+    }
+    .seal-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #4cc9f0;
+      position: relative;
+    }
+    .seal-dot::after {
+      content: ''; position: absolute; inset: -3px; border-radius: 50%;
+      background: rgba(76,201,240,.4); animation: ping 1.8s ease infinite;
+    }
+
+    .home-title {
+      font-size: clamp(2.8rem, 10vw, 5.5rem);
+      font-weight: 900; line-height: 1.0;
+      background: linear-gradient(135deg, #c7d2fe 0%, #4cc9f0 45%, #f72585 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeInUp .6s .08s ease both;
+      letter-spacing: -.02em;
+    }
+    .home-tagline {
+      font-size: clamp(.9rem, 2.8vw, 1.15rem);
+      color: var(--text-muted); max-width: 520px; line-height: 1.65;
+      animation: fadeInUp .6s .16s ease both;
+    }
+    .home-tagline strong { color: var(--text); }
+
+    .home-chips {
+      display: flex; flex-wrap: wrap; gap: .55rem; justify-content: center;
+      animation: fadeInUp .6s .24s ease both;
+    }
+    .home-chip {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      color: var(--text-muted); font-size: .82rem; padding: .35rem .9rem;
+      border-radius: 50px;
+    }
+
+    /* ══════════════════════════════════════════════
+       STATS
+    ══════════════════════════════════════════════ */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem;
+      max-width: 660px; margin: 0 auto;
+    }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-md); padding: 1.4rem 1rem; text-align: center;
+      transition: border-color .25s, transform .25s;
+    }
+    .stat-card:hover { border-color: rgba(67,97,238,.4); transform: translateY(-2px); }
+    .stat-num {
+      font-size: 2.4rem; font-weight: 900; display: block; line-height: 1;
+      background: linear-gradient(135deg, #a5b4fc, #4cc9f0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { font-size: .75rem; color: var(--text-muted); margin-top: .4rem; }
+
+    /* ══════════════════════════════════════════════
+       MATERIAS GRID
+    ══════════════════════════════════════════════ */
+    .materias-grid {
+      display: grid; grid-template-columns: repeat(2,1fr);
+      gap: 1.2rem; max-width: 880px; margin: 0 auto;
+    }
+    .materia-card {
+      position: relative; overflow: hidden;
+      border-radius: var(--r-lg); padding: 2rem 1.6rem 2.2rem;
+      text-decoration: none; display: flex; flex-direction: column; gap: .9rem;
+      border: 1px solid rgba(255,255,255,.08);
+      min-height: 260px; transition: transform .25s, box-shadow .25s;
+    }
+    .materia-card:hover { transform: translateY(-5px); }
+    .materia-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 30% 20%, rgba(255,255,255,.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .mat-emoji { font-size: 2.8rem; line-height: 1; }
+    .mat-grade {
+      display: inline-block; font-size: .7rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: .22rem .7rem; border-radius: 50px;
+      background: rgba(255,255,255,.18); color: rgba(255,255,255,.9);
+      width: fit-content;
+    }
+    .mat-name  { font-size: 1.5rem; font-weight: 900; color: #fff; line-height: 1.15; }
+    .mat-desc  { font-size: .84rem; color: rgba(255,255,255,.68); line-height: 1.55; }
+    .mat-tags  { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; }
+    .mat-tag   { font-size: .7rem; background: rgba(255,255,255,.13); color: rgba(255,255,255,.82); padding: .2rem .6rem; border-radius: 50px; }
+    .mat-arrow {
+      position: absolute; bottom: 1.5rem; right: 1.5rem;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.05rem; color: #fff; transition: background .2s, transform .2s;
+    }
+    .materia-card:hover .mat-arrow { background: rgba(255,255,255,.3); transform: translateX(3px); }
+
+    /* ══════════════════════════════════════════════
+       CÓMO USAR
+    ══════════════════════════════════════════════ */
+    .how-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1rem; max-width: 820px; margin: 0 auto;
+    }
+    .how-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-md); padding: 1.6rem 1.3rem;
+      display: flex; flex-direction: column; gap: .6rem;
+    }
+    .how-num {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--accent-grad); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: .9rem; color: #fff;
+      box-shadow: 0 0 14px rgba(67,97,238,.4);
+    }
+    .how-title { font-weight: 700; font-size: .95rem; margin-top: .2rem; }
+    .how-desc  { font-size: .83rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* ══════════════════════════════════════════════
+       SECCIONES GENÉRICAS
+    ══════════════════════════════════════════════ */
+    .home-section {
+      max-width: 1000px; margin: 0 auto; padding: 4rem 1.2rem;
+    }
+    .sec-tag {
+      font-size: .72rem; font-weight: 700; letter-spacing: .13em;
+      text-transform: uppercase; color: #a5b4fc; margin-bottom: .5rem;
+    }
+    .sec-title {
+      font-size: clamp(1.5rem,4vw,2rem); font-weight: 900; margin-bottom: .4rem;
+    }
+    .sec-desc { color: var(--text-muted); font-size: .93rem; margin-bottom: 2rem; }
+
+    /* ══════════════════════════════════════════════
+       PIE DE PÁGINA
+    ══════════════════════════════════════════════ */
+    .v2-footer {
+      background: rgba(0,0,0,.4);
+      border-top: 1px solid var(--border);
+      padding: 2rem 0 2.4rem;
+      margin-top: 2rem;
+    }
+    .footer-inner {
+      max-width: 1120px; margin: 0 auto; padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1.2rem;
+    }
+    .footer-brand { display: flex; align-items: center; gap: .9rem; }
+    .footer-avatar {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: var(--accent-grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 900; color: #fff;
+      box-shadow: 0 0 20px rgba(67,97,238,.5); flex-shrink: 0;
+    }
+    .footer-name { font-weight: 800; font-size: .95rem; color: var(--text); }
+    .footer-sub  { font-size: .73rem; color: var(--text-muted); margin-top: .1rem; }
+    .footer-right { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .footer-badge {
+      display: inline-flex; align-items: center; gap: .35rem;
+      padding: .3rem .8rem; border-radius: 100px;
+      background: rgba(67,97,238,.12); border: 1px solid rgba(67,97,238,.3);
+      font-size: .72rem; font-weight: 700; color: #4cc9f0;
+    }
+    .footer-tag {
+      font-size: .72rem; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text-dim);
+    }
+    /* Línea extra de materias en el footer */
+    .footer-subjects {
+      max-width: 1120px; margin: 1.2rem auto 0; padding: 1.2rem 1.5rem 0;
+      border-top: 1px solid var(--border);
+      display: flex; gap: .6rem; flex-wrap: wrap; align-items: center;
+    }
+    .footer-subj-label { font-size: .72rem; color: var(--text-dim); margin-right: .4rem; }
+    .footer-subj-link {
+      font-size: .75rem; padding: .22rem .7rem; border-radius: 50px;
+      border: 1px solid var(--border); color: var(--text-muted);
+      text-decoration: none; transition: all .2s;
+    }
+    .footer-subj-link:hover { color: var(--text); border-color: var(--border-accent); }
+
+    @media(max-width:600px) {
+      .footer-role { display: none; }
+      .footer-subjects { display: none; }
+    }
+
+    /* ══════════════════════════════════════════════
+       CALENDARIO ACADÉMICO
+    ══════════════════════════════════════════════ */
+    .cal-wrap {
+      max-width: 880px; margin: 0 auto;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 2rem 2.2rem;
+    }
+    .cal-tag {
+      display: inline-block;
+      font-size: .67rem; font-weight: 800; letter-spacing: .12em;
+      text-transform: uppercase; color: #a5b4fc;
+      background: rgba(67,97,238,.1); border: 1px solid rgba(67,97,238,.25);
+      padding: .26rem .8rem; border-radius: 50px; margin-bottom: .75rem;
+    }
+    .cal-title { font-size: 1.55rem; font-weight: 900; margin-bottom: .35rem; }
+    .cal-desc  { font-size: .85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .cal-grid  {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: .85rem;
+    }
+    .cal-card {
+      border-radius: var(--r-md); padding: 1.15rem 1rem 1rem;
+      border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: .42rem;
+      position: relative; overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .cal-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .cal-card:hover { transform: translateY(-2px); }
+
+    .cal-card.cal-done   { background: rgba(6,214,160,.04);   border-color: rgba(6,214,160,.28); }
+    .cal-card.cal-done::before   { background: #06d6a0; }
+    .cal-card.cal-active { background: rgba(255,209,102,.05); border-color: rgba(255,209,102,.38); box-shadow: 0 0 20px rgba(255,209,102,.08); }
+    .cal-card.cal-active::before { background: #ffd166; }
+    .cal-card.cal-next::before   { background: rgba(255,255,255,.12); }
+
+    .cal-num   { font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .cal-dates { font-size: .95rem; font-weight: 800; line-height: 1.3; color: var(--text); }
+    .cal-status{
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .76rem; font-weight: 700; margin-top: .3rem;
+    }
+    .cal-pulse {
+      width: 7px; height: 7px; border-radius: 50%; background: #ffd166;
+      flex-shrink: 0; position: relative;
+    }
+    .cal-pulse::after {
+      content: ''; position: absolute; inset: -3px; border-radius: 50%;
+      background: rgba(255,209,102,.4); animation: ping 1.6s ease infinite;
+    }
+
+    /* ══════════════════════════════════════════════
+       MOBILE RESPONSIVE
+    ══════════════════════════════════════════════ */
+    @media(max-width:640px) {
+      .stats-row { grid-template-columns: repeat(3,1fr); gap: .6rem; }
+      .materias-grid { grid-template-columns: 1fr; }
+      .materia-card { min-height: 210px; }
+      .mat-name { font-size: 1.25rem; }
+      .how-grid { grid-template-columns: 1fr; }
+      .cal-grid { grid-template-columns: repeat(2,1fr); }
+      .cal-wrap { padding: 1.4rem 1.1rem; }
+    }
+    @media(max-width:380px) {
+      .stats-row { grid-template-columns: 1fr; }
+      .stat-num { font-size: 1.9rem; }
+      .home-title { font-size: 2.4rem; }
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+<body>
 
-    <!-- Header -->
-    <header class="text-center pt-12 pb-8 px-4">
-        <div class="inline-block p-4 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-4 animate-pulse">
-            <i class="fa-solid fa-atom text-4xl text-cyan-400"></i>
-        </div>
-        <h1 class="tech-font text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600 mb-2">
-            VIRTUAL-LAB PVI
-        </h1>
-        <p class="text-slate-400 text-lg">Laboratorio Virtual de Ciencias y Matemáticas</p>
-        <div class="mt-4 inline-flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full border border-slate-700">
-            <i class="fa-solid fa-calendar text-cyan-400"></i>
-            <span class="text-sm text-slate-300">Año Lectivo 2026</span>
-        </div>
-    </header>
+<!-- Barra de progreso de lectura -->
+<div id="page-progress"></div>
 
-    <main class="container mx-auto px-4 pb-20 max-w-6xl">
-        
-        <!-- Info Banner -->
-        <div class="bg-gradient-to-r from-cyan-900/50 to-blue-900/50 border border-cyan-500/30 rounded-2xl p-6 mb-12">
-            <div class="flex items-start gap-4">
-                <div class="bg-cyan-500/20 p-3 rounded-xl">
-                    <i class="fa-solid fa-circle-info text-2xl text-cyan-400"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-white text-lg mb-2">Organización por Materias y Períodos</h3>
-                    <p class="text-slate-300 text-sm leading-relaxed">
-                        El contenido está organizado en <strong class="text-cyan-400">4 páginas por materia al año</strong>. 
-                        Cada página contiene todo el contenido de un período. Actualmente se encuentra disponible 
-                        el <strong class="text-green-400">PRIMER PERÍODO</strong> de cada grado. Los demás períodos 
-                        se irán activando durante el año lectivo.
-                    </p>
-                </div>
-            </div>
-        </div>
+<!-- ═══════════════════════════════════
+     NAVBAR — estructura de tema-v2.css
+══════════════════════════════════════ -->
+<nav class="v2-nav">
+  <div class="inner">
+    <a class="nav-logo" href="index.html"><svg class="logo-atom" viewBox="0 0 40 40" width="26" height="26" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="3.2" fill="currentColor"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(120 20 20)"/></svg><span class="logo-text">VirtualLab</span></a>
+    <!-- En home no hay breadcrumbs; mostramos los accesos directos a materias -->
+    <div class="nav-subject-links">
+      <a href="fisica10/index.html">Física 10°</a>
+      <a href="fisica11/index.html">Física 11°</a>
+      <a href="matematicas6/index.html">Matemáticas 6°</a>
+      <a href="geometria6/index.html">Geometría 6°</a>
+    </div>
+    <div class="nav-right">
+    </div>
+  </div>
+</nav>
 
-        <!-- ==================== GRADO 6° - MATEMÁTICAS ==================== -->
-        <section class="grade-section grade-math">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="bg-amber-500/20 p-3 rounded-xl">
-                    <i class="fa-solid fa-calculator text-2xl text-amber-400"></i>
-                </div>
-                <div>
-                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 6° - MATEMÁTICAS</h2>
-                    <p class="text-slate-400 text-sm">4 páginas de contenido anual</p>
-                </div>
-            </div>
+<!-- ═══════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section class="home-hero">
+  <!-- Partículas decorativas -->
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+  <div class="particle p4"></div>
+  <div class="particle p5"></div>
+  <div class="particle p6"></div>
+  <div class="particle p7"></div>
+  <div class="particle p8"></div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Página 1 - Activa -->
-                <a href="matematicas6.html" class="group">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col relative overflow-hidden">
-                        <div class="absolute top-3 right-3">
-                            <span class="period-badge">Período 1</span>
-                        </div>
-                        <div class="text-3xl mb-3">🔢</div>
-                        <h3 class="font-bold text-white text-base mb-2">Página 1</h3>
-                        <p class="text-slate-400 text-xs mb-3 flex-grow">Sistemas Numéricos y Binario</p>
-                        <span class="text-amber-400 text-xs font-bold flex items-center gap-1">
-                            VER <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </span>
-                    </div>
-                </a>
+  <div class="hero-seal">
+    <div class="seal-dot"></div>
+    I.E. Paulo VI &nbsp;·&nbsp; Huila, Colombia
+  </div>
 
-                <!-- Páginas 2-4 - Próximamente -->
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 2</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">📐</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 2</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
+  <h1 class="home-title">VirtualLab</h1>
 
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 3</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">📊</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 3</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
+  <p class="home-tagline">
+    Tu laboratorio de aprendizaje virtual. Teoría, simulaciones y quizzes de práctica
+    para <strong>Física 10° y 11°</strong>, <strong>Matemáticas</strong> y <strong>Geometría 6°</strong>.
+  </p>
 
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 4</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">🎯</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 4</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div class="home-chips">
+    <span class="home-chip">📱 Desde tu celular</span>
+    <span class="home-chip">🔬 Simulaciones PhET</span>
+    <span class="home-chip">🎯 Quizzes ICFES</span>
+    <span class="home-chip">📐 Fórmulas paso a paso</span>
+    <span class="home-chip">🎬 Videos incrustados</span>
+  </div>
 
-        <!-- ==================== GRADO 6° - GEOMETRÍA ==================== -->
-        <section class="grade-section grade-geo">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="bg-sky-500/20 p-3 rounded-xl">
-                    <i class="fa-solid fa-shapes text-2xl text-sky-400"></i>
-                </div>
-                <div>
-                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 6° - GEOMETRÍA</h2>
-                    <p class="text-slate-400 text-sm">4 páginas de contenido anual</p>
-                </div>
-            </div>
+</section>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Página 1 - Activa -->
-                <a href="geometria.html" class="group">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col relative overflow-hidden">
-                        <div class="absolute top-3 right-3">
-                            <span class="period-badge">Período 1</span>
-                        </div>
-                        <div class="text-3xl mb-3">📏</div>
-                        <h3 class="font-bold text-white text-base mb-2">Página 1</h3>
-                        <p class="text-slate-400 text-xs mb-3 flex-grow">Puntos, Rectas, Planos y Ángulos</p>
-                        <span class="text-sky-400 text-xs font-bold flex items-center gap-1">
-                            VER <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </span>
-                    </div>
-                </a>
+<!-- ═══════════════════════════════════
+     STATS
+══════════════════════════════════════ -->
+<section class="home-section" style="padding-top:0; padding-bottom:2.5rem;">
+  <div class="stats-row">
+    <div class="stat-card anim-scroll">
+      <span class="stat-num">4</span>
+      <div class="stat-label">Materias</div>
+    </div>
+    <div class="stat-card anim-scroll">
+      <span class="stat-num">44</span>
+      <div class="stat-label">Temas de estudio</div>
+    </div>
+    <div class="stat-card anim-scroll">
+      <span class="stat-num">PhET</span>
+      <div class="stat-label">Simulaciones interactivas</div>
+    </div>
+  </div>
+</section>
 
-                <!-- Páginas 2-4 - Próximamente -->
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 2</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">🔺</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 2</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
 
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 3</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">⭕</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 3</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
+<!-- ═══════════════════════════════════
+     MATERIAS
+══════════════════════════════════════ -->
+<section class="home-section" id="materias" style="padding-top:0;">
+  <p class="sec-tag">Contenido del sitio</p>
+  <h2 class="sec-title">Elige tu materia</h2>
+  <p class="sec-desc">Cada materia está organizada por períodos. Toca una para empezar.</p>
 
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 4</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">📐</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 4</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <div class="materias-grid">
 
-        <!-- ==================== GRADO 10° - FÍSICA ==================== -->
-        <section class="grade-section grade-fis10">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="bg-blue-500/20 p-3 rounded-xl">
-                    <i class="fa-solid fa-gauge-high text-2xl text-blue-400"></i>
-                </div>
-                <div>
-                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 10° - FÍSICA</h2>
-                    <p class="text-slate-400 text-sm">4 páginas de contenido anual</p>
-                </div>
-            </div>
+    <a href="fisica10/index.html" class="materia-card anim-scroll"
+       style="background:linear-gradient(140deg,#4361ee 0%,#3a0ca3 100%);box-shadow:0 10px 40px rgba(67,97,238,.35);">
+      <div class="mat-emoji">⚡</div>
+      <div class="mat-grade">Grado 10°</div>
+      <div class="mat-name">Física 10°</div>
+      <div class="mat-desc">Cinemática, dinámica, fluidos y termodinámica.</div>
+      <div class="mat-tags">
+        <span class="mat-tag">Cinemática</span>
+        <span class="mat-tag">Trabajo &amp; Energía</span>
+        <span class="mat-tag">Hidrostática</span>
+        <span class="mat-tag">Termodinámica</span>
+      </div>
+      <div class="mat-arrow">→</div>
+    </a>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Página 1 - Activa -->
-                <a href="magnitudes.html" class="group">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col relative overflow-hidden">
-                        <div class="absolute top-3 right-3">
-                            <span class="period-badge">Período 1</span>
-                        </div>
-                        <div class="text-3xl mb-3">⚖️</div>
-                        <h3 class="font-bold text-white text-base mb-2">Página 1</h3>
-                        <p class="text-slate-400 text-xs mb-3 flex-grow">Magnitudes, Unidades y Notación Científica</p>
-                        <span class="text-blue-400 text-xs font-bold flex items-center gap-1">
-                            VER <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </span>
-                    </div>
-                </a>
+    <a href="fisica11/index.html" class="materia-card anim-scroll"
+       style="background:linear-gradient(140deg,#7209b7 0%,#560bad 55%,#f72585 100%);box-shadow:0 10px 40px rgba(114,9,183,.35);">
+      <div class="mat-emoji">🌊</div>
+      <div class="mat-grade">Grado 11°</div>
+      <div class="mat-name">Física 11°</div>
+      <div class="mat-desc">Ondas, óptica, electricidad y electromagnetismo.</div>
+      <div class="mat-tags">
+        <span class="mat-tag">MAS &amp; Ondas</span>
+        <span class="mat-tag">Óptica</span>
+        <span class="mat-tag">Electrostática</span>
+        <span class="mat-tag">Magnetismo</span>
+      </div>
+      <div class="mat-arrow">→</div>
+    </a>
 
-                <!-- Páginas 2-4 - Próximamente -->
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 2</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">🏃</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 2</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
+    <a href="matematicas6/index.html" class="materia-card anim-scroll"
+       style="background:linear-gradient(140deg,#f77f00 0%,#d62828 100%);box-shadow:0 10px 40px rgba(247,127,0,.3);">
+      <div class="mat-emoji">🔢</div>
+      <div class="mat-grade">Grado 6°</div>
+      <div class="mat-name">Matemáticas 6°</div>
+      <div class="mat-desc">Números, operaciones, fracciones y estadística.</div>
+      <div class="mat-tags">
+        <span class="mat-tag">Sistemas de numeración</span>
+        <span class="mat-tag">MCM &amp; MCD</span>
+        <span class="mat-tag">Fracciones</span>
+        <span class="mat-tag">Probabilidad</span>
+      </div>
+      <div class="mat-arrow">→</div>
+    </a>
 
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 3</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">🍎</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 3</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
+    <a href="geometria6/index.html" class="materia-card anim-scroll"
+       style="background:linear-gradient(140deg,#0096c7 0%,#0077b6 55%,#48cae4 100%);box-shadow:0 10px 40px rgba(0,150,199,.3);">
+      <div class="mat-emoji">📐</div>
+      <div class="mat-grade">Grado 6°</div>
+      <div class="mat-name">Geometría 6°</div>
+      <div class="mat-desc">Rectas, ángulos, polígonos y transformaciones geométricas.</div>
+      <div class="mat-tags">
+        <span class="mat-tag">Conceptos básicos</span>
+        <span class="mat-tag">Ángulos</span>
+        <span class="mat-tag">Plano cartesiano</span>
+        <span class="mat-tag">Transformaciones</span>
+      </div>
+      <div class="mat-arrow">→</div>
+    </a>
 
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 4</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">⚡</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 4</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+  </div>
+</section>
 
-        <!-- ==================== GRADO 11° - FÍSICA ==================== -->
-        <section class="grade-section grade-fis11">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="bg-purple-500/20 p-3 rounded-xl">
-                    <i class="fa-solid fa-atom text-2xl text-purple-400"></i>
-                </div>
-                <div>
-                    <h2 class="tech-font text-2xl font-bold text-white">GRADO 11° - FÍSICA</h2>
-                    <p class="text-slate-400 text-sm">4 páginas de contenido anual</p>
-                </div>
-            </div>
+<!-- ═══════════════════════════════════
+     CALENDARIO ACADÉMICO
+══════════════════════════════════════ -->
+<section class="home-section" style="padding-top:0; padding-bottom:2.5rem;" id="calendario">
+  <div class="cal-wrap anim-scroll">
+    <div class="cal-tag">Calendario 2026</div>
+    <h2 class="cal-title">Calendario Académico 2026</h2>
+    <p class="cal-desc">Los períodos muestran sus fechas de inicio y cierre para ayudar a organizar el ritmo de trabajo durante el año escolar.</p>
+    <div class="cal-grid">
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Página 1 - Activa -->
-                <a href="ondas.html" class="group">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col relative overflow-hidden">
-                        <div class="absolute top-3 right-3">
-                            <span class="period-badge">Período 1</span>
-                        </div>
-                        <div class="text-3xl mb-3">〰️</div>
-                        <h3 class="font-bold text-white text-base mb-2">Página 1</h3>
-                        <p class="text-slate-400 text-xs mb-3 flex-grow">Ondas, Sonido, Efecto Doppler y Tubos Sonoros</p>
-                        <span class="text-purple-400 text-xs font-bold flex items-center gap-1">
-                            VER <i class="fa-solid fa-arrow-right text-xs"></i>
-                        </span>
-                    </div>
-                </a>
+      <div class="cal-card" id="calCard1">
+        <div class="cal-num" style="color:#06d6a0">Período 1</div>
+        <div class="cal-dates">26 de enero –<br>10 de abril</div>
+        <div class="cal-status" id="calStatus1">—</div>
+      </div>
 
-                <!-- Páginas 2-4 - Próximamente -->
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 2</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">💡</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 2</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
+      <div class="cal-card" id="calCard2">
+        <div class="cal-num" style="color:#ffd166">Período 2</div>
+        <div class="cal-dates">13 de abril –<br>19 de julio</div>
+        <div class="cal-status" id="calStatus2">—</div>
+      </div>
 
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 3</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">🧲</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 3</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
+      <div class="cal-card" id="calCard3">
+        <div class="cal-num" style="color:#f77f00">Período 3</div>
+        <div class="cal-dates">6 de julio –<br>11 de septiembre</div>
+        <div class="cal-status" id="calStatus3">—</div>
+      </div>
 
-                <div class="coming-soon">
-                    <div class="glass-card p-5 rounded-2xl h-full flex flex-col">
-                        <div class="absolute top-3 right-3">
-                            <span class="bg-slate-700 text-slate-400 text-xs px-2 py-1 rounded-full">Período 4</span>
-                        </div>
-                        <div class="text-3xl mb-3 opacity-50">☢️</div>
-                        <h3 class="font-bold text-slate-500 text-base mb-2">Página 4</h3>
-                        <p class="text-slate-600 text-xs mb-3">Próximamente</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="cal-card" id="calCard4">
+        <div class="cal-num" style="color:#f72585">Período 4</div>
+        <div class="cal-dates">8 de septiembre –<br>27 de noviembre</div>
+        <div class="cal-status" id="calStatus4">—</div>
+      </div>
 
-        <!-- Calendario Académico -->
-        <section class="mt-16">
-            <h2 class="tech-font text-2xl font-bold text-white mb-6 text-center">
-                <i class="fa-solid fa-calendar-days text-cyan-400 mr-2"></i>
-                Calendario Académico 2026
-            </h2>
-            <div class="grid md:grid-cols-4 gap-4">
-                <div class="glass-panel p-4 rounded-xl text-center border-t-4 border-green-500">
-                    <div class="text-green-400 font-bold text-sm mb-1">PERÍODO 1</div>
-                    <div class="text-white font-bold">26 Enero -  10 Abril</div>
-                    <div class="text-slate-400 text-xs mt-2">En progreso</div>
-                </div>
-                <div class="glass-panel p-4 rounded-xl text-center border-t-4 border-yellow-500 opacity-60">
-                    <div class="text-yellow-400 font-bold text-sm mb-1">PERÍODO 2</div>
-                    <div class="text-white font-bold">13 Abril - 19 Junio</div>
-                    <div class="text-slate-400 text-xs mt-2">Próximo</div>
-                </div>
-                <div class="glass-panel p-4 rounded-xl text-center border-t-4 border-orange-500 opacity-60">
-                    <div class="text-orange-400 font-bold text-sm mb-1">PERÍODO 3</div>
-                    <div class="text-white font-bold">06 Julio - 11 Septiembre</div>
-                    <div class="text-slate-400 text-xs mt-2">Pendiente</div>
-                </div>
-                <div class="glass-panel p-4 rounded-xl text-center border-t-4 border-red-500 opacity-60">
-                    <div class="text-red-400 font-bold text-sm mb-1">PERÍODO 4</div>
-                    <div class="text-white font-bold">08 Septiembre - 27 Noviembre</div>
-                    <div class="text-slate-400 text-xs mt-2">Pendiente</div>
-                </div>
-            </div>
-        </section>
+    </div>
+  </div>
+</section>
 
-    </main>
+<!-- ═══════════════════════════════════
+     CÓMO USAR
+══════════════════════════════════════ -->
+<section class="home-section" style="padding-top:2rem;">
+  <p class="sec-tag">Guía rápida</p>
+  <h2 class="sec-title">¿Cómo usar VirtualLab?</h2>
+  <p class="sec-desc">En tres pasos puedes aprovechar todo el contenido.</p>
 
-    <footer class="bg-slate-950 py-8 text-center border-t border-slate-800">
-        <div class="container mx-auto px-4">
-            <p class="text-slate-400 font-bold">I.E. Paulo VI</p>
-            <p class="text-slate-500 text-sm mt-1">Docente: Luis Miguel Cabrera</p>
-            <p class="text-slate-600 text-xs mt-4">Laboratorio Virtual © 2026</p>
-        </div>
-    </footer>
+  <div class="how-grid">
+    <div class="how-card anim-scroll">
+      <div class="how-num">1</div>
+      <div class="how-title">Elige materia y período</div>
+      <div class="how-desc">Selecciona la materia y el período que estás viendo en clase.</div>
+    </div>
+    <div class="how-card anim-scroll">
+      <div class="how-num">2</div>
+      <div class="how-title">Lee la teoría e interactúa</div>
+      <div class="how-desc">Revisa las fórmulas, usa los simuladores y mira los videos sin salir de la página.</div>
+    </div>
+    <div class="how-card anim-scroll">
+      <div class="how-num">3</div>
+      <div class="how-title">Practica con el quiz</div>
+      <div class="how-desc">Responde el quiz de 5 preguntas estilo ICFES al final de cada tema.</div>
+    </div>
+  </div>
+</section>
 
+<!-- ═══════════════════════════════════
+     FOOTER — estructura aprobada
+══════════════════════════════════════ -->
+<footer class="v2-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-avatar">LC</div>
+      <div>
+        <div class="footer-name">Docente Luis Miguel Cabrera</div>
+        <div class="footer-sub">I.E. Paulo VI · Huila, Colombia · Física &amp; Matemáticas</div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">⚗️ VirtualLab 2026</span>
+      <span class="footer-tag">lumcab</span>
+    </div>
+  </div>
+  <div class="footer-subjects">
+    <span class="footer-subj-label">Materias:</span>
+    <a href="fisica10/index.html"    class="footer-subj-link">Física 10°</a>
+    <a href="fisica11/index.html"    class="footer-subj-link">Física 11°</a>
+    <a href="matematicas6/index.html" class="footer-subj-link">Matemáticas 6°</a>
+    <a href="geometria6/index.html"  class="footer-subj-link">Geometría 6°</a>
+  </div>
+</footer>
+
+<script>
+  // ── Barra de progreso de lectura ──
+  const bar = document.getElementById('page-progress');
+  window.addEventListener('scroll', () => {
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
+  }, { passive: true });
+
+  // ── Animación de entrada por scroll (clase anim-scroll de tema-v2.css) ──
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.anim-scroll').forEach(el => io.observe(el));
+
+  // ── Calendario académico — estado automático por fecha ──
+  (function() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const periodos = [
+      { id: 1, start: new Date('2026-01-26'), end: new Date('2026-04-10') },
+      { id: 2, start: new Date('2026-04-13'), end: new Date('2026-07-19') },
+      { id: 3, start: new Date('2026-07-06'), end: new Date('2026-09-11') },
+      { id: 4, start: new Date('2026-09-08'), end: new Date('2026-11-27') },
+    ];
+
+    periodos.forEach(p => {
+      const card   = document.getElementById('calCard'   + p.id);
+      const status = document.getElementById('calStatus' + p.id);
+      if (!card || !status) return;
+
+      const endDay = new Date(p.end);
+      endDay.setHours(23, 59, 59);
+
+      if (today > endDay) {
+        card.classList.add('cal-done');
+        status.innerHTML = '<span style="color:#06d6a0">✓ Finalizado</span>';
+      } else if (today >= p.start) {
+        card.classList.add('cal-active');
+        status.innerHTML = '<span class="cal-pulse"></span><span style="color:#ffd166">En progreso</span>';
+      } else {
+        card.classList.add('cal-next');
+        status.innerHTML = '<span style="color:var(--text-dim)">⏰ Próximo</span>';
+      }
+    });
+  })();
+</script>
 </body>
 </html>

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introducción a la Física | Física 10° · VirtualLab</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/icons/favicon.ico">
+  <link rel="stylesheet" href="../../css/tema-v2.css">
+  <script src="../../js/theme.js"></script>
+  <style>
+    :root {
+      --accent-a: #4361ee;
+      --accent-b: #3a0ca3;
+      --accent-c: #4cc9f0;
+      --accent-grad: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+      --hero-c1: #4cc9f0;
+      --hero-c2: #4361ee;
+    }
+    .v2-badge      { background: rgba(67,97,238,.12); border-color: rgba(67,97,238,.35); color: #4cc9f0; }
+    .badge-dot     { background: #4cc9f0; }
+    .o-core        { background: var(--accent-grad); box-shadow: 0 0 40px rgba(67,97,238,.6); }
+    .o-ring-1      { width: 110px; height: 110px; border-color: rgba(67,97,238,.45); animation-duration: 4s; }
+    .o-ring-1::after { background: #4361ee; box-shadow: 0 0 14px #4361ee; }
+    .o-ring-2      { width: 190px; height: 190px; border-color: rgba(76,201,240,.35); animation-duration: 7s; animation-direction: reverse; }
+    .o-ring-2::after { background: #4cc9f0; box-shadow: 0 0 14px #4cc9f0; }
+    .o-ring-3      { width: 290px; height: 290px; border-color: rgba(58,12,163,.3); animation-duration: 13s; }
+    .o-ring-3::after { background: #3a0ca3; box-shadow: 0 0 14px #3a0ca3; width: 8px; height: 8px; top: -4px; left: calc(50% - 4px); }
+    .v2-tab.active  { background: var(--accent-a); }
+    .f-eq           { color: #4cc9f0; font-weight: 700; }
+    .f-sym          { color: #ffd166; }
+    .quiz-prog-fill { background: var(--accent-grad); }
+    .score-ring     { background: var(--accent-grad); }
+
+    /* ── Convertidor ── */
+    .conv-box {
+      background: rgba(0,0,0,.22); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 2rem;
+      max-width: 640px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 1.2rem;
+    }
+    .conv-input-row { display: flex; gap: .8rem; flex-wrap: wrap; align-items: center; }
+    .conv-input {
+      flex: 1; min-width: 180px;
+      background: rgba(255,255,255,.05); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: .7rem 1rem;
+      color: var(--text); font-size: 1.1rem; font-family: inherit;
+      transition: border-color .2s;
+    }
+    .conv-input:focus { outline: none; border-color: var(--accent-a); }
+    .conv-btn {
+      background: var(--accent-grad); color: #fff; border: none;
+      padding: .72rem 1.4rem; border-radius: var(--r-sm);
+      font-size: .95rem; font-weight: 700; cursor: pointer; transition: opacity .2s;
+    }
+    .conv-btn:hover { opacity: .88; }
+    .conv-result {
+      background: rgba(67,97,238,.08); border: 1px solid rgba(67,97,238,.25);
+      border-radius: var(--r-md); padding: 1.2rem 1.5rem; display: none;
+    }
+    .conv-result.show { display: block; }
+    .conv-sci   { font-size: 1.6rem; font-weight: 800; color: #4cc9f0; font-family: 'Courier New', monospace; }
+    .conv-prefix{ font-size: .88rem; color: var(--text-muted); margin-top: .5rem; }
+
+    .prefix-table { width: 100%; border-collapse: collapse; font-size: .84rem; margin-top: 1.4rem; }
+    .prefix-table th {
+      text-align: left; padding: .4rem .7rem;
+      color: var(--text-muted); border-bottom: 1px solid var(--border);
+      font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+    }
+    .prefix-table td { padding: .42rem .7rem; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .prefix-table tr:hover td { background: rgba(67,97,238,.06); }
+    .prefix-sym { color: #4cc9f0; font-weight: 700; }
+
+    /* ── Quiz ── */
+    .quiz-opt { color: #fff !important; font-size: 1rem; min-height: 54px; background: rgba(255,255,255,.05) !important; border-color: rgba(255,255,255,.12) !important; }
+    .quiz-opt:hover:not(.answered) { background: rgba(67,97,238,.18) !important; border-color: #4361ee !important; }
+    .opt-ltr { background: linear-gradient(135deg,#4361ee,#3a0ca3) !important; border: none !important; color: #fff !important; font-weight: 900 !important; width: 36px !important; height: 36px !important; font-size: .88rem !important; box-shadow: 0 0 10px rgba(67,97,238,.4); }
+    .quiz-opt.correct           { background: rgba(6,214,160,.15) !important; border-color: #06d6a0 !important; }
+    .quiz-opt.correct .opt-ltr  { background: linear-gradient(135deg,#06d6a0,#048a68) !important; }
+    .quiz-opt.wrong             { background: rgba(230,57,70,.15) !important; border-color: #e63946 !important; }
+    .quiz-opt.wrong   .opt-ltr  { background: linear-gradient(135deg,#e63946,#9b2226) !important; }
+
+    /* ── Video ── */
+    .yt-player-wrap { border-radius: var(--r-md); overflow: hidden; }
+    .yt-thumb-card { position: relative; aspect-ratio: 16/9; cursor: pointer; background: #000; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-thumb-img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s, filter .4s; filter: brightness(.75); }
+    .yt-thumb-card:hover .yt-thumb-img { transform: scale(1.04); filter: brightness(.6); }
+    .yt-thumb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+    .yt-big-play { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,0,0,.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #fff; box-shadow: 0 4px 30px rgba(0,0,0,.5); transition: transform .25s, background .25s; }
+    .yt-thumb-card:hover .yt-big-play { transform: scale(1.12); background: #ff0000; }
+    .yt-info-bar { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top,rgba(0,0,0,.85),transparent); padding: 1.5rem 1rem .8rem; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    .yt-title-bar { font-size: .88rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .yt-ext-btn { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); color: #fff; padding: .35rem .8rem; border-radius: 6px; font-size: .75rem; font-weight: 600; text-decoration: none; white-space: nowrap; flex-shrink: 0; transition: background .2s; }
+    .yt-ext-btn:hover { background: rgba(255,255,255,.3); }
+    .yt-embed-frame { display: none; position: relative; aspect-ratio: 16/9; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .yt-embed-frame.visible { display: block; }
+
+    /* ── Footer ── */
+    .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { display: flex; align-items: center; gap: .9rem; }
+    .footer-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-grad); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 900; color: #fff; box-shadow: 0 0 18px rgba(67,97,238,.5); flex-shrink: 0; }
+    .footer-name  { font-weight: 800; font-size: .96rem; color: var(--text); }
+    .footer-role  { font-size: .75rem; color: var(--text-muted); margin-top: .1rem; }
+    .footer-right { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .footer-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .28rem .75rem; border-radius: 100px; background: rgba(67,97,238,.12); border: 1px solid rgba(67,97,238,.28); font-size: .73rem; font-weight: 700; color: #4cc9f0; }
+    .footer-tag   { font-size: .73rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); }
+
+    @media(max-width:600px) {
+      .yt-big-play { width: 60px; height: 60px; font-size: 1.3rem; }
+      .footer-role { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="page-progress"></div>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="v2-nav">
+  <div class="inner">
+    <a class="nav-logo" href="../../index.html"><svg class="logo-atom" viewBox="0 0 40 40" width="26" height="26" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="3.2" fill="currentColor"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(120 20 20)"/></svg><span class="logo-text">VirtualLab</span></a>
+    <div class="nav-crumbs">
+      <a href="../../index.html">Inicio</a><span class="sep">›</span>
+      <a href="../index.html">Física 10°</a><span class="sep">›</span>
+      <a href="index.html">Período 1</a><span class="sep">›</span>
+      <span class="current">Introducción a la Física</span>
+    </div>
+    <div class="nav-right">
+      <a class="v2-btn v2-btn-ghost" href="index.html">← Período 1</a>
+      <a class="v2-btn v2-btn-primary" href="2_magnitudes_vectores.html">Siguiente →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="v2-hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-particles-layer" id="heroParticles"></div>
+  <div class="v2-wrap">
+    <div class="hero-content-wrap">
+      <div class="v2-badge"><span class="badge-dot"></span>Física 10° &nbsp;·&nbsp; Período 1 &nbsp;·&nbsp; Tema 1</div>
+      <h1>Introducción a la Física</h1>
+      <p class="hero-sub">¿Qué estudia la física? Conoce sus ramas, el método científico y las herramientas básicas para medir y analizar el mundo que nos rodea.</p>
+      <div class="hero-tags">
+        <span class="h-tag">🔭 Ramas de la física</span>
+        <span class="h-tag">🔬 Método científico</span>
+        <span class="h-tag">🔢 Notación científica</span>
+        <span class="h-tag">📏 Errores de medición</span>
+        <span class="h-tag">⚡ Calculadora interactiva</span>
+      </div>
+      <div class="hero-scroll-hint"><div class="scroll-mouse"></div><span>Desliza para explorar</span></div>
+    </div>
+  </div>
+  <div class="hero-visual-wrap">
+    <div class="orbital">
+      <div class="o-core"></div>
+      <div class="o-ring o-ring-1"></div>
+      <div class="o-ring o-ring-2"></div>
+      <div class="o-ring o-ring-3"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══ TEORÍA ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-teoria">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📖 Teoría</div>
+    <h2 class="v2-sec-title">Conceptos esenciales</h2>
+    <p class="v2-sec-desc">Haz clic en cada ficha para estudiar el tema. Puedes copiar el texto para tus apuntes.</p>
+  </div>
+
+  <div class="v2-tabs">
+    <button class="v2-tab active" data-tab="t-que">🔭 ¿Qué es la Física?</button>
+    <button class="v2-tab" data-tab="t-metodo">🔬 Método Científico</button>
+    <button class="v2-tab" data-tab="t-notacion">🔢 Notación Científica</button>
+    <button class="v2-tab" data-tab="t-errores">📏 Errores de Medición</button>
+  </div>
+
+  <div class="v2-card">
+
+    <!-- ¿Qué es la Física? -->
+    <div id="t-que" class="v2-tab-panel active">
+      <button class="copy-teoria-btn" data-target="copy-que">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-que">
+        <h3>¿Qué es la Física?</h3>
+        <p>La <strong>física</strong> es la ciencia que estudia la naturaleza y sus leyes fundamentales: la <strong>materia</strong>, la <strong>energía</strong>, el <strong>espacio</strong> y el <strong>tiempo</strong>, y las interacciones entre ellos. Su objetivo es describir y predecir los fenómenos naturales mediante modelos matemáticos.</p>
+        <div class="key-box">💡 La física es la base de todas las ciencias naturales. Sus principios explican desde por qué cae una manzana hasta cómo funciona un cohete o un teléfono celular.</div>
+        <h3>Principales ramas de la Física</h3>
+        <ul>
+          <li><strong>Mecánica:</strong> estudia el movimiento y las fuerzas (cinemática, dinámica, estática).</li>
+          <li><strong>Termodinámica:</strong> analiza el calor, la temperatura y los procesos energéticos.</li>
+          <li><strong>Electromagnetismo:</strong> estudia las cargas eléctricas y los campos eléctricos y magnéticos.</li>
+          <li><strong>Óptica:</strong> investiga la luz y sus interacciones con la materia.</li>
+          <li><strong>Acústica:</strong> se ocupa del sonido y las ondas mecánicas.</li>
+          <li><strong>Física Cuántica:</strong> describe el comportamiento de partículas subatómicas.</li>
+          <li><strong>Física Relativista:</strong> analiza objetos que se mueven a velocidades cercanas a la de la luz.</li>
+        </ul>
+        <h3>La física en la vida cotidiana del Huila</h3>
+        <p>La física está presente en todo lo que nos rodea: el movimiento de los vehículos en la carretera Neiva–Pitalito, el comportamiento del agua en el río Magdalena, la generación de energía eléctrica en la represa de Betania, y la transmisión de señales de celular en la región. Comprender la física nos ayuda a mejorar nuestra calidad de vida.</p>
+        <h3>Física clásica vs. Física moderna</h3>
+        <ul>
+          <li><strong>Física clásica</strong> (antes del siglo XX): mecánica de Newton, electromagnetismo de Maxwell, termodinámica. Válida para objetos de tamaño cotidiano y velocidades bajas.</li>
+          <li><strong>Física moderna</strong> (siglo XX en adelante): relatividad de Einstein, mecánica cuántica. Necesaria para describir el mundo subatómico o velocidades extremas.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Método Científico -->
+    <div id="t-metodo" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-metodo">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-metodo">
+        <h3>¿Qué es el Método Científico?</h3>
+        <p>El <strong>método científico</strong> es el conjunto de pasos ordenados que siguen los científicos para investigar fenómenos de la naturaleza de manera objetiva y verificable. Es la base de toda investigación científica.</p>
+        <div class="key-box">💡 El método científico garantiza que los resultados sean reproducibles y verificables por cualquier científico en cualquier parte del mundo.</div>
+        <h3>Pasos del Método Científico</h3>
+        <ol>
+          <li><strong>Observación:</strong> se detecta un fenómeno interesante. Puede ser directa (con los sentidos) o indirecta (con instrumentos). <em>Ejemplo: "Los objetos caen hacia el suelo cuando los suelto."</em></li>
+          <li><strong>Planteamiento del problema:</strong> se formula una pregunta precisa. <em>Ejemplo: "¿Afecta la masa de un objeto la velocidad con que cae?"</em></li>
+          <li><strong>Hipótesis:</strong> respuesta tentativa y verificable a la pregunta. Debe poder comprobarse o refutarse. <em>Ejemplo: "Los objetos más pesados caen más rápido."</em></li>
+          <li><strong>Experimentación:</strong> se diseña y ejecuta un experimento controlado para probar la hipótesis. Se definen las variables.</li>
+          <li><strong>Análisis de resultados:</strong> se organizan y procesan los datos. Se usan tablas, gráficas y fórmulas.</li>
+          <li><strong>Conclusión:</strong> se determina si la hipótesis fue confirmada o refutada, y se comunica el resultado.</li>
+        </ol>
+        <h3>Tipos de variables en un experimento</h3>
+        <ul>
+          <li><strong>Variable independiente:</strong> la que el científico controla o cambia (causa).</li>
+          <li><strong>Variable dependiente:</strong> la que se mide como resultado (efecto).</li>
+          <li><strong>Variables controladas:</strong> las que se mantienen constantes para no afectar el resultado.</li>
+        </ul>
+        <h3>Ejemplo histórico</h3>
+        <p>Galileo Galilei demostró experimentalmente que dos objetos de diferente masa caen a la misma velocidad en ausencia de resistencia del aire, refutando la idea de Aristóteles de que los objetos más pesados caen más rápido. Este experimento es uno de los primeros ejemplos del método científico moderno.</p>
+      </div>
+    </div>
+
+    <!-- Notación Científica -->
+    <div id="t-notacion" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-notacion">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-notacion">
+        <h3>¿Qué es la Notación Científica?</h3>
+        <p>La <strong>notación científica</strong> es una forma de expresar números muy grandes o muy pequeños de manera compacta. En física los valores pueden ser enormes (masa del Sol: 1,989 × 10³⁰ kg) o diminutos (masa del electrón: 9,11 × 10⁻³¹ kg).</p>
+        <div class="key-box">💡 Forma general: <strong>a × 10<sup>n</sup></strong>, donde <strong>1 ≤ a &lt; 10</strong> y <em>n</em> es un entero (positivo o negativo).</div>
+        <h3>¿Cómo convertir a notación científica?</h3>
+        <ol>
+          <li>Ubica la coma decimal después del primer dígito significativo distinto de cero.</li>
+          <li>Cuenta cuántos lugares moviste la coma → ese es el exponente <em>n</em>.</li>
+          <li>Si moviste la coma hacia la <strong>izquierda</strong> → <em>n</em> positivo. Si hacia la <strong>derecha</strong> → <em>n</em> negativo.</li>
+        </ol>
+        <p><strong>Ejemplos:</strong></p>
+        <ul>
+          <li>3 400 000 = <span class="f-eq">3,4 × 10⁶</span> (coma 6 posiciones a la izquierda)</li>
+          <li>0,000075 = <span class="f-eq">7,5 × 10⁻⁵</span> (coma 5 posiciones a la derecha)</li>
+          <li>186 000 = <span class="f-eq">1,86 × 10⁵</span></li>
+        </ul>
+        <h3>Prefijos del Sistema Internacional (SI)</h3>
+        <table class="prefix-table">
+          <thead><tr><th>Prefijo</th><th>Símbolo</th><th>Potencia</th><th>Equivale a</th></tr></thead>
+          <tbody>
+            <tr><td>Giga</td><td class="prefix-sym">G</td><td>10⁹</td><td>1 000 000 000</td></tr>
+            <tr><td>Mega</td><td class="prefix-sym">M</td><td>10⁶</td><td>1 000 000</td></tr>
+            <tr><td>kilo</td><td class="prefix-sym">k</td><td>10³</td><td>1 000</td></tr>
+            <tr><td>hecto</td><td class="prefix-sym">h</td><td>10²</td><td>100</td></tr>
+            <tr><td>deca</td><td class="prefix-sym">da</td><td>10¹</td><td>10</td></tr>
+            <tr><td><em>(base)</em></td><td>—</td><td>10⁰</td><td>1</td></tr>
+            <tr><td>deci</td><td class="prefix-sym">d</td><td>10⁻¹</td><td>0,1</td></tr>
+            <tr><td>centi</td><td class="prefix-sym">c</td><td>10⁻²</td><td>0,01</td></tr>
+            <tr><td>mili</td><td class="prefix-sym">m</td><td>10⁻³</td><td>0,001</td></tr>
+            <tr><td>micro</td><td class="prefix-sym">μ</td><td>10⁻⁶</td><td>0,000 001</td></tr>
+            <tr><td>nano</td><td class="prefix-sym">n</td><td>10⁻⁹</td><td>0,000 000 001</td></tr>
+            <tr><td>pico</td><td class="prefix-sym">p</td><td>10⁻¹²</td><td>0,000 000 000 001</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Errores de Medición -->
+    <div id="t-errores" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-errores">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-errores">
+        <h3>¿Qué es una medición?</h3>
+        <p>Medir es comparar una magnitud con un patrón de referencia llamado <strong>unidad</strong>. Toda medición tiene asociada una <strong>incertidumbre</strong> o error, ya que ningún instrumento es perfectamente preciso.</p>
+        <div class="key-box">💡 Toda medición se expresa con su incertidumbre: <strong>d = (15,3 ± 0,1) cm</strong>, donde 0,1 cm es el error del instrumento.</div>
+        <h3>Tipos de errores</h3>
+        <ul>
+          <li><strong>Error sistemático:</strong> siempre ocurre en la misma dirección. Lo causa el instrumento o el método. <em>Ejemplo: una balanza descalibrada que siempre marca 2 g de más.</em></li>
+          <li><strong>Error aleatorio:</strong> varía al azar en cada medición. Se reduce realizando varias mediciones y promediando.</li>
+          <li><strong>Error de paralaje:</strong> se produce al leer el instrumento desde un ángulo incorrecto.</li>
+        </ul>
+        <h3>Error absoluto y error relativo</h3>
+        <ul>
+          <li><strong>Error absoluto (Eₐ):</strong> <span class="f-eq">Eₐ = |Vₘ − Vᵣ|</span><br>Diferencia entre el valor medido (Vₘ) y el valor real (Vᵣ).</li>
+          <li><strong>Error relativo (Eᵣ):</strong> <span class="f-eq">Eᵣ = (Eₐ / Vᵣ) × 100 %</span><br>Qué tan grande es el error respecto al valor real. Se expresa en porcentaje.</li>
+        </ul>
+        <h3>Precisión vs. Exactitud</h3>
+        <ul>
+          <li><strong>Exactitud:</strong> qué tan cerca está el valor medido del valor real. Alta exactitud = el resultado se acerca al valor verdadero.</li>
+          <li><strong>Precisión:</strong> qué tan reproducibles son las mediciones. Alta precisión = resultados muy similares entre sí (aunque no necesariamente cercanos al valor real).</li>
+        </ul>
+        <h3>Cifras significativas</h3>
+        <ul>
+          <li>Todos los dígitos distintos de cero son significativos: <strong>523</strong> tiene 3 c.s.</li>
+          <li>Ceros entre dígitos significativos cuentan: <strong>5003</strong> tiene 4 c.s.</li>
+          <li>Ceros a la derecha de la coma decimal cuentan: <strong>2,50</strong> tiene 3 c.s.</li>
+          <li>Ceros solo a la izquierda no cuentan: <strong>0,0045</strong> tiene 2 c.s.</li>
+        </ul>
+        <h3>Ejemplo</h3>
+        <p>Un estudiante mide el largo del tablero del salón: Vₘ = 3,72 m. El valor real es Vᵣ = 3,80 m. Entonces:
+          <br><strong>Eₐ = |3,72 − 3,80| = 0,08 m</strong>
+          <br><strong>Eᵣ = (0,08 / 3,80) × 100 % ≈ 2,1 %</strong>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══ CONVERTIDOR DE NOTACIÓN CIENTÍFICA ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-conv">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">⚡ Herramienta interactiva</div>
+    <h2 class="v2-sec-title">Convertidor de Notación Científica</h2>
+    <p class="v2-sec-desc">Ingresa cualquier número y la calculadora lo convierte a notación científica e identifica el prefijo SI más cercano.</p>
+  </div>
+  <div class="v2-card">
+    <div class="conv-box">
+      <div class="conv-input-row">
+        <input id="convInput" class="conv-input" type="number" step="any" placeholder="Ej: 0.000045  o  3400000">
+        <button class="conv-btn" onclick="convertirNS()">Convertir →</button>
+      </div>
+      <div class="conv-result" id="convResult">
+        <div class="conv-sci" id="convSci"></div>
+        <div class="conv-prefix" id="convPrefix"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══ VIDEO ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-video">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🎬 Video</div>
+    <h2 class="v2-sec-title">Aprende con video</h2>
+    <p class="v2-sec-desc">Refuerza los conceptos con este video explicativo. Haz clic para reproducir.</p>
+  </div>
+  <div class="v2-card">
+    <div class="yt-player-wrap" id="ytPlayer">
+      <div class="yt-thumb-card" id="ytThumb" onclick="playVideo()">
+        <img class="yt-thumb-img" id="ytThumbImg" src="" alt="Video: Introducción a la Física">
+        <div class="yt-thumb-overlay">
+          <button class="yt-big-play" aria-label="Reproducir">▶</button>
+        </div>
+        <div class="yt-info-bar">
+          <span class="yt-title-bar">Introducción a la Física — Conceptos fundamentales</span>
+          <a class="yt-ext-btn" id="ytExtLink" href="#" target="_blank" rel="noopener">Ver en YouTube ↗</a>
+        </div>
+      </div>
+      <div class="yt-embed-frame" id="ytEmbed"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══ QUIZ ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-quiz">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🎯 Quiz ICFES</div>
+    <h2 class="v2-sec-title">Practica y evalúate</h2>
+    <p class="v2-sec-desc">5 preguntas estilo ICFES. Lee con calma y selecciona la mejor respuesta.</p>
+  </div>
+  <div class="v2-card" id="quizWrap">
+    <div class="quiz-progress-bar"><div class="quiz-prog-fill" id="quizProgFill" style="width:0%"></div></div>
+    <div class="quiz-counter" id="quizCounter">Pregunta 1 de 5</div>
+    <div id="quizQWrap"></div>
+    <div style="margin-top:1.2rem;display:flex;justify-content:flex-end;">
+      <button class="v2-btn v2-btn-primary" id="quizNextBtn" style="display:none" onclick="quizNext()">Siguiente →</button>
+    </div>
+    <div id="quizResult" style="display:none;text-align:center;padding:2rem 1rem;">
+      <div class="score-ring" id="scoreRing" style="width:90px;height:90px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:1rem;box-shadow:0 0 30px rgba(67,97,238,.5)"></div>
+      <div style="font-size:1.3rem;font-weight:800;margin-bottom:.4rem" id="scoreMsg"></div>
+      <div style="color:var(--text-muted);font-size:.9rem;margin-bottom:1.5rem" id="scoreSub"></div>
+      <button class="v2-btn v2-btn-primary" onclick="quizReset()">🔄 Intentar de nuevo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="v2-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-avatar">LC</div>
+      <div>
+        <div class="footer-name">Docente Luis Miguel Cabrera</div>
+        <div class="footer-role">I.E. Paulo VI · Huila, Colombia · Física &amp; Matemáticas</div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">⚗️ VirtualLab 2026</span>
+      <span class="footer-tag">lumcab</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Actualiza este ID con el video de YouTube que prefieras ──
+const YT_ID = 'KTqZpQzRRFw';
+
+// ── Barra de progreso ──
+const bar = document.getElementById('page-progress');
+window.addEventListener('scroll', () => {
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  bar.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
+}, { passive: true });
+
+// ── Tabs de teoría ──
+document.querySelectorAll('.v2-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const id = btn.dataset.tab;
+    document.querySelectorAll('.v2-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.v2-tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(id).classList.add('active');
+  });
+});
+
+// ── Copiar teoría ──
+document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const el = document.getElementById(btn.dataset.target);
+    navigator.clipboard.writeText(el ? el.innerText : '').then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '✅ ¡Copiado!';
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  });
+});
+
+// ── Convertidor de Notación Científica ──
+function convertirNS() {
+  const raw = parseFloat(document.getElementById('convInput').value);
+  const result  = document.getElementById('convResult');
+  const sciEl   = document.getElementById('convSci');
+  const prefEl  = document.getElementById('convPrefix');
+
+  if (isNaN(raw) || raw === 0) {
+    sciEl.textContent = 'Ingresa un número válido distinto de cero.';
+    prefEl.textContent = '';
+    result.classList.add('show');
+    return;
+  }
+  const exp  = Math.floor(Math.log10(Math.abs(raw)));
+  const mant = parseFloat((raw / Math.pow(10, exp)).toFixed(5));
+
+  const prefixes = [
+    { name:'Giga (G)', exp:9 }, { name:'Mega (M)', exp:6 },
+    { name:'kilo (k)', exp:3 }, { name:'hecto (h)', exp:2 },
+    { name:'deca (da)', exp:1 }, { name:'base', exp:0 },
+    { name:'deci (d)', exp:-1 }, { name:'centi (c)', exp:-2 },
+    { name:'mili (m)', exp:-3 }, { name:'micro (μ)', exp:-6 },
+    { name:'nano (n)', exp:-9 }, { name:'pico (p)', exp:-12 },
+  ];
+  const match = prefixes.reduce((a, b) =>
+    Math.abs(b.exp - exp) < Math.abs(a.exp - exp) ? b : a
+  );
+
+  const sign = exp >= 0 ? '+' : '';
+  sciEl.innerHTML  = `${mant} &times; 10<sup>${exp}</sup>`;
+  prefEl.textContent = `Prefijo SI más cercano: ${match.name} (10${sign}${match.exp})`;
+  result.classList.add('show');
+}
+document.getElementById('convInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') convertirNS();
+});
+
+// ── Video YouTube ──
+document.getElementById('ytThumbImg').src = `https://img.youtube.com/vi/${YT_ID}/hqdefault.jpg`;
+document.getElementById('ytExtLink').href = `https://www.youtube.com/watch?v=${YT_ID}`;
+function playVideo() {
+  document.getElementById('ytThumb').style.display = 'none';
+  const frame = document.getElementById('ytEmbed');
+  frame.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${YT_ID}?autoplay=1&rel=0&modestbranding=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  frame.classList.add('visible');
+}
+
+// ── Partículas del hero ──
+(function() {
+  const wrap = document.getElementById('heroParticles');
+  if (!wrap) return;
+  const cols = ['#4361ee','#4cc9f0','#3a0ca3'];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    const sz = 3 + Math.random() * 6;
+    p.style.cssText = `position:absolute;border-radius:50%;width:${sz}px;height:${sz}px;background:${cols[i%3]};left:${Math.random()*100}%;top:${60+Math.random()*35}%;opacity:${.2+Math.random()*.4};animation:particle-rise ${6+Math.random()*8}s ease-in-out infinite;animation-delay:${Math.random()*4}s`;
+    wrap.appendChild(p);
+  }
+})();
+
+// ── Quiz ──
+const QUIZ = [
+  {
+    q: '¿Cuál de las siguientes opciones describe mejor el objeto de estudio de la física?',
+    opts: ['El comportamiento de los seres vivos','La composición química de la materia','La materia, la energía y sus interacciones fundamentales','El análisis de la sociedad y la cultura'],
+    ans: 2,
+    exp: 'La <strong>física</strong> estudia la materia, la energía, el espacio y el tiempo, y las interacciones entre ellos. La biología estudia los seres vivos y la química, la composición de la materia.'
+  },
+  {
+    q: '¿Cuál es el primer paso del método científico?',
+    opts: ['Formulación de la hipótesis','Análisis de resultados','Experimentación','Observación del fenómeno'],
+    ans: 3,
+    exp: 'El método científico comienza con la <strong>observación</strong>. Sin observar un fenómeno no es posible formular una pregunta ni una hipótesis.'
+  },
+  {
+    q: '¿Cómo se expresa correctamente 0,000045 en notación científica?',
+    opts: ['45 × 10⁻⁶','4,5 × 10⁵','0,45 × 10⁻⁴','4,5 × 10⁻⁵'],
+    ans: 3,
+    exp: 'Se mueve la coma 5 lugares a la derecha: <strong>4,5 × 10⁻⁵</strong>. La mantisa debe cumplir 1 ≤ a < 10.'
+  },
+  {
+    q: 'Un estudiante mide el largo de su salón y obtiene 8,72 m. El valor real es 8,80 m. ¿Cuál es el error relativo?',
+    opts: ['0,8 %','2,1 %','0,91 %','4,3 %'],
+    ans: 2,
+    exp: 'Eₐ = |8,72 − 8,80| = 0,08 m. Eᵣ = (0,08 / 8,80) × 100 % ≈ <strong>0,91 %</strong>. La opción más cercana es la c.'
+  },
+  {
+    q: 'Un instrumento siempre mide 2 cm menos del valor real sin importar qué objeto se mida. Esto es un ejemplo de:',
+    opts: ['Error aleatorio','Error de paralaje','Error sistemático','Error relativo'],
+    ans: 2,
+    exp: 'Cuando el error siempre ocurre en la misma dirección y magnitud, se llama <strong>error sistemático</strong>. El error aleatorio varía al azar en cada medición.'
+  }
+];
+
+let qIdx = 0, score = 0, answered = false;
+
+function renderQ() {
+  const q = QUIZ[qIdx];
+  const letters = ['A','B','C','D'];
+  document.getElementById('quizCounter').textContent = `Pregunta ${qIdx+1} de ${QUIZ.length}`;
+  document.getElementById('quizProgFill').style.width = `${(qIdx/QUIZ.length)*100}%`;
+  document.getElementById('quizNextBtn').style.display = 'none';
+  answered = false;
+  document.getElementById('quizQWrap').innerHTML = `
+    <p class="quiz-question" style="font-size:1.05rem;font-weight:700;margin-bottom:1.1rem;line-height:1.5">${q.q}</p>
+    <div class="quiz-opts">
+      ${q.opts.map((o,i)=>`<button class="quiz-opt" data-idx="${i}" onclick="pickOpt(this,${i})"><span class="opt-ltr">${letters[i]}</span><span>${o}</span></button>`).join('')}
+    </div>
+    <div id="quizExp" style="display:none;margin-top:1rem;padding:.9rem 1.1rem;border-radius:var(--r-sm);background:rgba(67,97,238,.1);border:1px solid rgba(67,97,238,.25);font-size:.88rem;line-height:1.55;color:var(--text-muted)"></div>
+  `;
+}
+
+function pickOpt(btn, idx) {
+  if (answered) return;
+  answered = true;
+  const ans = QUIZ[qIdx].ans;
+  document.querySelectorAll('.quiz-opt').forEach(b => {
+    b.classList.add('answered');
+    const i = parseInt(b.dataset.idx);
+    if (i === ans) b.classList.add('correct');
+    else if (i === idx && idx !== ans) b.classList.add('wrong');
+  });
+  if (idx === ans) score++;
+  const expEl = document.getElementById('quizExp');
+  expEl.innerHTML = `💡 ${QUIZ[qIdx].exp}`;
+  expEl.style.display = 'block';
+  document.getElementById('quizNextBtn').style.display = 'inline-flex';
+}
+
+function quizNext() {
+  qIdx++;
+  if (qIdx < QUIZ.length) {
+    renderQ();
+  } else {
+    document.getElementById('quizQWrap').innerHTML = '';
+    document.getElementById('quizCounter').textContent = '';
+    document.getElementById('quizProgFill').style.width = '100%';
+    document.getElementById('quizNextBtn').style.display = 'none';
+    const pct = Math.round((score/QUIZ.length)*100);
+    const level = score <= 1 ? 0 : score === 2 ? 1 : score <= 4 ? 2 : 3;
+    const msgs = [
+      ['😔','Sigue practicando','Repasa la teoría e inténtalo de nuevo.'],
+      ['🙂','¡Buen esfuerzo!','Repasa los temas donde fallaste.'],
+      ['😊','¡Muy bien!','Buen dominio del tema. Sigue así.'],
+      ['🏆','¡Excelente!','Dominas perfectamente esta sección.']
+    ];
+    document.getElementById('scoreRing').textContent = `${score}/${QUIZ.length}`;
+    document.getElementById('scoreMsg').textContent = `${msgs[level][0]} ${msgs[level][1]}`;
+    document.getElementById('scoreSub').textContent = `${pct}% correcto — ${msgs[level][2]}`;
+    document.getElementById('quizResult').style.display = 'block';
+  }
+}
+
+function quizReset() {
+  qIdx = 0; score = 0;
+  document.getElementById('quizResult').style.display = 'none';
+  renderQ();
+}
+
+// ── Animaciones scroll ──
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.anim-scroll').forEach(el => io.observe(el));
+
+renderQ();
+</script>
+</body>
+</html>
