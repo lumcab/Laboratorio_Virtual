@@ -63,14 +63,8 @@
     .yt-embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
     .yt-embed-frame.visible { display: block; }
 
-    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); background: #0a0a0a; }
-    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: none; }
-    .phet-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(67,97,238,.08); cursor: pointer; transition: background .3s; z-index: 2; text-align: center; padding: 1rem; }
-    .phet-placeholder:hover { background: rgba(67,97,238,.15); }
-    .phet-icon { font-size: 3.5rem; margin-bottom: 1rem; transition: transform .3s; filter: drop-shadow(0 4px 12px rgba(76,201,240,.4)); }
-    .phet-placeholder:hover .phet-icon { transform: scale(1.1) translateY(-5px); }
-    .phet-btn { background: var(--accent-grad); border: none; padding: .6rem 1.5rem; border-radius: 50px; color: #fff; font-weight: 800; font-size: .95rem; cursor: pointer; box-shadow: 0 4px 15px rgba(67,97,238,.4); pointer-events: none; }
-    .phet-warning { margin-top: .8rem; font-size: .75rem; color: var(--text-muted); max-width: 300px; line-height: 1.4; }
+    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
     .phet-mobile-note { display: none; background: rgba(255,209,102,.08); border: 1px solid rgba(255,209,102,.25); border-radius: var(--r-sm); padding: .7rem 1rem; margin-top: .8rem; font-size: .82rem; color: #ffd166; }
 
     .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
@@ -324,11 +318,10 @@
   </div>
 
   <div class="yt-player-wrap" id="ytPlayerWrap">
-    <!-- Se deja un ID genérico por ahora -->
     <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('t0dOLZXkpV4')">
       <img class="yt-thumb-img"
-           src="https://img.youtube.com/vi/t0dOLZXkpV4/maxresdefault.jpg"
-           onerror="this.src='https://img.youtube.com/vi/t0dOLZXkpV4/hqdefault.jpg'"
+           src="https://img.youtube.com/vi/t0dOLZXkpV4/hqdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/t0dOLZXkpV4/mqdefault.jpg'"
            alt="Ecuación de Bernoulli — Física 10°">
       <div class="yt-thumb-overlay">
         <div class="yt-big-play">&#9654;</div>
@@ -355,22 +348,22 @@
 <section class="v2-section-sm v2-wrap anim-scroll" id="sec-phet">
   <div class="mb-md">
     <div class="v2-sec-label text-accent">🧪 Laboratorio PhET</div>
-    <h2 class="v2-sec-title">Presión del Fluido</h2>
-    <p class="v2-sec-desc">Usa los medidores de presión para comprobar Bernoulli en una tubería.</p>
+    <h2 class="v2-sec-title">Presión y Profundidad</h2>
+    <p class="v2-sec-desc">Explora la componente hidrostática de Bernoulli: cómo la presión varía con la profundidad y la densidad del fluido.</p>
   </div>
-  <div class="phet-wrap" id="phetWrap3">
-    <div class="phet-placeholder" id="phetThumb3" onclick="phetLoadEmbed('phetThumb3', 'phetFrame3')">
-      <div class="phet-icon">🧪</div>
-      <button class="phet-btn">Cargar Simulador PhET</button>
-      <div class="phet-warning">Este simulador clásico requiere descargar un entorno de ejecución (~30MB). Puede demorar unos segundos.</div>
-    </div>
-    <iframe class="phet-iframe" id="phetFrame3"
-      data-src="https://phet.colorado.edu/sims/cheerpj/fluid-pressure-and-flow/latest/fluid-pressure-and-flow.html?simulation=fluid-pressure-and-flow&locale=es"
-      allowfullscreen>
+  <div class="phet-wrap">
+    <iframe
+      src="https://phet.colorado.edu/sims/html/under-pressure/latest/under-pressure_es.html"
+      title="Bajo Presión - PhET"
+      allowfullscreen
+      loading="lazy">
     </iframe>
   </div>
   <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
-    💡 <strong>Actividad sugerida:</strong> Abre la pestaña "Flujo". Activa los "Medidores de presión". Pon un medidor en la parte ancha y otro en el cuello estrecho. ¡Comprobarás que la presión baja donde el agua va más rápido!
+    💡 <strong>Actividad sugerida:</strong> Activa múltiples medidores de presión y colócalos a diferentes alturas. Verifica que la presión crece con la profundidad (ρgh): ¡eso es exactamente la componente hidrostática de la ecuación de Bernoulli!
+  </p>
+  <p class="text-muted" style="margin-top:.5rem; font-size:.82rem;">
+    🔗 ¿Quieres ver el efecto Venturi en una tubería? <a href="https://phet.colorado.edu/sims/cheerpj/fluid-pressure-and-flow/latest/fluid-pressure-and-flow.html?simulation=fluid-pressure-and-flow&locale=es" target="_blank" rel="noopener" style="color:var(--accent-c);">Abrir simulación de Flujo de Fluidos en PhET →</a> <span style="opacity:.6;">(requiere ~30 MB)</span>
   </p>
   <p class="phet-mobile-note">📱 Esta simulación funciona mejor en pantallas grandes o en un computador.</p>
 </section>
@@ -502,17 +495,6 @@ function ytLoadEmbed(id) {
   thumb.style.display = 'none'; frame.classList.add('visible');
   iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&color=white';
 }
-
-/* PHET LAZY LOAD */
-window.phetLoadEmbed = function(thumbId, frameId) {
-  const thumb = document.getElementById(thumbId);
-  const frame = document.getElementById(frameId);
-  if(thumb && frame) {
-    thumb.style.display = 'none';
-    frame.style.display = 'block';
-    frame.src = frame.getAttribute('data-src');
-  }
-};
 
 /* PROGRESS BAR */
 (function () {
