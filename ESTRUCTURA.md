@@ -82,8 +82,8 @@
 | Archivo | Tema | Estado |
 |---|---|---|
 | `fisica10/periodo4/index.html` | Índice período | ✅ Completo |
-| `fisica10/periodo4/1_temperatura_calor.html` | Temperatura y calor | ⬜ Pendiente |
-| `fisica10/periodo4/2_termodinamica.html` | Termodinámica | ⬜ Pendiente |
+| `fisica10/periodo4/1_temperatura_calor.html` | Temperatura y calor | ✅ Completo |
+| `fisica10/periodo4/2_termodinamica.html` | Termodinámica | ✅ Completo |
 
 ---
 
@@ -91,8 +91,8 @@
 | Archivo | Tema | Estado |
 |---|---|---|
 | `fisica11/periodo1/index.html` | Índice período | ✅ Completo |
-| `fisica11/periodo1/1_mas.html` | Movimiento armónico simple | ⬜ Pendiente |
-| `fisica11/periodo1/2_ondas_sonido.html` | Ondas y sonido | ⬜ Pendiente |
+| `fisica11/periodo1/1_mas.html` | Movimiento armónico simple | ✅ Completo |
+| `fisica11/periodo1/2_ondas_sonido.html` | Ondas y sonido | ✅ Completo |
 | `fisica11/periodo1/3_sismica.html` | Sísmica y ondas sísmicas | ⬜ Pendiente |
 
 ### Física 11° — Período 2 · Óptica
@@ -187,11 +187,11 @@
 | Materia | Completadas | Total temas | Progreso |
 |---|---|---|---|
 | Infraestructura | 7 | 7 | 100% |
-| Física 10° | 9 | 11 | 81% |
-| Física 11° | 0 | 9 | 0% |
+| Física 10° | 11 | 11 | 100% |
+| Física 11° | 2 | 9 | 22% |
 | Matemáticas 6° | 0 | 12 | 0% |
 | Geometría 6° | 0 | 8 | 0% |
-| **Total** | **16** | **47** | **34%** |
+| **Total** | **19** | **47** | **40%** |
 
 ---
 
@@ -208,9 +208,9 @@
 | Física 10° | Hidrostática | `f7FL-1vsw3M` | ✅ Verificado |
 | Física 10° | Hidrodinámica | `hHEd6rfc6xg` | ✅ Verificado |
 | Física 10° | Ecuación de Bernoulli | `t0dOLZXkpV4` | ✅ Verificado |
-| Física 10° | Temperatura y calor | — | ⬜ Pendiente |
+| Física 10° | Temperatura y calor | `RDOnnSdB7n8` | ✅ Verificado |
 
-> Antes de crear cada página, verificar en YouTube que el video permita embed. Si falla, usar el patrón thumbnail → clic → YouTube.
+> **Nota de desarrollo:** Al crear nuevas páginas, dejar el bloque del video de YouTube configurado con un identificador de marcador de posición (por ejemplo, `VIDEO_ID_AQUI`) en los enlaces e imágenes, para que el usuario pueda proporcionar su propio video posteriormente.
 
 ---
 

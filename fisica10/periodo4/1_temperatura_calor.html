@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temperatura y Calor | Física 10° · VirtualLab</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/icons/favicon.ico">
+  <link rel="stylesheet" href="../../css/tema-v2.css">
+  <script src="../../js/theme.js"></script>
+  <style>
+    /* ── Colores de materia: Física 10° ── */
+    :root {
+      --accent-a: #4361ee;
+      --accent-b: #3a0ca3;
+      --accent-c: #4cc9f0;
+      --accent-grad: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+      --hero-c1: #4cc9f0;
+      --hero-c2: #4361ee;
+    }
+    .v2-badge      { background: rgba(67,97,238,.12); border-color: rgba(67,97,238,.35); color: #4cc9f0; }
+    .badge-dot     { background: #4cc9f0; }
+    .o-core        { background: var(--accent-grad); box-shadow: 0 0 40px rgba(67,97,238,.6); }
+    .o-ring-1      { width: 110px; height: 110px; border-color: rgba(67,97,238,.45); animation-duration: 4s; }
+    .o-ring-1::after { background: #4361ee; box-shadow: 0 0 14px #4361ee; }
+    .o-ring-2      { width: 190px; height: 190px; border-color: rgba(76,201,240,.35); animation-duration: 7s; animation-direction: reverse; }
+    .o-ring-2::after { background: #4cc9f0; box-shadow: 0 0 14px #4cc9f0; }
+    .o-ring-3      { width: 290px; height: 290px; border-color: rgba(58,12,163,.3); animation-duration: 13s; }
+    .o-ring-3::after { background: #3a0ca3; box-shadow: 0 0 14px #3a0ca3; width: 8px; height: 8px; top:-4px; left: calc(50% - 4px); }
+    .v2-tab.active { background: var(--accent-a); }
+    .f-eq          { color: #4cc9f0; }
+    .f-sym         { color: #ffd166; }
+    .quiz-prog-fill { background: var(--accent-grad); }
+    .score-ring    { background: var(--accent-grad); }
+
+    /* ── Canvas ── */
+    #simCanvas { border-radius: 10px; background: rgba(0,0,0,.4); }
+    #graphCanvas { border-radius: 10px; background: rgba(0,0,0,.3); }
+
+    /* ── QUIZ: opciones claras y táctiles ── */
+    .quiz-opt {
+      color: #ffffff !important;
+      font-size: 1rem;
+      min-height: 54px;
+      background: rgba(255,255,255,.05) !important;
+      border-color: rgba(255,255,255,.12) !important;
+    }
+    .quiz-opt:hover:not(.answered) {
+      background: rgba(67,97,238,.18) !important;
+      border-color: #4361ee !important;
+    }
+    .opt-ltr {
+      background: linear-gradient(135deg,#4361ee,#3a0ca3) !important;
+      border: none !important;
+      color: #fff !important;
+      font-weight: 900 !important;
+      width: 36px !important; height: 36px !important;
+      font-size: .88rem !important;
+      box-shadow: 0 0 10px rgba(67,97,238,.4);
+    }
+    .quiz-opt.correct            { background: rgba(6,214,160,.15) !important; border-color: #06d6a0 !important; }
+    .quiz-opt.correct .opt-ltr  { background: linear-gradient(135deg,#06d6a0,#048a68) !important; }
+    .quiz-opt.wrong              { background: rgba(230,57,70,.15) !important; border-color: #e63946 !important; }
+    .quiz-opt.wrong   .opt-ltr  { background: linear-gradient(135deg,#e63946,#9b2226) !important; }
+
+    /* ── VIDEO: thumbnail click-to-play ── */
+    .yt-player-wrap { border-radius: var(--r-md); overflow: hidden; }
+    .yt-thumb-card {
+      position: relative; aspect-ratio: 16/9; cursor: pointer;
+      background: #000; border-radius: var(--r-md); overflow: hidden;
+      border: 1px solid rgba(255,255,255,.1);
+    }
+    .yt-thumb-img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .4s ease, filter .4s ease;
+      filter: brightness(.75);
+    }
+    .yt-thumb-card:hover .yt-thumb-img { transform: scale(1.04); filter: brightness(.6); }
+    .yt-thumb-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1rem;
+    }
+    .yt-big-play {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(255,0,0,.9); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: #fff;
+      box-shadow: 0 4px 30px rgba(0,0,0,.5);
+      transition: transform .25s ease, background .25s ease;
+    }
+    .yt-thumb-card:hover .yt-big-play { transform: scale(1.12); background: #ff0000; }
+    .yt-info-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.85), transparent);
+      padding: 1.5rem 1rem .8rem;
+      display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+    }
+    .yt-title-bar { font-size: .88rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .yt-ext-btn {
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+      color: #fff; padding: .35rem .8rem; border-radius: 6px;
+      font-size: .75rem; font-weight: 600; text-decoration: none;
+      white-space: nowrap; flex-shrink: 0; backdrop-filter: blur(6px);
+      transition: background .2s;
+    }
+    .yt-ext-btn:hover { background: rgba(255,255,255,.3); }
+    /* iframe del video */
+    .yt-embed-frame {
+      display: none; position: relative; aspect-ratio: 16/9;
+      border-radius: var(--r-md); overflow: hidden;
+      border: 1px solid rgba(255,255,255,.1);
+    }
+    .yt-embed-frame iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+    }
+    .yt-embed-frame.visible { display: block; }
+
+    /* ── PhET embed ── */
+    .phet-wrap {
+      position: relative; width: 100%; padding-bottom: 62%;
+      border-radius: var(--r-md); overflow: hidden;
+      border: 1px solid var(--border); box-shadow: var(--shadow-md);
+    }
+    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .phet-mobile-note {
+      display: none;
+      background: rgba(255,209,102,.08); border: 1px solid rgba(255,209,102,.25);
+      border-radius: var(--r-sm); padding: .7rem 1rem; margin-top: .8rem;
+      font-size: .82rem; color: #ffd166;
+    }
+
+    /* ── Pie de página ── */
+    .v2-footer {
+      background: rgba(0,0,0,.4);
+      border-top: 1px solid var(--border);
+      padding: 1.8rem 0 2.2rem; margin-top: 2rem;
+    }
+    .footer-inner {
+      max-width: 1120px; margin: 0 auto; padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-brand { display: flex; align-items: center; gap: .9rem; }
+    .footer-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent-grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.05rem; font-weight: 900; color: #fff;
+      box-shadow: 0 0 18px rgba(67,97,238,.5); flex-shrink: 0;
+    }
+    .footer-name  { font-weight: 800; font-size: .96rem; color: var(--text); }
+    .footer-role  { font-size: .75rem; color: var(--text-muted); margin-top: .1rem; }
+    .footer-right { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .footer-badge {
+      display: inline-flex; align-items: center; gap: .35rem;
+      padding: .28rem .75rem; border-radius: 100px;
+      background: rgba(67,97,238,.12); border: 1px solid rgba(67,97,238,.28);
+      font-size: .73rem; font-weight: 700; color: #4cc9f0;
+    }
+    .footer-tag {
+      font-size: .73rem; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text-dim);
+    }
+
+    /* ── Mobile extra ── */
+    @media(max-width:600px) {
+      .phet-mobile-note { display: block; }
+      .phet-wrap { padding-bottom: 80%; }
+      .yt-big-play { width: 60px; height: 60px; font-size: 1.3rem; }
+      .yt-title-bar { font-size: .8rem; }
+      .footer-role { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Barra de progreso de lectura -->
+<div id="page-progress"></div>
+
+<!-- ═══════════════════════════════════
+     NAVBAR
+══════════════════════════════════════ -->
+<nav class="v2-nav">
+  <div class="inner">
+    <a class="nav-logo" href="../../index.html"><svg class="logo-atom" viewBox="0 0 40 40" width="26" height="26" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="3.2" fill="currentColor"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(120 20 20)"/></svg><span class="logo-text">VirtualLab</span></a>
+    <div class="nav-crumbs">
+      <a href="../../index.html">Inicio</a>
+      <span class="sep">›</span>
+      <a href="../index.html">Física 10°</a>
+      <span class="sep">›</span>
+      <a href="index.html">Período 4</a>
+      <span class="sep">›</span>
+      <span class="current">Temperatura y Calor</span>
+    </div>
+    <div class="nav-right">
+      <a class="v2-btn v2-btn-ghost" href="../periodo3/3_bernoulli.html">← Bernoulli</a>
+      <a class="v2-btn v2-btn-primary" href="2_termodinamica.html">Termodinámica →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section class="v2-hero">
+  <div class="hero-bg-glow"></div>
+
+  <!-- Partículas -->
+  <div class="hero-particles-layer" id="heroParticles"></div>
+
+  <div class="v2-wrap">
+    <div class="hero-content-wrap">
+      <div class="v2-badge">
+        <span class="badge-dot"></span>
+        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 10°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 4</a> &nbsp;·&nbsp; Tema 1
+      </div>
+      <h1>Temperatura y Calor</h1>
+      <p class="hero-sub">
+        Descubre cómo la agitación molecular define la temperatura y cómo el calor es la energía térmica en tránsito entre dos cuerpos.
+      </p>
+      <div class="hero-tags">
+        <span class="h-tag">🌡️ Temperatura</span>
+        <span class="h-tag">🔥 Calor</span>
+        <span class="h-tag">⚖️ Equilibrio térmico</span>
+        <span class="h-tag">🧊 Escalas: Celsius, Kelvin</span>
+        <span class="h-tag">⚡ Simulador interactivo</span>
+      </div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-mouse"></div>
+        <span>Desliza para explorar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decoración orbital -->
+  <div class="hero-visual-wrap">
+    <div class="orbital">
+      <div class="o-core"></div>
+      <div class="o-ring o-ring-1"></div>
+      <div class="o-ring o-ring-2"></div>
+      <div class="o-ring o-ring-3"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══════════════════════════════════
+     TEORÍA
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-teoria">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📖 Teoría</div>
+    <h2 class="v2-sec-title">Conceptos esenciales</h2>
+    <p class="v2-sec-desc">Haz clic en cada ficha para estudiar el tema. Puedes copiar el texto para tus apuntes.</p>
+  </div>
+
+  <div class="v2-tabs">
+    <button class="v2-tab active" data-tab="t-temperatura">🌡️ Temperatura</button>
+    <button class="v2-tab" data-tab="t-calor">🔥 Calor</button>
+    <button class="v2-tab" data-tab="t-escalas">🧊 Escalas</button>
+    <button class="v2-tab" data-tab="t-equilibrio">⚖️ Equilibrio</button>
+  </div>
+
+  <div class="v2-card">
+    <!-- Panel Temperatura -->
+    <div id="t-temperatura" class="v2-tab-panel active">
+      <button class="copy-teoria-btn" data-target="copy-temp">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-temp">
+        <h3>¿Qué es la Temperatura?</h3>
+        <p>La temperatura es una medida de la <strong>energía cinética promedio</strong> de las partículas (átomos o moléculas) que componen un cuerpo. Es decir, nos indica qué tan rápido se mueven o vibran las moléculas en su interior.</p>
+        <div class="key-box">💡 Idea clave: <strong>A mayor agitación molecular, mayor temperatura.</strong> La temperatura NO depende de la cantidad de masa; un vaso de agua hirviendo y una olla gigante de agua hirviendo tienen la misma temperatura.</div>
+        <h3>Características de la Temperatura</h3>
+        <ul>
+          <li>Es una propiedad <strong>macroscópica</strong> que nos da una idea del estado de agitación térmica microscópico.</li>
+          <li>Se mide con un <strong>termómetro</strong>.</li>
+          <li>No depende de la cantidad de materia. (Propiedad intensiva).</li>
+          <li>La unidad en el Sistema Internacional es el <strong>Kelvin (K)</strong>.</li>
+        </ul>
+        <h3>Ejemplo del contexto colombiano</h3>
+        <p>En Neiva, un día caluroso puede alcanzar los 38°C de temperatura. Esto significa que las moléculas del aire tienen una energía cinética promedio bastante alta, chocando rápidamente contra tu piel, lo cual percibes como "caliente".</p>
+      </div>
+    </div>
+
+    <!-- Panel Calor -->
+    <div id="t-calor" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-calor">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-calor">
+        <h3>¿Qué es el Calor (Q)?</h3>
+        <p>El calor es la <strong>energía térmica en tránsito</strong> que fluye espontáneamente desde un cuerpo de mayor temperatura hacia un cuerpo de menor temperatura.</p>
+        <div class="key-box">💡 Idea clave: <strong>Los cuerpos NO "tienen" calor, tienen energía interna.</strong> El calor solo existe cuando la energía está siendo transferida de un lugar a otro debido a una diferencia de temperatura.</div>
+        <h3>Características del Calor</h3>
+        <ul>
+          <li>Siempre fluye del cuerpo <strong>más caliente al más frío</strong>, nunca al revés de forma espontánea (Segunda Ley de la Termodinámica).</li>
+          <li>Depende de la masa del objeto. (Propiedad extensiva).</li>
+          <li>La unidad en el Sistema Internacional es el <strong>Julio (J)</strong>, aunque frecuentemente se usan las Calorías (cal).</li>
+        </ul>
+        <h3>Ejemplo práctico</h3>
+        <p>Si pones un hielo en tu mano, no es que el frío entre a tu mano. Lo que ocurre es que tu mano (que está a 37°C) <strong>transfiere calor</strong> al hielo (que está a 0°C). Como tu mano pierde energía térmica, el cerebro interpreta esa pérdida de calor como sensación de "frío".</p>
+      </div>
+    </div>
+
+    <!-- Panel Escalas -->
+    <div id="t-escalas" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-escalas">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-escalas">
+        <h3>Escalas Termométricas</h3>
+        <p>Para medir la temperatura utilizamos diferentes escalas. Las más conocidas son:</p>
+        <ul>
+          <li><strong>Escala Celsius (°C):</strong> Es la más utilizada en la vida diaria. Se basa en los puntos de fusión (0°C) y ebullición (100°C) del agua a 1 atmósfera de presión.</li>
+          <li><strong>Escala Kelvin (K):</strong> Es la <strong>escala absoluta</strong> usada en ciencia y en el Sistema Internacional. No tiene grados negativos. Comienza en el Cero Absoluto (0 K), donde teóricamente cesa todo movimiento molecular.</li>
+          <li><strong>Escala Fahrenheit (°F):</strong> Se usa principalmente en Estados Unidos. El agua congela a 32°F y hierve a 212°F.</li>
+        </ul>
+        <div class="key-box">💡 El cero absoluto (0 K) equivale a -273.15 °C. Es la temperatura más baja que puede existir en el universo físico.</div>
+      </div>
+    </div>
+
+    <!-- Panel Equilibrio -->
+    <div id="t-equilibrio" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-eq">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-eq">
+        <h3>Equilibrio Térmico</h3>
+        <p>Cuando dos cuerpos a diferentes temperaturas se ponen en contacto, el cuerpo más caliente cede calor al más frío. Este flujo de calor continúa hasta que <strong>ambos cuerpos alcanzan la misma temperatura</strong>.</p>
+        <div class="key-box">💡 Ley Cero de la Termodinámica: Si el cuerpo A está en equilibrio térmico con el cuerpo B, y el cuerpo B está en equilibrio térmico con el cuerpo C, entonces A y C están en equilibrio térmico entre sí.</div>
+        <h3>Principio de Conservación de la Energía</h3>
+        <p>En un sistema aislado térmicamente (donde no entra ni sale calor del exterior, como en un termo o calorímetro ideal), el calor que cede un cuerpo debe ser igual al calor que absorbe el otro cuerpo.</p>
+        <ul>
+          <li><strong>Q_cedido + Q_absorbido = 0</strong></li>
+          <li>O lo que es lo mismo: <strong>|Q_cedido| = Q_absorbido</strong></li>
+        </ul>
+        <h3>Ejemplo práctico</h3>
+        <p>Si mezclas 1 litro de agua a 80°C con 1 litro de agua a 20°C en un recipiente ideal, el calor fluirá del agua caliente a la fría hasta que ambas alcancen una temperatura intermedia de equilibrio (50°C en este caso, por ser masas iguales de la misma sustancia).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     FÓRMULAS
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-formulas">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📐 Fórmulas</div>
+    <h2 class="v2-sec-title">Ecuaciones de temperatura y calor</h2>
+    <p class="v2-sec-desc">Pasa el cursor sobre cada tarjeta para ver el detalle de variables y unidades.</p>
+  </div>
+
+  <div class="formula-grid">
+
+    <div class="formula-card">
+      <div class="f-name">De Celsius a Kelvin</div>
+      <div class="f-eq">T(K) = T(°C) + 273.15</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">T(K)</span><span class="f-desc">Temperatura absoluta</span><span class="f-unit">K</span></div>
+        <div class="f-var"><span class="f-sym">T(°C)</span><span class="f-desc">Temperatura en Celsius</span><span class="f-unit">°C</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">De Celsius a Fahrenheit</div>
+      <div class="f-eq">T(°F) = 1.8·T(°C) + 32</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">T(°F)</span><span class="f-desc">Temperatura en Fahrenheit</span><span class="f-unit">°F</span></div>
+        <div class="f-var"><span class="f-sym">T(°C)</span><span class="f-desc">Temperatura en Celsius</span><span class="f-unit">°C</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Calor Sensible</div>
+      <div class="f-eq" style="font-size:1.3rem;">Q = m · c · ΔT</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">Q</span><span class="f-desc">Calor absorbido o cedido</span><span class="f-unit">J o cal</span></div>
+        <div class="f-var"><span class="f-sym">m</span><span class="f-desc">Masa del cuerpo</span><span class="f-unit">kg o g</span></div>
+        <div class="f-var"><span class="f-sym">c</span><span class="f-desc">Calor específico</span><span class="f-unit">J/(kg·K) o cal/(g·°C)</span></div>
+        <div class="f-var"><span class="f-sym">ΔT</span><span class="f-desc">Variación de temperatura (Tf - Ti)</span><span class="f-unit">°C o K</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Equilibrio Térmico</div>
+      <div class="f-eq" style="font-size:1.2rem;">m₁c₁(Te - T₁) + m₂c₂(Te - T₂) = 0</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">Te</span><span class="f-desc">Temperatura de equilibrio</span><span class="f-unit">°C</span></div>
+        <div class="f-var"><span class="f-sym">m₁, c₁, T₁</span><span class="f-desc">Datos del cuerpo 1</span><span class="f-unit"></span></div>
+        <div class="f-var"><span class="f-sym">m₂, c₂, T₂</span><span class="f-desc">Datos del cuerpo 2</span><span class="f-unit"></span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SIMULADOR INTERACTIVO
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-sim">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">⚡ Simulador</div>
+    <h2 class="v2-sec-title">Equilibrio Térmico</h2>
+    <p class="v2-sec-desc">Pon en contacto dos bloques idénticos a diferentes temperaturas y observa cómo fluye el calor hasta alcanzar el equilibrio térmico.</p>
+  </div>
+
+  <div class="v2-sim">
+    <!-- Barra superior del sim -->
+    <div class="sim-topbar">
+      <div class="sim-tag"><div class="sim-dot"></div> Termodinámica: Equilibrio Térmico</div>
+      <div class="sim-ctrl-row">
+        <button class="s-btn on" id="btnPlay" title="Reproducir / Pausar">▶</button>
+        <button class="s-btn" id="btnReset" title="Reiniciar">↺</button>
+      </div>
+    </div>
+
+    <!-- Layout: panel izq + área sim -->
+    <div class="sim-layout">
+      <!-- Panel de controles -->
+      <div class="sim-sidebar">
+
+        <div class="s-label" style="color: #e63946;">Temperatura Bloque A (°C)</div>
+        <input type="range" class="s-range" id="slTa" min="0" max="100" value="80" step="1">
+        <div class="s-val" id="valTa" style="color: #e63946;">Ta = 80 °C</div>
+
+        <div class="s-label" style="color: #4cc9f0; margin-top: 1rem;">Temperatura Bloque B (°C)</div>
+        <input type="range" class="s-range" id="slTb" min="0" max="100" value="20" step="1">
+        <div class="s-val" id="valTb" style="color: #4cc9f0;">Tb = 20 °C</div>
+
+        <div class="s-label" style="margin-top: 1rem;">Estado</div>
+        <div class="s-val" id="valEstado">En pausa...</div>
+      </div>
+
+      <!-- Área de simulación -->
+      <div class="sim-main">
+        <!-- Canvas visual del contacto -->
+        <canvas id="simCanvas" height="150" style="width:100%; margin-bottom:.8rem;"></canvas>
+        <!-- Canvas gráficas -->
+        <canvas id="graphCanvas" height="180" style="width:100%;"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     VIDEO EXPLICATIVO
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-video">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🎬 Video explicativo</div>
+    <h2 class="v2-sec-title">Mira, escucha y entiende</h2>
+    <p class="v2-sec-desc">Toca el botón para ver el video directamente aquí sobre la diferencia entre Calor y Temperatura.</p>
+  </div>
+
+  <!-- Miniatura: visible por defecto. Al hacer clic carga el iframe con autoplay -->
+  <div class="yt-player-wrap" id="ytPlayerWrap">
+
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('RDOnnSdB7n8')">
+      <!-- Miniatura de YouTube -->
+      <img class="yt-thumb-img"
+           src="https://img.youtube.com/vi/RDOnnSdB7n8/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/RDOnnSdB7n8/hqdefault.jpg'"
+           alt="Calor vs Temperatura">
+      <div class="yt-thumb-overlay">
+        <div class="yt-big-play">&#9654;</div>
+      </div>
+      <div class="yt-info-bar">
+        <div class="yt-title-bar">Diferencia entre Temperatura y Calor<br>
+          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Explicación y conceptos clave · Toca para reproducir</span>
+        </div>
+        <a class="yt-ext-btn"
+           href="https://www.youtube.com/watch?v=RDOnnSdB7n8"
+           target="_blank" rel="noopener"
+           onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
+      </div>
+    </div>
+
+    <!-- iframe: oculto hasta que el estudiante pulse play -->
+    <div class="yt-embed-frame" id="ytEmbedFrame">
+      <iframe id="ytIframe" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     PhET INTEGRADO
+══════════════════════════════════════ -->
+<section class="v2-section-sm v2-wrap anim-scroll" id="sec-phet">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🧪 Laboratorio PhET</div>
+    <h2 class="v2-sec-title">Formas y Cambios de Energía</h2>
+    <p class="v2-sec-desc">Añade calor a diferentes sustancias y observa cómo cambia su temperatura. ¿Qué sustancia se calienta más rápido: el agua o el aceite?</p>
+  </div>
+  <div class="phet-wrap">
+    <iframe
+      src="https://phet.colorado.edu/sims/html/energy-forms-and-changes/latest/energy-forms-and-changes_es.html"
+      title="Formas y Cambios de Energía - PhET"
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+  <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
+    💡 <strong>Actividad sugerida:</strong> Pon el agua y el hierro al fuego al mismo tiempo. ¿Cuál aumenta su temperatura más rápido? Esto se debe a la diferencia en su calor específico.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════
+     TIPS Y ERRORES COMUNES
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-tips">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">💡 Tips y errores</div>
+    <h2 class="v2-sec-title">Lo que debes saber bien</h2>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:2rem;">
+    <div class="tip-card">
+      <div class="t-icon">🧊</div>
+      <h4>Kelvin nunca es negativo</h4>
+      <p>La temperatura en Kelvin siempre es un número positivo. El 0 K es el Cero Absoluto. Si un cálculo te da Kelvin negativo, ¡revisa tus cuentas!</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🔥</div>
+      <h4>El frío NO entra, el calor sale</h4>
+      <p>En física no existe la transferencia de "frío". El calor siempre viaja del cuerpo caliente al frío. Cuando sientes frío es porque estás perdiendo calor hacia el ambiente.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">📏</div>
+      <h4>ΔT en Celsius = ΔT en Kelvin</h4>
+      <p>Como un grado Celsius tiene el mismo "tamaño" que un Kelvin, una variación de temperatura (ΔT) de 10 °C es exactamente lo mismo que una variación de 10 K.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">💧</div>
+      <h4>El agua tiene alto calor específico</h4>
+      <p>El agua cuesta mucho calentarla y mucho enfriarla (su c = 4186 J/kg·°C). Por eso las ciudades costeras tienen climas más suaves que las ciudades en el desierto.</p>
+    </div>
+  </div>
+
+  <!-- Tabla de errores comunes -->
+  <div class="v2-sec-label text-accent" style="margin-bottom:1rem;">❌ Errores frecuentes en el ICFES</div>
+  <div class="error-table-card">
+    <div class="err-row">
+      <div class="err-cell err-head err-bad">❌ Error frecuente</div>
+      <div class="err-cell err-head err-good">✅ Lo correcto</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Pensar que dos cuerpos en contacto tienen el mismo calor.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Dos cuerpos en contacto térmico prolongado alcanzan la misma <strong>temperatura</strong>, no el mismo "calor".</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Decir "Cierra la puerta para que no entre el frío".</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>En física lo correcto sería: "Cierra la puerta para que no se escape el calor de la habitación hacia afuera".</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Creer que la temperatura de una olla de agua hirviendo depende del tamaño de la olla.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>El agua siempre hierve a la misma temperatura (dependiendo de la presión atmosférica), sin importar si es un vaso o un balde gigante.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     QUIZ ICFES
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-quiz">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📝 Quiz ICFES</div>
+    <h2 class="v2-sec-title">¿Entendiste el tema?</h2>
+    <p class="v2-sec-desc">5 preguntas estilo ICFES. Léelas con calma, no hay tiempo límite. Al final verás tu puntaje.</p>
+  </div>
+
+  <div class="quiz-v2" id="quizBox">
+    <div class="quiz-top">
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizFill" style="width:0%"></div></div>
+      <div class="quiz-cnt" id="quizCnt">Pregunta 1 de 5</div>
+    </div>
+
+    <!-- Área de pregunta -->
+    <div class="quiz-body" id="quizBody">
+      <div class="quiz-q" id="qText"></div>
+      <div class="quiz-opts" id="qOpts"></div>
+      <div class="quiz-fb" id="qFb"></div>
+    </div>
+
+    <div class="quiz-foot">
+      <button class="v2-btn v2-btn-primary" id="qNext" style="display:none">Siguiente →</button>
+    </div>
+
+    <!-- Pantalla de resultado -->
+    <div class="quiz-result-screen" id="quizResult">
+      <div class="score-ring" id="scoreRing">
+        <div class="score-big" id="scoreBig">0/5</div>
+        <div class="score-sub">respuestas correctas</div>
+      </div>
+      <div class="score-msg" id="scoreMsg"></div>
+      <div class="score-hint" id="scoreHint"></div>
+      <button class="v2-btn v2-btn-primary" id="qRestart">🔄 Intentar de nuevo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     NAVEGACIÓN INFERIOR
+══════════════════════════════════════ -->
+<div class="v2-wrap">
+  <hr class="v2-hr">
+  <div class="v2-page-nav">
+    <a class="nav-btn-card" href="../periodo3/3_bernoulli.html">
+      <span class="nbc-arr">←</span>
+      <div>
+        <div class="nbc-sub">Tema anterior</div>
+        <div class="nbc-title">Período 3: Ecuación de Bernoulli</div>
+      </div>
+    </a>
+    <a class="nav-btn-card right" href="2_termodinamica.html">
+      <div>
+        <div class="nbc-sub">Siguiente tema</div>
+        <div class="nbc-title">Termodinámica</div>
+      </div>
+      <span class="nbc-arr">→</span>
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PIE DE PÁGINA — lumcab
+══════════════════════════════════════ -->
+<footer class="v2-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-avatar">LC</div>
+      <div>
+        <div class="footer-name">Docente Luis Miguel Cabrera</div>
+        <div class="footer-role">I.E. Paulo VI &nbsp;·&nbsp; Huila, Colombia &nbsp;·&nbsp; Física & Matemáticas</div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">⚛️ VirtualLab 2026</span>
+      <span class="footer-tag">lumcab</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
+<script>
+/* ==========================================
+   0. VIDEO — CLICK TO PLAY
+========================================== */
+function ytLoadEmbed(videoId) {
+  const thumb = document.getElementById('ytThumbCard');
+  const frame = document.getElementById('ytEmbedFrame');
+  const iframe = document.getElementById('ytIframe');
+  if (!thumb || !frame || !iframe) return;
+  thumb.style.display = 'none';
+  frame.classList.add('visible');
+  iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId
+             + '?autoplay=1&rel=0&modestbranding=1&color=white';
+}
+
+/* ==========================================
+   1. BARRA DE PROGRESO DE LECTURA
+========================================== */
+(function() {
+  const bar = document.getElementById('page-progress');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (scrollTop / docH * 100) + '%';
+  }, { passive: true });
+})();
+
+/* ==========================================
+   2. PARTÍCULAS DEL HERO
+========================================== */
+(function() {
+  const layer = document.getElementById('heroParticles');
+  const colors = ['#4361ee','#4cc9f0','#3a0ca3','rgba(76,201,240,.5)'];
+  for (let i = 0; i < 22; i++) {
+    const d = document.createElement('div');
+    d.className = 'p-dot';
+    const size = Math.random() * 5 + 2;
+    d.style.cssText = `
+      width:${size}px; height:${size}px;
+      background:${colors[Math.floor(Math.random() * colors.length)]};
+      left:${Math.random() * 100}%;
+      bottom:-20px;
+      animation-duration:${7 + Math.random() * 10}s;
+      animation-delay:${Math.random() * 8}s;
+      opacity:${.3 + Math.random() * .5};
+    `;
+    layer.appendChild(d);
+  }
+})();
+
+/* ==========================================
+   3. ANIMACIONES AL HACER SCROLL
+========================================== */
+(function() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.anim-scroll').forEach(el => obs.observe(el));
+})();
+
+/* ==========================================
+   4. TABS DE TEORÍA
+========================================== */
+(function() {
+  document.querySelectorAll('.v2-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.closest('section') || btn.parentElement.parentElement;
+      group.querySelectorAll('.v2-tab').forEach(b => b.classList.remove('active'));
+      group.querySelectorAll('.v2-tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = group.querySelector('#' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+})();
+
+/* ==========================================
+   5. BOTONES DE COPIAR TEORÍA
+========================================== */
+(function() {
+  document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+      const content = document.getElementById(targetId);
+      if (!content) return;
+      let textToCopy = content.innerText.replace(/📋 Copiar para mis apuntes/g, '').trim();
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = "✅ ¡Copiado!";
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerText = originalText;
+          btn.classList.remove('copied');
+        }, 2500);
+      }).catch(err => {
+        console.error('Error al copiar: ', err);
+        btn.innerText = "❌ Error al copiar";
+      });
+    });
+  });
+})();
+
+/* ==========================================
+   6. SIMULADOR DE EQUILIBRIO TÉRMICO
+========================================== */
+(function() {
+  const simCanvas = document.getElementById('simCanvas');
+  const graphCanvas = document.getElementById('graphCanvas');
+  if(!simCanvas || !graphCanvas) return;
+
+  const simCtx = simCanvas.getContext('2d');
+  const graphCtx = graphCanvas.getContext('2d');
+
+  const slTa = document.getElementById('slTa');
+  const slTb = document.getElementById('slTb');
+  const valTa = document.getElementById('valTa');
+  const valTb = document.getElementById('valTb');
+  const valEstado = document.getElementById('valEstado');
+  const btnPlay = document.getElementById('btnPlay');
+  const btnReset = document.getElementById('btnReset');
+
+  // Estado del simulador
+  let isPlaying = false;
+  let t = 0;
+  const k = 0.05; // Constante de enfriamiento/calentamiento
+  
+  // Variables iniciales y actuales
+  let T_a_initial = parseFloat(slTa.value);
+  let T_b_initial = parseFloat(slTb.value);
+  let T_a = T_a_initial;
+  let T_b = T_b_initial;
+
+  // Historial para las gráficas
+  let historyTa = [];
+  let historyTb = [];
+  let historyTime = [];
+
+  let animationFrame;
+
+  // Actualizar UI sliders
+  slTa.addEventListener('input', () => {
+    T_a_initial = parseFloat(slTa.value);
+    valTa.textContent = `Ta = ${T_a_initial} °C`;
+    if(!isPlaying && t === 0) { T_a = T_a_initial; drawSim(); drawGraph(); }
+  });
+
+  slTb.addEventListener('input', () => {
+    T_b_initial = parseFloat(slTb.value);
+    valTb.textContent = `Tb = ${T_b_initial} °C`;
+    if(!isPlaying && t === 0) { T_b = T_b_initial; drawSim(); drawGraph(); }
+  });
+
+  function resetSim() {
+    isPlaying = false;
+    cancelAnimationFrame(animationFrame);
+    btnPlay.textContent = "▶";
+    btnPlay.classList.remove('on');
+    t = 0;
+    T_a = T_a_initial;
+    T_b = T_b_initial;
+    historyTa = [T_a];
+    historyTb = [T_b];
+    historyTime = [t];
+    valEstado.textContent = "En espera...";
+    slTa.disabled = false;
+    slTb.disabled = false;
+    drawSim();
+    drawGraph();
+  }
+
+  btnReset.addEventListener('click', resetSim);
+
+  btnPlay.addEventListener('click', () => {
+    if (isPlaying) {
+      isPlaying = false;
+      btnPlay.textContent = "▶";
+      btnPlay.classList.remove('on');
+      valEstado.textContent = "Pausado";
+      cancelAnimationFrame(animationFrame);
+    } else {
+      if(t === 0) {
+        historyTa = [T_a];
+        historyTb = [T_b];
+        historyTime = [t];
+      }
+      isPlaying = true;
+      btnPlay.textContent = "⏸";
+      btnPlay.classList.add('on');
+      valEstado.textContent = "Transfiriendo calor...";
+      slTa.disabled = true;
+      slTb.disabled = true;
+      lastTime = performance.now();
+      loop();
+    }
+  });
+
+  let lastTime = 0;
+  function loop(currentTime) {
+    if (!isPlaying) return;
+    const dt = (currentTime - lastTime) / 1000 || 0;
+    lastTime = currentTime;
+
+    // Actualizar temperaturas (Ley del enfriamiento de Newton, asumiendo m1=m2 y c1=c2)
+    // dT_a/dt = -k(T_a - T_b)
+    // dT_b/dt = -k(T_b - T_a)
+    
+    // Simplificado por pasos:
+    const delta = T_a - T_b;
+    T_a -= k * delta;
+    T_b += k * delta;
+
+    t += 0.5; // Tiempo simulado
+
+    // Registrar historial (cada ciertos frames)
+    historyTa.push(T_a);
+    historyTb.push(T_b);
+    historyTime.push(t);
+
+    drawSim();
+    drawGraph();
+
+    // Comprobar equilibrio
+    if (Math.abs(T_a - T_b) < 0.1) {
+      T_a = (T_a_initial + T_b_initial) / 2;
+      T_b = T_a;
+      valEstado.textContent = `Equilibrio alcanzado a ${T_a.toFixed(1)}°C`;
+      isPlaying = false;
+      btnPlay.textContent = "▶";
+      btnPlay.classList.remove('on');
+      drawSim();
+      drawGraph();
+      return;
+    }
+
+    animationFrame = requestAnimationFrame(loop);
+  }
+
+  // Interpola color entre azul(0), gris(50), rojo(100)
+  function getTempColor(temp) {
+    // Normalizar a 0-1
+    let n = Math.max(0, Math.min(100, temp)) / 100;
+    // HSL: Azul=240, Rojo=0
+    let h = 240 - (n * 240); 
+    return `hsl(${h}, 80%, 50%)`;
+  }
+
+  function drawSim() {
+    const W = simCanvas.width = simCanvas.offsetWidth;
+    const H = simCanvas.height = simCanvas.offsetHeight;
+    simCtx.clearRect(0, 0, W, H);
+
+    // Dibuja los dos bloques
+    const blockW = W * 0.3;
+    const blockH = H * 0.6;
+    const y = H/2 - blockH/2;
+    const gap = (t > 0 || isPlaying) ? 0 : 20; // Se juntan al darle play
+    const x1 = W/2 - blockW - gap/2;
+    const x2 = W/2 + gap/2;
+
+    // Bloque A
+    simCtx.fillStyle = getTempColor(T_a);
+    simCtx.fillRect(x1, y, blockW, blockH);
+    simCtx.strokeStyle = 'white'; simCtx.lineWidth = 2;
+    simCtx.strokeRect(x1, y, blockW, blockH);
+    
+    // Texto A
+    simCtx.fillStyle = 'white';
+    simCtx.font = "bold 16px sans-serif";
+    simCtx.textAlign = 'center';
+    simCtx.fillText(`A: ${T_a.toFixed(1)}°C`, x1 + blockW/2, y + blockH/2 + 6);
+
+    // Bloque B
+    simCtx.fillStyle = getTempColor(T_b);
+    simCtx.fillRect(x2, y, blockW, blockH);
+    simCtx.strokeStyle = 'white'; simCtx.lineWidth = 2;
+    simCtx.strokeRect(x2, y, blockW, blockH);
+
+    // Texto B
+    simCtx.fillStyle = 'white';
+    simCtx.fillText(`B: ${T_b.toFixed(1)}°C`, x2 + blockW/2, y + blockH/2 + 6);
+
+    // Flechas de calor si están en contacto y hay diferencia
+    if (gap === 0 && Math.abs(T_a - T_b) > 0.5) {
+      simCtx.fillStyle = 'rgba(255,255,255,0.7)';
+      simCtx.font = "bold 24px sans-serif";
+      let arrow = T_a > T_b ? "→" : "←";
+      simCtx.fillText(arrow, W/2, y - 10);
+      simCtx.font = "12px sans-serif";
+      simCtx.fillText("Calor (Q)", W/2, y - 30);
+    }
+  }
+
+  function drawGraph() {
+    const W = graphCanvas.width = graphCanvas.offsetWidth;
+    const H = graphCanvas.height = graphCanvas.offsetHeight;
+    graphCtx.clearRect(0, 0, W, H);
+
+    const padL = 40, padB = 25, padT = 15, padR = 15;
+    const gW = W - padL - padR;
+    const gH = H - padT - padB;
+
+    // Ejes
+    graphCtx.strokeStyle = 'rgba(255,255,255,0.3)';
+    graphCtx.lineWidth = 1;
+    graphCtx.beginPath();
+    graphCtx.moveTo(padL, padT);
+    graphCtx.lineTo(padL, padT + gH);
+    graphCtx.lineTo(padL + gW, padT + gH);
+    graphCtx.stroke();
+
+    graphCtx.fillStyle = 'rgba(255,255,255,0.6)';
+    graphCtx.font = '10px sans-serif';
+    graphCtx.textAlign = 'right';
+    graphCtx.fillText("100°C", padL - 5, padT + 5);
+    graphCtx.fillText("0°C", padL - 5, padT + gH);
+    graphCtx.textAlign = 'center';
+    graphCtx.fillText("Tiempo", padL + gW/2, H - 5);
+
+    if (historyTime.length < 2) return;
+
+    let maxT = historyTime[historyTime.length - 1];
+    if (maxT < 50) maxT = 50;
+
+    function getX(time) { return padL + (time / maxT) * gW; }
+    function getY(temp) { return padT + gH - (temp / 100) * gH; }
+
+    // Linea Ta
+    graphCtx.beginPath();
+    graphCtx.strokeStyle = '#e63946'; // Rojo
+    graphCtx.lineWidth = 3;
+    for(let i=0; i<historyTa.length; i++) {
+      let px = getX(historyTime[i]);
+      let py = getY(historyTa[i]);
+      if(i===0) graphCtx.moveTo(px,py); else graphCtx.lineTo(px,py);
+    }
+    graphCtx.stroke();
+
+    // Linea Tb
+    graphCtx.beginPath();
+    graphCtx.strokeStyle = '#4cc9f0'; // Azul
+    graphCtx.lineWidth = 3;
+    for(let i=0; i<historyTb.length; i++) {
+      let px = getX(historyTime[i]);
+      let py = getY(historyTb[i]);
+      if(i===0) graphCtx.moveTo(px,py); else graphCtx.lineTo(px,py);
+    }
+    graphCtx.stroke();
+  }
+
+  // Init
+  window.addEventListener('resize', () => { drawSim(); drawGraph(); });
+  setTimeout(() => { drawSim(); drawGraph(); }, 100);
+
+})();
+
+/* ==========================================
+   7. QUIZ ICFES
+========================================== */
+(function() {
+  const qData = [
+    {
+      q: "Dos recipientes contienen agua hirviendo a 100°C. El recipiente A tiene 1 Litro de agua y el recipiente B tiene 5 Litros. Es correcto afirmar que:",
+      opts: [
+        { text: "El agua del recipiente B tiene mayor temperatura porque tiene más masa.", isCorrect: false },
+        { text: "Ambos recipientes tienen la misma temperatura y el mismo calor.", isCorrect: false },
+        { text: "Ambos tienen la misma temperatura, pero el agua del recipiente B puede ceder más calor.", isCorrect: true },
+        { text: "El agua del recipiente A tiene mayor temperatura porque es más fácil de calentar.", isCorrect: false }
+      ],
+      fbGood: "¡Excelente! La temperatura es una propiedad intensiva (no depende de la masa, ambas son 100°C). Pero el calor cedido depende de la masa (Q = mcΔT), por lo que 5 L cederán más calor.",
+      fbBad: "Recuerda: la temperatura no depende de la cantidad de masa. Ambas aguas hierven a 100°C. Sin embargo, tener más masa significa tener más energía interna que puede ceder como calor."
+    },
+    {
+      q: "Si la temperatura ambiente es de 27 °C, ¿Cuál es su valor en la escala absoluta Kelvin?",
+      opts: [
+        { text: "273 K", isCorrect: false },
+        { text: "300 K", isCorrect: true },
+        { text: "246 K", isCorrect: false },
+        { text: "327 K", isCorrect: false }
+      ],
+      fbGood: "¡Correcto! Para convertir de Celsius a Kelvin sumamos 273.15. Así: 27 + 273.15 ≈ 300 K.",
+      fbBad: "La fórmula para convertir de Celsius a Kelvin es: K = °C + 273. Por lo tanto, 27 + 273 = 300 K."
+    },
+    {
+      q: "Se coloca un bloque de metal caliente (80°C) dentro de un recipiente con agua fría (20°C). El sistema está aislado. Después de un tiempo, se espera que:",
+      opts: [
+        { text: "El metal absorba el frío del agua hasta igualar sus temperaturas.", isCorrect: false },
+        { text: "El calor fluya del metal al agua hasta alcanzar el equilibrio térmico.", isCorrect: true },
+        { text: "La temperatura final de ambos sea exactamente la suma de las temperaturas (100°C).", isCorrect: false },
+        { text: "El calor fluya del agua al metal por ser líquido.", isCorrect: false }
+      ],
+      fbGood: "¡Muy bien! Según la 2da Ley de la Termodinámica, el calor fluye del cuerpo de mayor temperatura al de menor temperatura hasta que se igualan (equilibrio térmico).",
+      fbBad: "Cuidado: En física no existe el flujo de 'frío'. El calor SIEMPRE viaja desde el cuerpo de mayor temperatura hacia el de menor temperatura hasta que llegan al equilibrio."
+    },
+    {
+      q: "El calor específico del agua líquida es muy alto en comparación con la mayoría de los metales. Esto explica por qué:",
+      opts: [
+        { text: "El agua se calienta y se enfría muy rápidamente.", isCorrect: false },
+        { text: "El agua necesita poca energía para aumentar su temperatura.", isCorrect: false },
+        { text: "El agua demora más en calentarse y enfriarse, actuando como regulador térmico.", isCorrect: true },
+        { text: "Los metales no pueden absorber calor.", isCorrect: false }
+      ],
+      fbGood: "¡Correcto! Un alto calor específico significa que se requiere mucha energía para cambiar la temperatura de esa sustancia. Por eso el agua del mar tarda meses en cambiar de temperatura.",
+      fbBad: "Revisa el concepto: el calor específico (c) indica cuánta energía hace falta para cambiar la temperatura de 1 kg en 1 °C. Si 'c' es muy grande (como el del agua), la sustancia cambia de temperatura lentamente."
+    },
+    {
+      q: "El cero absoluto (0 Kelvin) corresponde teóricamente a:",
+      opts: [
+        { text: "La temperatura en la cual el agua se congela.", isCorrect: false },
+        { text: "El estado en el que la agitación cinética de las moléculas se detiene.", isCorrect: true },
+        { text: "La temperatura más alta alcanzada en el universo.", isCorrect: false },
+        { text: "Exactamente a los -100 °C.", isCorrect: false }
+      ],
+      fbGood: "¡Así es! En el cero absoluto (0 K o -273.15 °C), la energía cinética de las partículas llega a su valor mínimo posible (teóricamente cesa el movimiento).",
+      fbBad: "Recuerda que la temperatura mide la agitación molecular. Si esa agitación fuera nula, la temperatura sería la más baja posible. Ese punto se llama Cero Absoluto (0 K o -273.15 °C)."
+    }
+  ];
+
+  let qIndex = 0;
+  let correctCount = 0;
+  let answered = false;
+
+  const quizFill = document.getElementById('quizFill');
+  const quizCnt  = document.getElementById('quizCnt');
+  const qText    = document.getElementById('qText');
+  const qOpts    = document.getElementById('qOpts');
+  const qFb      = document.getElementById('qFb');
+  const qNext    = document.getElementById('qNext');
+  const resultScr= document.getElementById('quizResult');
+
+  function initQuiz() {
+    qIndex = 0; correctCount = 0;
+    resultScr.style.display = 'none';
+    document.getElementById('quizBody').style.display = 'block';
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    answered = false;
+    qNext.style.display = 'none';
+    qFb.innerHTML = '';
+    qFb.className = 'quiz-fb';
+
+    const d = qData[qIndex];
+    quizFill.style.width = ((qIndex) / qData.length * 100) + '%';
+    quizCnt.textContent = `Pregunta ${qIndex + 1} de ${qData.length}`;
+
+    qText.textContent = d.q;
+    qOpts.innerHTML = '';
+
+    const ltrs = ['A','B','C','D'];
+    d.opts.forEach((o, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-opt';
+      btn.innerHTML = `<div class="opt-ltr">${ltrs[i]}</div> <div class="opt-txt">${o.text}</div>`;
+      btn.onclick = () => selectOption(btn, o.isCorrect, d);
+      qOpts.appendChild(btn);
+    });
+  }
+
+  function selectOption(btn, isCorrect, d) {
+    if (answered) return;
+    answered = true;
+    
+    Array.from(qOpts.children).forEach(b => {
+      b.classList.add('answered');
+      b.style.opacity = '0.6';
+    });
+
+    btn.style.opacity = '1';
+    
+    if (isCorrect) {
+      correctCount++;
+      btn.classList.add('correct');
+      qFb.className = 'quiz-fb correct visible';
+      qFb.innerHTML = `<div style="font-weight:800;margin-bottom:.4rem;color:#06d6a0;">✅ ¡Correcto!</div>${d.fbGood}`;
+    } else {
+      btn.classList.add('wrong');
+      qFb.className = 'quiz-fb wrong visible';
+      qFb.innerHTML = `<div style="font-weight:800;margin-bottom:.4rem;color:#e63946;">❌ Incorrecto</div>${d.fbBad}`;
+      
+      Array.from(qOpts.children).forEach((b, i) => {
+        if(d.opts[i].isCorrect) {
+          b.classList.add('correct');
+          b.style.opacity = '1';
+        }
+      });
+    }
+
+    qNext.style.display = 'inline-flex';
+    quizFill.style.width = ((qIndex + 1) / qData.length * 100) + '%';
+  }
+
+  qNext.addEventListener('click', () => {
+    qIndex++;
+    if (qIndex < qData.length) {
+      loadQuestion();
+    } else {
+      showResult();
+    }
+  });
+
+  function showResult() {
+    document.getElementById('quizBody').style.display = 'none';
+    qNext.style.display = 'none';
+    resultScr.style.display = 'flex';
+    
+    document.getElementById('scoreBig').textContent = `${correctCount}/${qData.length}`;
+    const pct = correctCount / qData.length;
+    
+    const sRing = document.getElementById('scoreRing');
+    const sMsg  = document.getElementById('scoreMsg');
+    const sHint = document.getElementById('scoreHint');
+
+    if(pct === 1) {
+      sRing.style.background = 'linear-gradient(135deg, #06d6a0, #048a68)';
+      sMsg.textContent = "¡Excelente! Puntaje perfecto.";
+      sHint.textContent = "Dominas por completo los conceptos de calor y temperatura.";
+    } else if (pct >= 0.6) {
+      sRing.style.background = 'linear-gradient(135deg, #4cc9f0, #4361ee)';
+      sMsg.textContent = "¡Buen trabajo!";
+      sHint.textContent = "Tienes buenas bases, pero repasa un poco los errores.";
+    } else {
+      sRing.style.background = 'linear-gradient(135deg, #e63946, #9b2226)';
+      sMsg.textContent = "Hay que seguir estudiando";
+      sHint.textContent = "Vuelve a leer las pestañas de teoría y vuelve a intentarlo.";
+    }
+  }
+
+  document.getElementById('qRestart').addEventListener('click', initQuiz);
+  initQuiz();
+})();
+</script>
+</body>
+</html>
