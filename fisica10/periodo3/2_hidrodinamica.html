@@ -63,8 +63,14 @@
     .yt-embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
     .yt-embed-frame.visible { display: block; }
 
-    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
-    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); background: #0a0a0a; }
+    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: none; }
+    .phet-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(67,97,238,.08); cursor: pointer; transition: background .3s; z-index: 2; text-align: center; padding: 1rem; }
+    .phet-placeholder:hover { background: rgba(67,97,238,.15); }
+    .phet-icon { font-size: 3.5rem; margin-bottom: 1rem; transition: transform .3s; filter: drop-shadow(0 4px 12px rgba(76,201,240,.4)); }
+    .phet-placeholder:hover .phet-icon { transform: scale(1.1) translateY(-5px); }
+    .phet-btn { background: var(--accent-grad); border: none; padding: .6rem 1.5rem; border-radius: 50px; color: #fff; font-weight: 800; font-size: .95rem; cursor: pointer; box-shadow: 0 4px 15px rgba(67,97,238,.4); pointer-events: none; }
+    .phet-warning { margin-top: .8rem; font-size: .75rem; color: var(--text-muted); max-width: 300px; line-height: 1.4; }
     .phet-mobile-note { display: none; background: rgba(255,209,102,.08); border: 1px solid rgba(255,209,102,.25); border-radius: var(--r-sm); padding: .7rem 1rem; margin-top: .8rem; font-size: .82rem; color: #ffd166; }
 
     .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
@@ -355,10 +361,10 @@
 
   <div class="yt-player-wrap" id="ytPlayerWrap">
     <!-- REEMPLAZAR ID DEL VIDEO -->
-    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('aYjY3J22vIE')">
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('hHEd6rfc6xg')">
       <img class="yt-thumb-img"
-           src="https://img.youtube.com/vi/aYjY3J22vIE/maxresdefault.jpg"
-           onerror="this.src='https://img.youtube.com/vi/aYjY3J22vIE/hqdefault.jpg'"
+           src="https://img.youtube.com/vi/hHEd6rfc6xg/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/hHEd6rfc6xg/hqdefault.jpg'"
            alt="Hidrodinámica — Física 10°">
       <div class="yt-thumb-overlay">
         <div class="yt-big-play">&#9654;</div>
@@ -368,7 +374,7 @@
           <span style="font-weight:400;opacity:.8;font-size:.78rem;">Fluidos en movimiento · Toca para reproducir</span>
         </div>
         <a class="yt-ext-btn"
-           href="https://www.youtube.com/watch?v=aYjY3J22vIE"
+           href="https://www.youtube.com/watch?v=hHEd6rfc6xg"
            target="_blank" rel="noopener"
            onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
       </div>
@@ -391,13 +397,15 @@
     <h2 class="v2-sec-title">Flujo de Fluidos</h2>
     <p class="v2-sec-desc">Laboratorio completo interactivo sobre presión, velocidad y caudal en tubos modificables.</p>
   </div>
-  <div class="phet-wrap">
-    <!-- Se incluye la simulación PhET Fluid Pressure and Flow -->
-    <iframe
-      src="https://phet.colorado.edu/sims/html/fluid-pressure-and-flow/latest/fluid-pressure-and-flow_es.html"
-      title="Presión del Fluido y Flujo - PhET"
-      allowfullscreen
-      loading="lazy">
+  <div class="phet-wrap" id="phetWrap2">
+    <div class="phet-placeholder" id="phetThumb2" onclick="phetLoadEmbed('phetThumb2', 'phetFrame2')">
+      <div class="phet-icon">🧪</div>
+      <button class="phet-btn">Cargar Simulador PhET</button>
+      <div class="phet-warning">Este simulador clásico requiere descargar un entorno de ejecución (~30MB). Puede demorar unos segundos.</div>
+    </div>
+    <iframe class="phet-iframe" id="phetFrame2"
+      data-src="https://phet.colorado.edu/sims/cheerpj/fluid-pressure-and-flow/latest/fluid-pressure-and-flow.html?simulation=fluid-pressure-and-flow&locale=es"
+      allowfullscreen>
     </iframe>
   </div>
   <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
@@ -533,6 +541,17 @@ function ytLoadEmbed(id) {
   thumb.style.display = 'none'; frame.classList.add('visible');
   iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&color=white';
 }
+
+/* PHET LAZY LOAD */
+window.phetLoadEmbed = function(thumbId, frameId) {
+  const thumb = document.getElementById(thumbId);
+  const frame = document.getElementById(frameId);
+  if(thumb && frame) {
+    thumb.style.display = 'none';
+    frame.style.display = 'block';
+    frame.src = frame.getAttribute('data-src');
+  }
+};
 
 /* PROGRESS BAR */
 (function () {

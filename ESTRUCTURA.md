@@ -76,7 +76,7 @@
 | `fisica10/periodo3/index.html` | Índice período | ✅ Completo |
 | `fisica10/periodo3/1_hidrostatica.html` | Hidrostática | ✅ Completo |
 | `fisica10/periodo3/2_hidrodinamica.html` | Hidrodinámica | ✅ Completo |
-| `fisica10/periodo3/3_bernoulli.html` | Ecuación de Bernoulli | ⬜ Pendiente |
+| `fisica10/periodo3/3_bernoulli.html` | Ecuación de Bernoulli | ✅ Completo |
 
 ### Física 10° — Período 4 · Temperatura y calor
 | Archivo | Tema | Estado |
@@ -187,11 +187,11 @@
 | Materia | Completadas | Total temas | Progreso |
 |---|---|---|---|
 | Infraestructura | 7 | 7 | 100% |
-| Física 10° | 7 | 11 | 63% |
+| Física 10° | 9 | 11 | 81% |
 | Física 11° | 0 | 9 | 0% |
 | Matemáticas 6° | 0 | 12 | 0% |
 | Geometría 6° | 0 | 8 | 0% |
-| **Total** | **14** | **47** | **30%** |
+| **Total** | **16** | **47** | **34%** |
 
 ---
 
@@ -206,8 +206,8 @@
 | Física 10° | Trabajo y energía | `1Bc9wH6lk74` | ✅ Verificado |
 | Física 10° | Impulso y gravitación | `B3Xs4XpR3vU` | ✅ Verificado |
 | Física 10° | Hidrostática | `f7FL-1vsw3M` | ✅ Verificado |
-| Física 10° | Hidrodinámica | — | ⬜ Pendiente |
-| Física 10° | Ecuación de Bernoulli | — | ⬜ Pendiente |
+| Física 10° | Hidrodinámica | `hHEd6rfc6xg` | ✅ Verificado |
+| Física 10° | Ecuación de Bernoulli | `t0dOLZXkpV4` | ✅ Verificado |
 | Física 10° | Temperatura y calor | — | ⬜ Pendiente |
 
 > Antes de crear cada página, verificar en YouTube que el video permita embed. Si falla, usar el patrón thumbnail → clic → YouTube.

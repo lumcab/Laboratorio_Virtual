@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hidrodinámica | Física 10° · VirtualLab</title>
+  <title>Ecuación de Bernoulli | Física 10° · VirtualLab</title>
   <link rel="icon" type="image/x-icon" href="../../assets/icons/favicon.ico">
   <link rel="stylesheet" href="../../css/tema-v2.css">
   <script src="../../js/theme.js"></script>
@@ -63,8 +63,14 @@
     .yt-embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
     .yt-embed-frame.visible { display: block; }
 
-    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
-    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); background: #0a0a0a; }
+    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: none; }
+    .phet-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(67,97,238,.08); cursor: pointer; transition: background .3s; z-index: 2; text-align: center; padding: 1rem; }
+    .phet-placeholder:hover { background: rgba(67,97,238,.15); }
+    .phet-icon { font-size: 3.5rem; margin-bottom: 1rem; transition: transform .3s; filter: drop-shadow(0 4px 12px rgba(76,201,240,.4)); }
+    .phet-placeholder:hover .phet-icon { transform: scale(1.1) translateY(-5px); }
+    .phet-btn { background: var(--accent-grad); border: none; padding: .6rem 1.5rem; border-radius: 50px; color: #fff; font-weight: 800; font-size: .95rem; cursor: pointer; box-shadow: 0 4px 15px rgba(67,97,238,.4); pointer-events: none; }
+    .phet-warning { margin-top: .8rem; font-size: .75rem; color: var(--text-muted); max-width: 300px; line-height: 1.4; }
     .phet-mobile-note { display: none; background: rgba(255,209,102,.08); border: 1px solid rgba(255,209,102,.25); border-radius: var(--r-sm); padding: .7rem 1rem; margin-top: .8rem; font-size: .82rem; color: #ffd166; }
 
     .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
@@ -106,11 +112,11 @@
       <span class="sep">›</span>
       <a href="index.html">Período 3</a>
       <span class="sep">›</span>
-      <span class="current">Hidrodinámica</span>
+      <span class="current">Bernoulli</span>
     </div>
     <div class="nav-right">
-      <a class="v2-btn v2-btn-ghost" href="1_hidrostatica.html">← Hidrostática</a>
-      <a class="v2-btn v2-btn-primary" href="3_bernoulli.html">Bernoulli →</a>
+      <a class="v2-btn v2-btn-ghost" href="2_hidrodinamica.html">← Hidrodinámica</a>
+      <a class="v2-btn v2-btn-primary" href="../periodo4/index.html">Índice Período 4 →</a>
     </div>
   </div>
 </nav>
@@ -122,17 +128,17 @@
     <div class="hero-content-wrap">
       <div class="v2-badge">
         <span class="badge-dot"></span>
-        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 10°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 3</a> &nbsp;·&nbsp; Tema 2
+        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 10°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 3</a> &nbsp;·&nbsp; Tema 3
       </div>
-      <h1>Hidrodinámica</h1>
+      <h1>Ecuación de Bernoulli</h1>
       <p class="hero-sub">
-        Descubre cómo se comportan los líquidos cuando se mueven. Entiende el caudal, la velocidad de flujo y por qué el agua sale más rápido si tapas la mitad de una manguera.
+        Descubre cómo la presión, la velocidad y la altura de un fluido están conectadas. Entiende por qué vuelan los aviones y cómo funcionan los atomizadores.
       </p>
       <div class="hero-tags">
-        <span class="h-tag">🌊 Flujo</span>
-        <span class="h-tag">📏 Caudal</span>
-        <span class="h-tag">🔄 Continuidad</span>
-        <span class="h-tag">🍯 Viscosidad</span>
+        <span class="h-tag">✈️ Sustentación</span>
+        <span class="h-tag">🏎️ Efecto Venturi</span>
+        <span class="h-tag">🌬️ Presión y Velocidad</span>
+        <span class="h-tag">⚡ Conservación de Energía</span>
       </div>
       <div class="hero-scroll-hint">
         <div class="scroll-mouse"></div>
@@ -161,71 +167,66 @@
   </div>
 
   <div class="v2-tabs">
-    <button class="v2-tab active" data-tab="t-flujo">🌊 Tipos de Flujo</button>
-    <button class="v2-tab" data-tab="t-caudal">📏 Caudal</button>
-    <button class="v2-tab" data-tab="t-continuidad">🔄 Continuidad</button>
-    <button class="v2-tab" data-tab="t-viscosidad">🍯 Viscosidad</button>
+    <button class="v2-tab active" data-tab="t-bernoulli">⚡ Principio de Bernoulli</button>
+    <button class="v2-tab" data-tab="t-venturi">🏎️ Efecto Venturi</button>
+    <button class="v2-tab" data-tab="t-torricelli">🚰 Teorema de Torricelli</button>
+    <button class="v2-tab" data-tab="t-aviones">✈️ ¿Por qué vuelan los aviones?</button>
   </div>
 
   <div class="v2-card">
-    <div id="t-flujo" class="v2-tab-panel active">
-      <button class="copy-teoria-btn" data-target="copy-flujo">📋 Copiar para mis apuntes</button>
-      <div class="teoria-body" id="copy-flujo">
-        <h3>Fluidos en movimiento</h3>
-        <p>A diferencia de la hidrostática, la <strong>hidrodinámica</strong> estudia los fluidos que están en constante desplazamiento. Para simplificar, en Física 10° asumimos fluidos <em>ideales</em>: incompresibles (su volumen no cambia) y no viscosos (no hay fricción interna).</p>
-        <h3>Tipos de flujo</h3>
+    <div id="t-bernoulli" class="v2-tab-panel active">
+      <button class="copy-teoria-btn" data-target="copy-bernoulli">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-bernoulli">
+        <h3>Principio de Bernoulli</h3>
+        <p>El físico suizo Daniel Bernoulli descubrió una relación fundamental: en un fluido ideal en movimiento, <strong>donde la velocidad es mayor, la presión es menor</strong>, y viceversa.</p>
+        <div class="key-box">💡 Se trata simplemente de la <strong>ley de conservación de la energía</strong> aplicada a los fluidos. La suma de la energía cinética (velocidad), la energía potencial (altura) y la energía de presión se mantiene constante.</div>
+        <h3>Ecuación General</h3>
+        <p>La ecuación establece que la suma de tres términos es constante a lo largo de una línea de corriente:</p>
         <ul>
-          <li><strong>Flujo Laminar:</strong> El fluido se mueve en capas o láminas paralelas y suaves. Sus líneas de corriente no se cruzan. Es predecible y calmado.</li>
-          <li><strong>Flujo Turbulento:</strong> El fluido es caótico. Se forman remolinos y las partículas cruzan las trayectorias de las demás. Ocurre a altas velocidades o frente a obstáculos.</li>
+          <li><strong>P:</strong> Presión estática.</li>
+          <li><strong>½ ρ v²:</strong> Presión dinámica (energía cinética por unidad de volumen).</li>
+          <li><strong>ρ g h:</strong> Presión hidrostática (energía potencial por unidad de volumen).</li>
         </ul>
-        <h3>Ejemplo cotidiano</h3>
-        <p>Abre la llave del lavamanos muy poco: verás que el agua cae transparente y recta (flujo laminar). Si la abres al máximo, el agua sale ruidosa, con burbujas y salpicando para todos lados (flujo turbulento).</p>
       </div>
     </div>
 
-    <div id="t-caudal" class="v2-tab-panel">
-      <button class="copy-teoria-btn" data-target="copy-caudal">📋 Copiar para mis apuntes</button>
-      <div class="teoria-body" id="copy-caudal">
-        <h3>Caudal o Gasto (Q)</h3>
-        <p>El caudal mide <strong>cuánto líquido</strong> pasa por una tubería o un río en una cierta cantidad de <strong>tiempo</strong>.</p>
-        <div class="key-box">💡 Fórmula 1: <strong>Q = V / t</strong> (Volumen dividido por tiempo). Se mide en m³/s o Litros/s.</div>
-        <h3>Relación con la velocidad y el área</h3>
-        <p>El caudal también depende del grosor de la tubería y de qué tan rápido vaya el agua. Por lo tanto, hay una segunda forma de calcularlo:</p>
-        <div class="key-box">💡 Fórmula 2: <strong>Q = A · v</strong> (Área de la tubería multiplicada por la velocidad del fluido).</div>
-        <h3>Ejemplo del Huila</h3>
-        <p>Imagina el caudal del río Magdalena en el malecón de Neiva. Si su cauce es muy ancho y profundo (Gran Área A), el agua puede pasar con relativa calma (baja velocidad v) y aún así entregar un caudal gigantesco al día.</p>
+    <div id="t-venturi" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-venturi">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-venturi">
+        <h3>El Efecto Venturi</h3>
+        <p>Es una consecuencia directa del principio de Bernoulli y de la ecuación de continuidad. Cuando un tubo se estrecha, la velocidad del fluido <strong>aumenta</strong> (para mantener el caudal).</p>
+        <div class="key-box">💡 Según Bernoulli, si la velocidad aumenta en el estrechamiento, ¡la <strong>presión tiene que disminuir</strong> en ese mismo punto!</div>
+        <h3>Aplicaciones</h3>
+        <ul>
+          <li><strong>Carburadores de carros antiguos:</strong> El aire pasa por un estrechamiento rápido, baja su presión y succiona gasolina.</li>
+          <li><strong>Atomizadores de perfume:</strong> Al soplar aire rápido sobre un tubo, la baja presión succiona el líquido hacia arriba y lo pulveriza.</li>
+          <li><strong>Aerodinámica de autos de F1:</strong> Usan túneles bajo el carro para acelerar el aire, reduciendo la presión y "succionando" el auto contra el suelo (Downforce).</li>
+        </ul>
       </div>
     </div>
 
-    <div id="t-continuidad" class="v2-tab-panel">
-      <button class="copy-teoria-btn" data-target="copy-continuidad">📋 Copiar para mis apuntes</button>
-      <div class="teoria-body" id="copy-continuidad">
-        <h3>Ecuación de Continuidad</h3>
-        <p>Dado que el agua no se puede comprimir, todo el caudal que entra por un lado de una tubería cerrada TIENE que salir por el otro extremo. ¡El caudal se conserva! (<strong>Q₁ = Q₂</strong>).</p>
-        <div class="key-box">💡 Fórmula: <strong>A₁ · v₁ = A₂ · v₂</strong>.</div>
-        <h3>¿Qué significa esto?</h3>
-        <ul>
-          <li>Son magnitudes inversamente proporcionales.</li>
-          <li>Si el Área disminuye (un tubo más angosto), la velocidad <strong>debe aumentar</strong> para que pase la misma cantidad de agua.</li>
-          <li>Si el tubo se ensancha, el agua frena.</li>
-        </ul>
-        <h3>El clásico ejemplo de la manguera</h3>
-        <p>Cuando estás regando el jardín y quieres que el chorro llegue más lejos, ¿qué haces? ¡Tapas con el dedo la mitad de la boca de la manguera! Al reducir el <strong>área (A₂)</strong>, la <strong>velocidad (v₂)</strong> se dispara enormemente para lograr que pase el mismo caudal que viene desde la llave.</p>
+    <div id="t-torricelli" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-torricelli">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-torricelli">
+        <h3>Teorema de Torricelli</h3>
+        <p>Es un caso especial de la ecuación de Bernoulli para un tanque abierto con un agujero en la parte inferior.</p>
+        <div class="key-box">💡 Establece que la velocidad con la que sale el agua por un agujero es la misma que tendría si cayera en <strong>caída libre</strong> desde la superficie del agua hasta el agujero.</div>
+        <h3>La fórmula</h3>
+        <p><strong>v = √(2·g·h)</strong>, donde h es la profundidad del agujero medida desde la superficie del líquido.</p>
+        <p>Imagina un balde lleno de agua con un hueco abajo. Mientras más lleno esté el balde (mayor h), con más fuerza y velocidad saldrá el chorro por la mayor presión del peso del agua.</p>
       </div>
     </div>
 
-    <div id="t-viscosidad" class="v2-tab-panel">
-      <button class="copy-teoria-btn" data-target="copy-viscosidad">📋 Copiar para mis apuntes</button>
-      <div class="teoria-body" id="copy-viscosidad">
-        <h3>Viscosidad</h3>
-        <p>La viscosidad es la <strong>resistencia interna</strong> al flujo que presenta un fluido. Podríamos decir que es como la "fricción" entre las capas del propio líquido.</p>
+    <div id="t-aviones" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-aviones">📋 Copiar para mis apuntes</button>
+      <div class="teoria-body" id="copy-aviones">
+        <h3>¿Cómo vuelan los aviones? (Sustentación)</h3>
+        <p>Las alas de los aviones (perfiles aerodinámicos) están diseñadas con una forma especial: son curvas por arriba y más planas por abajo.</p>
         <ul>
-          <li>El agua y el alcohol tienen <strong>baja viscosidad</strong>; fluyen rápidamente.</li>
-          <li>La miel, el aceite de motor y la glicerina tienen <strong>alta viscosidad</strong>; fluyen muy lento.</li>
+          <li><strong>Arriba:</strong> El aire tiene que recorrer más distancia y lo hace a <strong>mayor velocidad</strong>. Por Bernoulli, esto genera una <strong>baja presión</strong>.</li>
+          <li><strong>Abajo:</strong> El aire viaja más lento, lo que genera una <strong>alta presión</strong>.</li>
         </ul>
-        <h3>El efecto de la temperatura</h3>
-        <p>La temperatura afecta directamente la viscosidad. Cuando calientas miel (o aceite en el motor del carro), su viscosidad disminuye, volviéndose mucho más líquida y rápida. Al congelarse, los líquidos se vuelven más viscosos.</p>
-        <div class="key-box">💡 Para los cálculos en Hidrodinámica (como la Ecuación de Continuidad), generalmente asumimos fluidos "ideales", lo que significa que consideramos que su viscosidad es cero para facilitar las matemáticas.</div>
+        <div class="key-box">💡 Esta diferencia de presiones (alta abajo, baja arriba) empuja el ala hacia arriba. Esta fuerza ascendente se llama <strong>Sustentación</strong> y es lo que permite que el avión de 300 toneladas se eleve.</div>
       </div>
     </div>
   </div>
@@ -235,110 +236,79 @@
 <section class="v2-section v2-wrap anim-scroll" id="sec-formulas">
   <div class="mb-md">
     <div class="v2-sec-label text-accent">📐 Fórmulas</div>
-    <h2 class="v2-sec-title">Ecuaciones del flujo</h2>
+    <h2 class="v2-sec-title">Ecuaciones de Bernoulli</h2>
     <p class="v2-sec-desc">Pasa el cursor sobre cada tarjeta para ver el detalle de variables y unidades.</p>
   </div>
 
   <div class="formula-grid">
-
     <div class="formula-card">
-      <div class="f-name">Caudal Volumétrico (1)</div>
-      <div class="f-eq">Q = V / t</div>
+      <div class="f-name">Ecuación de Bernoulli</div>
+      <div class="f-eq">P₁ + ½ρv₁² + ρgh₁ = P₂ + ½ρv₂² + ρgh₂</div>
       <div class="f-divider"></div>
       <div class="f-vars">
-        <div class="f-var"><span class="f-sym">Q</span><span class="f-desc">caudal</span><span class="f-unit">m³/s</span></div>
-        <div class="f-var"><span class="f-sym">V</span><span class="f-desc">volumen desplazado</span><span class="f-unit">m³</span></div>
-        <div class="f-var"><span class="f-sym">t</span><span class="f-desc">tiempo transcurrido</span><span class="f-unit">s</span></div>
+        <div class="f-var"><span class="f-sym">P</span><span class="f-desc">presión estática</span><span class="f-unit">Pa</span></div>
+        <div class="f-var"><span class="f-sym">½ρv²</span><span class="f-desc">presión dinámica</span><span class="f-unit">Pa</span></div>
+        <div class="f-var"><span class="f-sym">ρgh</span><span class="f-desc">presión hidrostática</span><span class="f-unit">Pa</span></div>
       </div>
     </div>
 
     <div class="formula-card">
-      <div class="f-name">Caudal Volumétrico (2)</div>
-      <div class="f-eq">Q = A · v</div>
+      <div class="f-name">Teorema de Torricelli</div>
+      <div class="f-eq">v = √(2·g·h)</div>
       <div class="f-divider"></div>
       <div class="f-vars">
-        <div class="f-var"><span class="f-sym">Q</span><span class="f-desc">caudal constante</span><span class="f-unit">m³/s</span></div>
-        <div class="f-var"><span class="f-sym">A</span><span class="f-desc">área de sección transversal</span><span class="f-unit">m²</span></div>
-        <div class="f-var"><span class="f-sym">v</span><span class="f-desc">velocidad del fluido</span><span class="f-unit">m/s</span></div>
+        <div class="f-var"><span class="f-sym">v</span><span class="f-desc">velocidad de salida</span><span class="f-unit">m/s</span></div>
+        <div class="f-var"><span class="f-sym">g</span><span class="f-desc">gravedad</span><span class="f-unit">9.8 m/s²</span></div>
+        <div class="f-var"><span class="f-sym">h</span><span class="f-desc">profundidad del agujero</span><span class="f-unit">m</span></div>
       </div>
     </div>
-
-    <div class="formula-card">
-      <div class="f-name">Ecuación de Continuidad</div>
-      <div class="f-eq">A₁ · v₁ = A₂ · v₂</div>
-      <div class="f-divider"></div>
-      <div class="f-vars">
-        <div class="f-var"><span class="f-sym">A</span><span class="f-desc">áreas de la tubería</span><span class="f-unit">m²</span></div>
-        <div class="f-var"><span class="f-sym">v</span><span class="f-desc">velocidades en esos puntos</span><span class="f-unit">m/s</span></div>
-      </div>
-    </div>
-
-    <div class="formula-card">
-      <div class="f-name">Área Circular (Tubo)</div>
-      <div class="f-eq">A = π · r²</div>
-      <div class="f-divider"></div>
-      <div class="f-vars">
-        <div class="f-var"><span class="f-sym">A</span><span class="f-desc">área transversal</span><span class="f-unit">m²</span></div>
-        <div class="f-var"><span class="f-sym">π</span><span class="f-desc">constante pi</span><span class="f-unit">3.1416</span></div>
-        <div class="f-var"><span class="f-sym">r</span><span class="f-desc">radio de la tubería</span><span class="f-unit">m</span></div>
-      </div>
-    </div>
-
   </div>
 </section>
 
 <!-- ═══ SIMULADOR ═══ -->
 <section class="v2-section v2-wrap anim-scroll" id="sec-sim">
   <div class="mb-md">
-    <div class="v2-sec-label text-accent">💧 Simulador de Tuberías</div>
-    <h2 class="v2-sec-title">Ecuación de Continuidad</h2>
-    <p class="v2-sec-desc">Ajusta el radio de entrada y el radio de salida de la tubería. Observa cómo cambia radicalmente la velocidad de las partículas para conservar el caudal.</p>
+    <div class="v2-sec-label text-accent">💧 Simulador Venturi</div>
+    <h2 class="v2-sec-title">Efecto Venturi en Acción</h2>
+    <p class="v2-sec-desc">Reduce el radio de la tubería en la sección central. Observa cómo, al aumentar la velocidad, la presión cae drásticamente.</p>
   </div>
 
   <div class="v2-sim">
     <div class="sim-topbar">
-      <div class="sim-tag"><div class="sim-dot" style="background:#4cc9f0;"></div> Flujo Continuo</div>
+      <div class="sim-tag"><div class="sim-dot" style="background:#4cc9f0;"></div> Bernoulli y Venturi</div>
       <div class="sim-ctrl-row">
-        <!-- El simulador corre automáticamente en hidrodinámica -->
         <button class="s-btn" id="btnReset" title="Restaurar a valores de fábrica">↺</button>
       </div>
     </div>
 
     <div class="sim-layout">
       <div class="sim-sidebar">
-
-        <div class="s-label" style="color:#a5b4fc;">Entrada (Izquierda)</div>
+        <div class="s-label" style="color:#4cc9f0;">Tubo Principal (Ancho)</div>
         <div class="s-label">Radio 1 (r₁)</div>
-        <input type="range" class="s-range" id="slR1" min="1" max="10" value="6" step="1">
+        <input type="range" class="s-range" id="slR1" min="3" max="8" value="6" step="1">
         <div class="s-val" id="valR1">r₁ = 6 m</div>
 
         <div style="height:1rem"></div>
 
-        <div class="s-label" style="color:#ffd166;">Salida (Derecha)</div>
+        <div class="s-label" style="color:#4361ee;">Estrechamiento Venturi</div>
         <div class="s-label">Radio 2 (r₂)</div>
-        <input type="range" class="s-range" id="slR2" min="1" max="10" value="3" step="1">
-        <div class="s-val" id="valR2">r₂ = 3 m</div>
-
-        <div style="height:1rem"></div>
-
-        <div class="s-label" style="color:#06d6a0;">Caudal Fijo (Q)</div>
-        <input type="range" class="s-range" id="slQ" min="100" max="1500" value="500" step="100">
-        <div class="s-val" id="valQ">Q = 500 m³/s</div>
+        <input type="range" class="s-range" id="slR2" min="1" max="6" value="2" step="0.5">
+        <div class="s-val" id="valR2">r₂ = 2 m</div>
 
         <div style="margin-top:1.5rem; padding:.85rem; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:12px;">
-          <div style="font-size:.72rem; color:var(--text-muted); margin-bottom:.5rem; font-weight:700; letter-spacing:.05em;">ANÁLISIS DE VELOCIDAD</div>
+          <div style="font-size:.72rem; color:var(--text-muted); margin-bottom:.5rem; font-weight:700; letter-spacing:.05em;">PRESIÓN RELATIVA</div>
           <div style="display:flex;flex-direction:column;gap:.32rem;">
-            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:#a5b4fc;">Velocidad Entrada (v₁)</span><span id="liveV1" style="font-size:.82rem;font-weight:800;color:#fff;">0 m/s</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:#ffd166;">Velocidad Salida (v₂)</span><span id="liveV2" style="font-size:.82rem;font-weight:800;color:#fff;">0 m/s</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:#4cc9f0;">Presión P₁</span><span id="liveP1" style="font-size:.82rem;font-weight:800;color:#fff;">100 kPa</span></div>
+            <div style="display:flex;justify-content:space-between;"><span style="font-size:.78rem;color:#4361ee;">Presión P₂ (Venturi)</span><span id="liveP2" style="font-size:.82rem;font-weight:800;color:#fff;">- kPa</span></div>
+            <div style="display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.08);padding-top:.32rem;margin-top:.1rem;"><span style="font-size:.78rem;color:var(--text-muted);">Velocidad Máxima</span><span id="liveV2" style="font-size:.82rem;font-weight:800;color:#fff;">0 m/s</span></div>
           </div>
         </div>
-
       </div>
 
       <div class="sim-main">
         <canvas id="simCanvas" height="250" style="width:100%;"></canvas>
         <p class="text-muted" style="margin-top:1rem; font-size:.8rem; text-align:center;">
-          Nota: Nota visual. Las áreas son proporcionales al cuadrado del radio. Si reduces el radio a la mitad, el área cae a una cuarta parte, por lo que la velocidad se multiplica por cuatro.
+          La caída de presión en el cuello central permite que los líquidos sean "succionados".
         </p>
       </div>
     </div>
@@ -354,21 +324,21 @@
   </div>
 
   <div class="yt-player-wrap" id="ytPlayerWrap">
-    <!-- REEMPLAZAR ID DEL VIDEO -->
-    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('aYjY3J22vIE')">
+    <!-- Se deja un ID genérico por ahora -->
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('t0dOLZXkpV4')">
       <img class="yt-thumb-img"
-           src="https://img.youtube.com/vi/aYjY3J22vIE/maxresdefault.jpg"
-           onerror="this.src='https://img.youtube.com/vi/aYjY3J22vIE/hqdefault.jpg'"
-           alt="Hidrodinámica — Física 10°">
+           src="https://img.youtube.com/vi/t0dOLZXkpV4/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/t0dOLZXkpV4/hqdefault.jpg'"
+           alt="Ecuación de Bernoulli — Física 10°">
       <div class="yt-thumb-overlay">
         <div class="yt-big-play">&#9654;</div>
       </div>
       <div class="yt-info-bar">
-        <div class="yt-title-bar">Hidrodinámica y Ecuación de Continuidad<br>
+        <div class="yt-title-bar">Principio de Bernoulli y Efecto Venturi<br>
           <span style="font-weight:400;opacity:.8;font-size:.78rem;">Fluidos en movimiento · Toca para reproducir</span>
         </div>
         <a class="yt-ext-btn"
-           href="https://www.youtube.com/watch?v=aYjY3J22vIE"
+           href="https://www.youtube.com/watch?v=t0dOLZXkpV4"
            target="_blank" rel="noopener"
            onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
       </div>
@@ -379,29 +349,28 @@
         allowfullscreen></iframe>
     </div>
   </div>
-  <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
-    * ⚠️ <strong>Nota para docente:</strong> Actualiza el ID del video si subes uno específico de Hidrodinámica a tu canal.
-  </p>
 </section>
 
 <!-- ═══ PhET ═══ -->
 <section class="v2-section-sm v2-wrap anim-scroll" id="sec-phet">
   <div class="mb-md">
     <div class="v2-sec-label text-accent">🧪 Laboratorio PhET</div>
-    <h2 class="v2-sec-title">Flujo de Fluidos</h2>
-    <p class="v2-sec-desc">Laboratorio completo interactivo sobre presión, velocidad y caudal en tubos modificables.</p>
+    <h2 class="v2-sec-title">Presión del Fluido</h2>
+    <p class="v2-sec-desc">Usa los medidores de presión para comprobar Bernoulli en una tubería.</p>
   </div>
-  <div class="phet-wrap">
-    <!-- Se incluye la simulación PhET Fluid Pressure and Flow -->
-    <iframe
-      src="https://phet.colorado.edu/sims/html/fluid-pressure-and-flow/latest/fluid-pressure-and-flow_es.html"
-      title="Presión del Fluido y Flujo - PhET"
-      allowfullscreen
-      loading="lazy">
+  <div class="phet-wrap" id="phetWrap3">
+    <div class="phet-placeholder" id="phetThumb3" onclick="phetLoadEmbed('phetThumb3', 'phetFrame3')">
+      <div class="phet-icon">🧪</div>
+      <button class="phet-btn">Cargar Simulador PhET</button>
+      <div class="phet-warning">Este simulador clásico requiere descargar un entorno de ejecución (~30MB). Puede demorar unos segundos.</div>
+    </div>
+    <iframe class="phet-iframe" id="phetFrame3"
+      data-src="https://phet.colorado.edu/sims/cheerpj/fluid-pressure-and-flow/latest/fluid-pressure-and-flow.html?simulation=fluid-pressure-and-flow&locale=es"
+      allowfullscreen>
     </iframe>
   </div>
   <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
-    💡 <strong>Actividad sugerida:</strong> Ve a la pestaña "Flujo". Abre el grifo. Agarra la tubería de un extremo y redúcela lo máximo posible. Usa el medidor de velocidad antes y después del estrangulamiento.
+    💡 <strong>Actividad sugerida:</strong> Abre la pestaña "Flujo". Activa los "Medidores de presión". Pon un medidor en la parte ancha y otro en el cuello estrecho. ¡Comprobarás que la presión baja donde el agua va más rápido!
   </p>
   <p class="phet-mobile-note">📱 Esta simulación funciona mejor en pantallas grandes o en un computador.</p>
 </section>
@@ -415,24 +384,24 @@
 
   <div class="grid-2" style="margin-bottom:2rem;">
     <div class="tip-card">
-      <div class="t-icon">📐</div>
-      <h4>Área NO es Radio</h4>
-      <p>Ten mucho cuidado en los problemas ICFES. La ecuación es A₁v₁ = A₂v₂. Si te dan el radio, recuerda que el área es proporcional al <strong>cuadrado del radio</strong> (A = πr²). ¡No cometas el error de usar el radio como área!</p>
+      <div class="t-icon">🏁</div>
+      <h4>Mayor velocidad = Menor presión</h4>
+      <p>Este es el principio de Bernoulli resumido. Es anti-intuitivo porque pensarías que el aire rápido "empuja más fuerte", pero en realidad su presión lateral sobre las paredes disminuye.</p>
     </div>
     <div class="tip-card">
-      <div class="t-icon">🚀</div>
-      <h4>Se reduce el tubo, la velocidad estalla</h4>
-      <p>Si el radio de un tubo se reduce a la mitad (1/2), su área transversal se reduce a la cuarta parte (1/4). Por continuidad, para conservar el caudal, ¡la velocidad tiene que aumentar cuatro veces!</p>
+      <div class="t-icon">🏠</div>
+      <h4>Techos en huracanes</h4>
+      <p>¿Por qué el viento arranca los techos hacia ARRIBA? El viento rápido por encima del techo crea una baja presión externa. El aire lento y calmado dentro de la casa tiene alta presión. Esa alta presión interna empuja el techo hacia arriba y lo arranca.</p>
     </div>
     <div class="tip-card">
-      <div class="t-icon">🌊</div>
-      <h4>El Caudal nunca cambia</h4>
-      <p>En una manguera única (sin ramificaciones), la cantidad de litros por segundo que entra por la llave es exactamente la misma que sale por la boquilla. Si alguien te pregunta dónde es mayor el caudal, la respuesta es: <strong>es igual en todos lados</strong>.</p>
+      <div class="t-icon">🚆</div>
+      <h4>La línea amarilla del metro</h4>
+      <p>Si te paras muy cerca de un tren bala, el aire rápido entre ti y el tren crea baja presión. La presión atmosférica de tu espalda te empujará hacia el tren. ¡Por eso hay líneas de seguridad!</p>
     </div>
     <div class="tip-card">
-      <div class="t-icon">🩸</div>
-      <h4>Flujo en tu cuerpo</h4>
-      <p>Esto se aplica a la sangre. La aorta es ancha, pero los capilares son diminutos. Si sumas el área de todos los capilares del cuerpo juntos, el área es inmensa. Por eso la sangre viaja lenta en los capilares y muy rápido en la aorta.</p>
+      <div class="t-icon">⚽</div>
+      <h4>Efecto Magnus en el fútbol</h4>
+      <p>Cuando un jugador patea un balón con "chanfle" (girando), el giro hace que el aire viaje más rápido por un lado de la pelota que por el otro. Esto genera diferencias de presión que hacen curvar mágicamente la trayectoria del balón.</p>
     </div>
   </div>
 
@@ -443,12 +412,12 @@
       <div class="err-cell err-head err-good">✅ Lo correcto</div>
     </div>
     <div class="err-row">
-      <div class="err-cell err-bad"><span class="mark">✗</span>Creer que al tapar media manguera con el dedo, sale "más agua".</div>
-      <div class="err-cell err-good"><span class="mark">✓</span>Sale exactamente la <strong>misma cantidad de agua</strong> por segundo (Q se conserva), pero como el hueco es más pequeño, el agua se ve obligada a salir a una <strong>velocidad mayor</strong>.</div>
+      <div class="err-cell err-bad"><span class="mark">✗</span>Creer que cuando el agua pasa por un tubo angosto, su presión aumenta porque está "apretada".</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Como el agua debe ir MÁS RÁPIDO para pasar por el cuello, su energía se convierte en velocidad, por lo tanto, la <strong>presión disminuye</strong>.</div>
     </div>
     <div class="err-row">
-      <div class="err-cell err-bad"><span class="mark">✗</span>Asumir que si el diámetro se duplica, la velocidad se reduce a la mitad.</div>
-      <div class="err-cell err-good"><span class="mark">✓</span>Si el diámetro se duplica, el ÁREA se cuadruplica (aumenta x4). Por lo tanto, la velocidad no cae a la mitad, cae a la cuarta parte (1/4).</div>
+      <div class="err-cell err-bad"><span class="mark">✗</span>Pensar que Torricelli depende de la masa de agua en el tanque.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>La velocidad del chorro <strong>solo depende de la profundidad (h)</strong> y la gravedad. Ni el área del tanque, ni su masa, ni la densidad afectan la velocidad en el teorema de Torricelli.</div>
     </div>
   </div>
 </section>
@@ -490,17 +459,17 @@
 <div class="v2-wrap">
   <hr class="v2-hr">
   <div class="v2-page-nav">
-    <a class="nav-btn-card" href="1_hidrostatica.html">
+    <a class="nav-btn-card" href="2_hidrodinamica.html">
       <span class="nbc-arr">←</span>
       <div>
         <div class="nbc-sub">Tema anterior</div>
-        <div class="nbc-title">Hidrostática</div>
+        <div class="nbc-title">Hidrodinámica</div>
       </div>
     </a>
-    <a class="nav-btn-card right" href="3_bernoulli.html">
+    <a class="nav-btn-card right" href="../periodo4/index.html">
       <div>
-        <div class="nbc-sub">Siguiente tema</div>
-        <div class="nbc-title">Ecuación de Bernoulli</div>
+        <div class="nbc-sub">Siguiente período</div>
+        <div class="nbc-title">Período 4</div>
       </div>
       <span class="nbc-arr">→</span>
     </a>
@@ -533,6 +502,17 @@ function ytLoadEmbed(id) {
   thumb.style.display = 'none'; frame.classList.add('visible');
   iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&color=white';
 }
+
+/* PHET LAZY LOAD */
+window.phetLoadEmbed = function(thumbId, frameId) {
+  const thumb = document.getElementById(thumbId);
+  const frame = document.getElementById(frameId);
+  if(thumb && frame) {
+    thumb.style.display = 'none';
+    frame.style.display = 'block';
+    frame.src = frame.getAttribute('data-src');
+  }
+};
 
 /* PROGRESS BAR */
 (function () {
@@ -572,7 +552,7 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
 });
 
 /* ==========================================
-   SIMULADOR DE CONTINUIDAD (Tubería)
+   SIMULADOR DE BERNOULLI / VENTURI
 ========================================== */
 (function () {
   const canvas = document.getElementById('simCanvas');
@@ -580,26 +560,27 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   
   const inputs = {
     r1: document.getElementById('slR1'),
-    r2: document.getElementById('slR2'),
-    q: document.getElementById('slQ')
+    r2: document.getElementById('slR2')
   };
   
   const vals = {
     r1: document.getElementById('valR1'),
-    r2: document.getElementById('valR2'),
-    q: document.getElementById('valQ')
+    r2: document.getElementById('valR2')
   };
 
   const lives = {
-    v1: document.getElementById('liveV1'),
+    p1: document.getElementById('liveP1'),
+    p2: document.getElementById('liveP2'),
     v2: document.getElementById('liveV2')
   };
 
   const btnReset = document.getElementById('btnReset');
 
   let raf;
-  let r1, r2, q;
-  let v1, v2;
+  let r1, r2;
+  const P1_BASE = 100000; // 100 kPa
+  const Q = 1000; // Caudal constante simulado
+  const RHO = 1000; // Densidad agua
   
   // Sistema de partículas
   const particles = [];
@@ -607,8 +588,8 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   
   for(let i=0; i<NUM_PARTICLES; i++) {
     particles.push({
-      x: Math.random() * 800, // posición aleatoria inicial en el ancho máximo asimilado
-      yRel: (Math.random() - 0.5) * 2 // entre -1 y 1 (posición relativa al tubo)
+      x: Math.random() * 800,
+      yRel: (Math.random() - 0.5) * 2 
     });
   }
 
@@ -623,136 +604,170 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   function readInputs() {
     r1 = parseFloat(inputs.r1.value);
     r2 = parseFloat(inputs.r2.value);
-    q = parseFloat(inputs.q.value);
+    
+    // Evitar que el cuello sea mayor que el tubo principal
+    if (r2 > r1) {
+      r2 = r1;
+      inputs.r2.value = r1;
+    }
     
     vals.r1.textContent = `r₁ = ${r1} m`;
     vals.r2.textContent = `r₂ = ${r2} m`;
-    vals.q.textContent = `Q = ${q} m³/s`;
     
-    // Áreas
-    const a1 = Math.PI * r1 * r1;
-    const a2 = Math.PI * r2 * r2;
+    // Cálculos de Bernoulli
+    const A1 = Math.PI * r1 * r1;
+    const A2 = Math.PI * r2 * r2;
     
-    // Velocidades
-    v1 = q / a1;
-    v2 = q / a2;
+    const v1 = Q / A1;
+    const v2 = Q / A2;
     
-    lives.v1.textContent = `${v1.toFixed(1)} m/s`;
+    // P1 + 0.5*rho*v1^2 = P2 + 0.5*rho*v2^2  (Asumiendo alturas iguales)
+    const P2 = P1_BASE + 0.5 * RHO * (v1*v1 - v2*v2);
+    
+    lives.p1.textContent = '100.0 kPa';
+    lives.p2.textContent = `${(P2/1000).toFixed(1)} kPa`;
     lives.v2.textContent = `${v2.toFixed(1)} m/s`;
+    
+    // Si la presión baja de cero (cavitación o vacío en modelo simple), pintar rojo
+    if (P2 < 0) lives.p2.style.color = '#e63946';
+    else lives.p2.style.color = '#fff';
+    
+    return { v1, v2 };
   }
 
   function resetSim() {
     inputs.r1.value = 6;
-    inputs.r2.value = 3;
-    inputs.q.value = 500;
+    inputs.r2.value = 2;
     readInputs();
   }
 
-  function drawPipe() {
+  function drawVenturiPipe() {
     const W = canvas.offsetWidth;
     const H = 250;
     const midX = W / 2;
     const centerY = H / 2;
     
-    // Proporciones visuales para radios
-    const visualScale = 8; 
+    const visualScale = 12; 
     const h1 = r1 * visualScale;
     const h2 = r2 * visualScale;
     
-    const transLen = 60; // longitud de la transición
+    const transLen = 60; 
     
     // Dibujo del tubo (Fondo)
     ctx.fillStyle = 'rgba(255,255,255,.05)';
     ctx.beginPath();
-    // Pared superior
     ctx.moveTo(0, centerY - h1);
-    ctx.lineTo(midX - transLen/2, centerY - h1);
-    ctx.lineTo(midX + transLen/2, centerY - h2);
-    ctx.lineTo(W, centerY - h2);
-    // Pared inferior
-    ctx.lineTo(W, centerY + h2);
-    ctx.lineTo(midX + transLen/2, centerY + h2);
-    ctx.lineTo(midX - transLen/2, centerY + h1);
+    ctx.lineTo(midX - transLen, centerY - h1);
+    ctx.lineTo(midX - transLen/3, centerY - h2);
+    ctx.lineTo(midX + transLen/3, centerY - h2);
+    ctx.lineTo(midX + transLen, centerY - h1);
+    ctx.lineTo(W, centerY - h1);
+    
+    ctx.lineTo(W, centerY + h1);
+    ctx.lineTo(midX + transLen, centerY + h1);
+    ctx.lineTo(midX + transLen/3, centerY + h2);
+    ctx.lineTo(midX - transLen/3, centerY + h2);
+    ctx.lineTo(midX - transLen, centerY + h1);
     ctx.lineTo(0, centerY + h1);
     ctx.closePath();
     ctx.fill();
     
     // Bordes del tubo
-    ctx.strokeStyle = 'rgba(76,201,240,.6)';
+    ctx.strokeStyle = 'rgba(67,97,238,.6)';
     ctx.lineWidth = 3;
     
     ctx.beginPath();
     ctx.moveTo(0, centerY - h1);
-    ctx.lineTo(midX - transLen/2, centerY - h1);
-    ctx.lineTo(midX + transLen/2, centerY - h2);
-    ctx.lineTo(W, centerY - h2);
+    ctx.lineTo(midX - transLen, centerY - h1);
+    ctx.lineTo(midX - transLen/3, centerY - h2);
+    ctx.lineTo(midX + transLen/3, centerY - h2);
+    ctx.lineTo(midX + transLen, centerY - h1);
+    ctx.lineTo(W, centerY - h1);
     ctx.stroke();
     
     ctx.beginPath();
     ctx.moveTo(0, centerY + h1);
-    ctx.lineTo(midX - transLen/2, centerY + h1);
-    ctx.lineTo(midX + transLen/2, centerY + h2);
-    ctx.lineTo(W, centerY + h2);
+    ctx.lineTo(midX - transLen, centerY + h1);
+    ctx.lineTo(midX - transLen/3, centerY + h2);
+    ctx.lineTo(midX + transLen/3, centerY + h2);
+    ctx.lineTo(midX + transLen, centerY + h1);
+    ctx.lineTo(W, centerY + h1);
     ctx.stroke();
+    
+    // Dibujar tubos manométricos
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(255,255,255,.3)';
+    ctx.fillStyle = 'rgba(76,201,240,.4)'; // Color del agua en manometro
+    
+    // Tubo 1 (Antes del Venturi)
+    const m1X = W * 0.2;
+    const p1H = 60; // Nivel de líquido representativo
+    ctx.beginPath(); ctx.rect(m1X - 6, centerY - h1 - 80, 12, 80); ctx.stroke();
+    ctx.fillRect(m1X - 5, centerY - h1 - p1H, 10, p1H);
+    
+    // Tubo 2 (En el Venturi)
+    const m2X = midX;
+    // La altura del manómetro 2 refleja la presión. Si P2 es menor, sube menos.
+    const ratio = Math.max(0, readInputs().v1 / readInputs().v2); // Aproximación visual
+    const p2H = 60 * ratio; 
+    ctx.beginPath(); ctx.rect(m2X - 6, centerY - h2 - 80, 12, 80); ctx.stroke();
+    ctx.fillRect(m2X - 5, centerY - h2 - p2H, 10, p2H);
     
     return { h1, h2, transLen, midX, centerY };
   }
 
   function renderLoop() {
-    readInputs();
+    const { v1, v2 } = readInputs();
     const W = canvas.offsetWidth;
     const H = 250;
     ctx.clearRect(0, 0, W, H);
     
-    const { h1, h2, transLen, midX, centerY } = drawPipe();
+    const { h1, h2, transLen, midX, centerY } = drawVenturiPipe();
     
-    // Actualizar y dibujar partículas
-    // Escala de velocidad visual para que sea comprensible
-    const visualVScale = 0.5; 
+    const visualVScale = 0.6; 
     
     ctx.fillStyle = '#4cc9f0';
     for(let i=0; i<NUM_PARTICLES; i++) {
       let p = particles[i];
       
-      // Encontrar altura del tubo en la posición x
       let currentHalfH;
       let currentV;
       
-      if (p.x < midX - transLen/2) {
-        currentHalfH = h1;
-        currentV = v1;
-      } else if (p.x > midX + transLen/2) {
-        currentHalfH = h2;
-        currentV = v2;
-      } else {
-        // En transición (interpolación lineal)
-        let t = (p.x - (midX - transLen/2)) / transLen;
+      if (p.x < midX - transLen) {
+        currentHalfH = h1; currentV = v1;
+      } else if (p.x > midX + transLen) {
+        currentHalfH = h1; currentV = v1;
+      } else if (p.x > midX - transLen/3 && p.x < midX + transLen/3) {
+        currentHalfH = h2; currentV = v2; // Centro estrecho
+      } else if (p.x >= midX - transLen && p.x <= midX - transLen/3) {
+        // Contracción
+        let t = (p.x - (midX - transLen)) / (transLen*0.66);
         currentHalfH = h1 + (h2 - h1) * t;
-        // La velocidad real es inversamente proporcional al cuadrado del radio
-        // Pero para la simulación usaremos una interpolación aproximada
-        let currentR = r1 + (r2 - r1) * t;
-        currentV = q / (Math.PI * currentR * currentR);
+        let cR = r1 + (r2 - r1)*t;
+        currentV = Q / (Math.PI * cR * cR);
+      } else {
+        // Expansión
+        let t = (p.x - (midX + transLen/3)) / (transLen*0.66);
+        currentHalfH = h2 + (h1 - h2) * t;
+        let cR = r2 + (r1 - r2)*t;
+        currentV = Q / (Math.PI * cR * cR);
       }
       
-      // Mover partícula
       p.x += currentV * visualVScale;
       
-      // Reciclar partícula al inicio si sale por la derecha
       if (p.x > W) {
         p.x = -10;
         p.yRel = (Math.random() - 0.5) * 2;
       }
       
-      // Dibujar
-      const absY = centerY + (p.yRel * currentHalfH * 0.85); // 0.85 para no rozar exactamente el borde
+      const absY = centerY + (p.yRel * currentHalfH * 0.85); 
       
       ctx.beginPath();
-      // Crear un efecto de estela basado en la velocidad
-      const tail = currentV * 0.8; 
+      const tail = currentV * 0.7; 
       ctx.moveTo(p.x, absY);
       ctx.lineTo(p.x - tail, absY);
       ctx.lineWidth = 2.5;
-      ctx.strokeStyle = `rgba(76,201,240,${0.3 + (currentV/v2)*0.6})`; // más rápido = más brillante
+      ctx.strokeStyle = `rgba(76,201,240,${0.4 + (currentV/v2)*0.6})`;
       ctx.stroke();
       
       ctx.beginPath();
@@ -767,7 +782,7 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   
   window.addEventListener('resize', () => { resize(); });
   resize(); readInputs(); 
-  renderLoop(); // Arranca en automático
+  renderLoop();
 })();
 
 /* ==========================================
@@ -776,103 +791,78 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
 (function () {
   const Qs = [
     {
-      q: 'El agua fluye por un tubo horizontal cerrado. Si el tubo se estrecha reduciendo su diámetro a la mitad, ¿qué sucede con la velocidad del agua?',
-      opts: ['A) Disminuye a la mitad', 'B) Se mantiene igual porque el caudal se conserva', 'C) Aumenta al doble', 'D) Aumenta cuatro veces'],
-      ans: 3,
-      fb: '✓ Correcto. El área de un círculo es A = πr². Si el diámetro (y por ende el radio) baja a 1/2, el área cae a (1/2)² = 1/4. Por la ecuación de continuidad, para mantener Q, la velocidad debe multiplicarse por 4.'
-    },
-    {
-      q: '¿Qué es el caudal (Gasto volumétrico)?',
-      opts: ['A) La fuerza con la que el agua golpea una pared', 'B) La cantidad de masa de agua en la tubería', 'C) El volumen de agua que pasa por una sección en un tiempo determinado', 'D) La presión interna de la tubería'],
+      q: 'Según el principio de Bernoulli, en una tubería horizontal por donde pasa un fluido incompresible, si la velocidad del fluido aumenta, la presión:',
+      opts: ['A) Aumenta proporcionalmente', 'B) Se mantiene igual', 'C) Disminuye', 'D) Se vuelve cero'],
       ans: 2,
-      fb: '✓ Correcto. El caudal (Q = V/t) mide el volumen de líquido que atraviesa la tubería cada segundo.'
+      fb: '✓ Correcto. A mayor velocidad, menor presión. Es la base del principio de Bernoulli y la conservación de la energía.'
     },
     {
-      q: 'Un agricultor del Huila usa una manguera conectada a la llave. Si no varía la apertura de la llave, pero él cambia la boquilla por una más ancha, ¿qué le ocurre al caudal?',
-      opts: ['A) El caudal disminuye', 'B) El caudal aumenta', 'C) El caudal se mantiene constante', 'D) El caudal se vuelve cero'],
+      q: '¿Por qué vuela un avión comercial?',
+      opts: ['A) Porque sus motores lo empujan tan fuerte que la gravedad no importa', 'B) Porque el aire pasa más rápido por debajo del ala, creando presión', 'C) Porque el aire pasa más rápido por ENCIMA del ala, creando una zona de baja presión que genera sustentación', 'D) Por el principio de Arquímedes flotando en el aire'],
       ans: 2,
-      fb: '✓ Correcto. En un sistema cerrado continuo el caudal lo impone la fuente (la llave de paso). Si cambia el ancho de la boquilla, cambia la VELOCIDAD del agua que sale, pero el CAUDAL general (litros por minuto) no varía.'
+      fb: '✓ Correcto. El perfil del ala hace que el aire superior viaje más rápido. Por Bernoulli, eso causa baja presión arriba y alta presión abajo, generando sustentación hacia arriba.'
     },
     {
-      q: '¿Qué diferencia principal hay entre un fluido ideal y uno real en la hidrodinámica básica?',
-      opts: ['A) El fluido ideal tiene mayor densidad', 'B) El fluido ideal se asume sin viscosidad', 'C) El fluido ideal fluye hacia arriba', 'D) El fluido ideal no puede comprimirse nunca, los líquidos reales sí, muy fácilmente'],
+      q: 'En un tanque de agua de 5 metros de profundidad se abre un pequeño agujero en el fondo. Si aplicamos el teorema de Torricelli, la velocidad de salida de agua dependerá de:',
+      opts: ['A) La masa total del agua', 'B) El diámetro del tanque', 'C) Únicamente la gravedad y la profundidad (h) de 5 metros', 'D) La densidad del agua'],
+      ans: 2,
+      fb: '✓ Correcto. La fórmula es v = √(2·g·h). Solo influye la gravedad y la altura (profundidad) de la columna de líquido.'
+    },
+    {
+      q: 'En un atomizador de perfume, al apretar la bomba se expulsa aire a gran velocidad sobre un tubo sumergido en el perfume. ¿Qué hace que el perfume suba por el tubo?',
+      opts: ['A) La alta velocidad del aire disminuye la presión arriba del tubo, por lo que la presión atmosférica dentro del frasco empuja el líquido hacia arriba', 'B) El aire arrastra las moléculas de perfume por magnetismo', 'C) La presión aumenta con la velocidad y empuja el líquido', 'D) El perfume se calienta y sube'],
+      ans: 0,
+      fb: '✓ Correcto. Es el efecto Venturi/Bernoulli. Aire rápido = baja presión. La presión atmosférica normal en el interior del frasco gana y empuja el perfume hacia esa baja presión.'
+    },
+    {
+      q: 'En una casa destechada por un huracán, ¿por qué el techo suele volar hacia arriba?',
+      opts: ['A) Porque el viento se mete por las ventanas y lo infla', 'B) Porque la baja presión creada por los vientos rápidos en el exterior "succiona" el techo, mientras la alta presión interior lo empuja', 'C) Porque la temperatura externa hace que los materiales se dilaten', 'D) Porque la lluvia afloja las tejas'],
       ans: 1,
-      fb: '✓ Correcto. En la hidrodinámica de 10° simplificamos los fluidos asumiéndolos "ideales", lo cual significa que ignoramos su viscosidad (fricción interna).'
-    },
-    {
-      q: 'Se tiene un tubo con una sección A₁=10 m² donde el agua viaja a 2 m/s. Se estrecha a A₂=5 m². ¿Cuál es la velocidad en la segunda sección?',
-      opts: ['A) 1 m/s', 'B) 2 m/s', 'C) 4 m/s', 'D) 10 m/s'],
-      ans: 2,
-      fb: '✓ Correcto. A₁·v₁ = A₂·v₂  =>  10 · 2 = 5 · v₂  =>  20 = 5 · v₂  =>  v₂ = 4 m/s. Como el área se redujo a la mitad, la velocidad se duplicó.'
+      fb: '✓ Correcto. El viento veloz sobre el techo crea una enorme zona de baja presión externa, mientras que el aire estancado y a alta presión dentro de la casa empuja el techo para escapar.'
     }
   ];
+  let curr=0, score=0, state=0;
+  const els = { q: document.getElementById('qText'), opts: document.getElementById('qOpts'), fb: document.getElementById('qFb'), nxt: document.getElementById('qNext'), fill: document.getElementById('quizFill'), cnt: document.getElementById('quizCnt'), ring: document.getElementById('scoreRing'), big: document.getElementById('scoreBig'), msg: document.getElementById('scoreMsg'), hint: document.getElementById('scoreHint'), res: document.getElementById('quizResult'), bdy: document.getElementById('quizBody'), resBtn: document.getElementById('qRestart') };
+  const L = ['A','B','C','D'];
 
-  let current = 0, score = 0, answered = false;
-  const qText = document.getElementById('qText'), qOpts = document.getElementById('qOpts');
-  const qFb = document.getElementById('qFb'), qNext = document.getElementById('qNext');
-  const quizFill = document.getElementById('quizFill'), quizCnt = document.getElementById('quizCnt');
-  const quizBody = document.getElementById('quizBody'), quizResult = document.getElementById('quizResult');
-  const scoreBig = document.getElementById('scoreBig'), scoreMsg = document.getElementById('scoreMsg');
-  const scoreHint = document.getElementById('scoreHint'), qRestart = document.getElementById('qRestart');
-  const L = ['A', 'B', 'C', 'D'];
-
-  function render() {
-    answered = false;
-    const p = Qs[current];
-    qText.textContent = p.q;
-    quizCnt.textContent = `Pregunta ${current + 1} de ${Qs.length}`;
-    quizFill.style.width = (current / Qs.length * 100) + '%';
-    qFb.className = 'quiz-fb'; qFb.textContent = ''; qNext.style.display = 'none';
-    qOpts.innerHTML = '';
-    p.opts.forEach((opt, i) => {
-      const btn = document.createElement('button'); btn.className = 'quiz-opt';
-      btn.style.cssText = 'display:flex;align-items:center;gap:.8rem;width:100%;padding:1rem 1.1rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:10px;cursor:pointer;font-size:1rem;font-family:inherit;color:#ffffff;text-align:left;min-height:54px;transition:all .2s;';
-      const ltr = document.createElement('span'); ltr.className = 'opt-ltr'; ltr.textContent = L[i];
-      ltr.style.cssText = 'display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#4361ee,#3a0ca3);color:#fff;font-weight:900;font-size:.9rem;box-shadow:0 0 12px rgba(67,97,238,.5);';
-      btn.appendChild(ltr); btn.appendChild(document.createTextNode(opt.replace(/^[ABCD]\) /, '')));
-      btn.addEventListener('click', () => {
-        if (answered) return; answered = true;
-        qOpts.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('answered'));
-        if (i === p.ans) {
-          btn.style.background = 'rgba(6,214,160,.18)'; btn.style.borderColor = '#06d6a0';
-          ltr.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)'; score++;
-          qFb.textContent = p.fb; qFb.className = 'quiz-fb ok-fb show';
-        } else {
-          btn.style.background = 'rgba(230,57,70,.18)'; btn.style.borderColor = '#e63946';
-          ltr.style.background = 'linear-gradient(135deg,#e63946,#9b2226)';
-          const cb = qOpts.querySelectorAll('.quiz-opt')[p.ans];
-          cb.style.background = 'rgba(6,214,160,.18)'; cb.style.borderColor = '#06d6a0';
-          const cl = cb.querySelector('.opt-ltr'); if (cl) cl.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)';
-          qFb.textContent = '✗ Incorrecto. ' + p.fb; qFb.className = 'quiz-fb err-fb show';
-        }
-        qNext.style.display = 'inline-flex';
-      });
-      qOpts.appendChild(btn);
+  function load() {
+    state=0; els.nxt.style.display='none'; els.fb.style.display='none';
+    els.opts.innerHTML=''; els.q.textContent = Qs[curr].q;
+    els.cnt.textContent = `Pregunta ${curr+1} de ${Qs.length}`;
+    els.fill.style.width = `${(curr/Qs.length)*100}%`;
+    Qs[curr].opts.forEach((o,i)=>{
+      const b = document.createElement('button'); b.className='v2-btn quiz-opt';
+      b.innerHTML = `<div class="opt-ltr">${L[i]}</div><div style="text-align:left;flex:1;">${o.substring(3)}</div>`;
+      b.onclick = ()=> pick(i, b);
+      els.opts.appendChild(b);
     });
   }
 
-  qNext.addEventListener('click', () => { current++; if (current >= Qs.length) showResult(); else render(); });
-
-  function showResult() {
-    quizFill.style.width = '100%';
-    quizBody.style.display = 'none'; document.querySelector('.quiz-foot').style.display = 'none';
-    quizResult.classList.add('show'); scoreBig.textContent = score + '/' + Qs.length;
-    const pct = score / Qs.length;
-    if (pct === 1)       { scoreMsg.textContent = '🏆 ¡Excelente! Eres un experto en fluidos.'; scoreHint.textContent = 'Comprendes a la perfección la ecuación de continuidad. Ya estás listo para el último reto: Bernoulli.'; }
-    else if (pct >= 0.6) { scoreMsg.textContent = '👍 ¡Buen trabajo!'; scoreHint.textContent = 'Recuerda muy bien la relación cuadrática entre el área y el radio de la tubería.'; }
-    else                 { scoreMsg.textContent = '📖 Vuelve a repasar el tema.'; scoreHint.textContent = 'La relación área/velocidad es vital. Intenta usar el simulador de tuberías nuevamente prestando atención a los números.'; }
+  function pick(idx, btn) {
+    if(state===1) return; state=1;
+    const crt = Qs[curr].ans;
+    const btns = els.opts.children;
+    for(let b of btns) b.classList.add('answered');
+    if(idx===crt) { btn.classList.add('correct'); score++; }
+    else { btn.classList.add('wrong'); btns[crt].classList.add('correct'); }
+    els.fb.textContent = Qs[curr].fb; els.fb.className = 'quiz-fb ' + (idx===crt?'good':'bad');
+    els.fb.style.display = 'block'; els.nxt.style.display = 'inline-flex';
   }
 
-  qRestart.addEventListener('click', () => {
-    current = 0; score = 0;
-    quizBody.style.display = ''; document.querySelector('.quiz-foot').style.display = '';
-    quizResult.classList.remove('show'); render();
-  });
+  function showRes() {
+    els.bdy.style.display='none'; els.nxt.style.display='none';
+    els.res.style.display='flex'; els.cnt.textContent = 'Resultados finales';
+    els.fill.style.width = '100%'; els.big.textContent = `${score}/${Qs.length}`;
+    let m = '¡Excelente trabajo!', h = 'Dominas la Ecuación de Bernoulli.';
+    if(score<3) { m = 'Sigue practicando'; h = 'Repasa la relación entre presión y velocidad.'; els.ring.style.background = '#e63946'; }
+    els.msg.textContent = m; els.hint.textContent = h;
+  }
 
-  render();
+  els.nxt.onclick = ()=> { curr++; if(curr<Qs.length) load(); else showRes(); };
+  els.resBtn.onclick = ()=> { curr=0; score=0; els.ring.style.background = 'var(--accent-grad)'; els.bdy.style.display='block'; els.res.style.display='none'; load(); };
+  load();
 })();
 </script>
 
 </body>
 </html>
-
