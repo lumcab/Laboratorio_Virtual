@@ -72,21 +72,28 @@
     /* ── VIDEO: thumbnail ── */
     .yt-player-wrap { border-radius: var(--r-md); overflow: hidden; }
     .yt-thumb-card {
-      position: relative; aspect-ratio: 16/9; cursor: pointer; background: #000; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1);
+      position: relative; aspect-ratio: 16/9; cursor: pointer;
+      background: linear-gradient(135deg, #7209b7 0%, #560bad 50%, #f72585 100%);
+      border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1);
+    }
+    .yt-thumb-card::before {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(135deg, rgba(114,9,183,.45) 0%, rgba(247,37,133,.25) 100%);
+      pointer-events: none;
     }
     .yt-thumb-img {
       width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease, filter .4s ease; filter: brightness(.75);
     }
     .yt-thumb-card:hover .yt-thumb-img { transform: scale(1.04); filter: brightness(.6); }
     .yt-thumb-overlay {
-      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
+      position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
     }
     .yt-big-play {
       width: 72px; height: 72px; border-radius: 50%; background: rgba(255,0,0,.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #fff; box-shadow: 0 4px 30px rgba(0,0,0,.5); transition: transform .25s ease, background .25s ease;
     }
     .yt-thumb-card:hover .yt-big-play { transform: scale(1.12); background: #ff0000; }
     .yt-info-bar {
-      position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,.85), transparent); padding: 1.5rem 1rem .8rem; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; background: linear-gradient(to top, rgba(0,0,0,.85), transparent); padding: 1.5rem 1rem .8rem; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
     }
     .yt-title-bar { font-size: .88rem; font-weight: 700; color: #fff; line-height: 1.3; }
     .yt-ext-btn {
@@ -403,25 +410,20 @@
   </div>
 
   <div class="yt-player-wrap" id="ytPlayerWrap">
-    <!-- El ID VIDEO_ID_AQUI sirve como placeholder para que luego el docente inserte su video -->
-    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('VIDEO_ID_AQUI')">
-      
-      <!-- Se usa una miniatura genérica, pero está lista para el ID real -->
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('_D7zaQN-M6Y')">
       <img class="yt-thumb-img"
-           src="https://img.youtube.com/vi/VIDEO_ID_AQUI/maxresdefault.jpg"
-           onerror="this.src='https://images.unsplash.com/photo-1516223725307-6f76b91ea1ab?q=80&w=1200&auto=format&fit=crop'"
+           src="https://img.youtube.com/vi/_D7zaQN-M6Y/hqdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/_D7zaQN-M6Y/mqdefault.jpg'"
            alt="Explicación Ondas y Sonido">
-      
       <div class="yt-thumb-overlay">
         <div class="yt-big-play">&#9654;</div>
       </div>
-      
       <div class="yt-info-bar">
-        <div class="yt-title-bar">Todo sobre Ondas y Sonido<br>
-          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Toca para reproducir la clase (Video Próximamente)</span>
+        <div class="yt-title-bar">Ondas y Sonido<br>
+          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Física 11° · Toca para reproducir</span>
         </div>
         <a class="yt-ext-btn"
-           href="https://www.youtube.com/watch?v=VIDEO_ID_AQUI"
+           href="https://www.youtube.com/watch?v=_D7zaQN-M6Y"
            target="_blank" rel="noopener"
            onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
       </div>
@@ -639,10 +641,6 @@
 })();
 
 function ytLoadEmbed(videoId) {
-  if (videoId === 'VIDEO_ID_AQUI') {
-    alert("Este video estará disponible próximamente. ¡Atento a las actualizaciones del profesor!");
-    return;
-  }
   const thumb = document.getElementById('ytThumbCard');
   const frame = document.getElementById('ytEmbedFrame');
   const iframe = document.getElementById('ytIframe');

@@ -74,8 +74,14 @@
     .yt-player-wrap { border-radius: var(--r-md); overflow: hidden; }
     .yt-thumb-card {
       position: relative; aspect-ratio: 16/9; cursor: pointer;
-      background: #000; border-radius: var(--r-md); overflow: hidden;
+      background: linear-gradient(135deg, #7209b7 0%, #560bad 50%, #f72585 100%);
+      border-radius: var(--r-md); overflow: hidden;
       border: 1px solid rgba(255,255,255,.1);
+    }
+    .yt-thumb-card::before {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(135deg, rgba(114,9,183,.45) 0%, rgba(247,37,133,.25) 100%);
+      pointer-events: none;
     }
     .yt-thumb-img {
       width: 100%; height: 100%; object-fit: cover;
@@ -84,7 +90,7 @@
     }
     .yt-thumb-card:hover .yt-thumb-img { transform: scale(1.04); filter: brightness(.6); }
     .yt-thumb-overlay {
-      position: absolute; inset: 0;
+      position: absolute; inset: 0; z-index: 2;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 1rem;
     }
@@ -98,7 +104,7 @@
     }
     .yt-thumb-card:hover .yt-big-play { transform: scale(1.12); background: #ff0000; }
     .yt-info-bar {
-      position: absolute; bottom: 0; left: 0; right: 0;
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
       background: linear-gradient(to top, rgba(0,0,0,.85), transparent);
       padding: 1.5rem 1rem .8rem;
       display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
@@ -465,23 +471,21 @@
     <p class="v2-sec-desc">Tómate un descanso y revisa de manera gráfica cómo se desarrollan las ecuaciones del MAS.</p>
   </div>
 
-  <!-- Video YouTube Placeholder (Using typical physics thumbnail) -->
   <div class="yt-player-wrap" id="ytPlayerWrap">
-    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('zV0i4yK_cQ8')">
-      <!-- Thumbnail genérico de clase de física / MAS -->
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('Np9r--W-Kgg')">
       <img class="yt-thumb-img"
-           src="https://img.youtube.com/vi/zV0i4yK_cQ8/maxresdefault.jpg"
-           onerror="this.src='https://img.youtube.com/vi/zV0i4yK_cQ8/hqdefault.jpg'"
+           src="https://img.youtube.com/vi/Np9r--W-Kgg/hqdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/Np9r--W-Kgg/mqdefault.jpg'"
            alt="Movimiento Armónico Simple">
       <div class="yt-thumb-overlay">
         <div class="yt-big-play">&#9654;</div>
       </div>
       <div class="yt-info-bar">
-        <div class="yt-title-bar">Todo sobre el Movimiento Armónico Simple<br>
-          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Gráficas, energía y leyes · Toca para reproducir</span>
+        <div class="yt-title-bar">Movimiento Armónico Simple<br>
+          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Física 11° · Toca para reproducir</span>
         </div>
         <a class="yt-ext-btn"
-           href="https://www.youtube.com/watch?v=zV0i4yK_cQ8"
+           href="https://www.youtube.com/watch?v=Np9r--W-Kgg"
            target="_blank" rel="noopener"
            onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
       </div>

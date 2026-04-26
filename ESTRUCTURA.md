@@ -9,7 +9,7 @@
 
 - **CSS base:** `css/tema-v2.css` — sistema visual aprobado, no reemplazar
 - **Tema JS:** `js/theme.js` — toggle oscuro/claro, cargado en `<head>` de todas las páginas
-- **Modelo de página de tema:** `fisica10/periodo1/3_cinematica_v2.html`
+- **Modelo de página de tema:** `fisica10/periodo1/3_cinematica.html`
 - **Profundidad 0** (raíz): `href="css/tema-v2.css"` · `src="js/theme.js"`
 - **Profundidad 1** (materia): `href="../css/tema-v2.css"` · `src="../js/theme.js"`
 - **Profundidad 2** (período/tema): `href="../../css/tema-v2.css"` · `src="../../js/theme.js"`
@@ -60,7 +60,7 @@
 | `fisica10/periodo1/index.html` | Índice período | ✅ Completo |
 | `fisica10/periodo1/1_intro_fisica.html` | Introducción a la física | ✅ Completo |
 | `fisica10/periodo1/2_magnitudes_vectores.html` | Magnitudes, unidades y vectores | ✅ Completo |
-| `fisica10/periodo1/3_cinematica_v2.html` | Cinemática MRU/MRUV | ✅ Completo · modelo aprobado |
+| `fisica10/periodo1/3_cinematica.html` | Cinemática MRU/MRUV | ✅ Completo · modelo aprobado |
 
 ### Física 10° — Período 2 · Fuerzas y energía
 | Archivo | Tema | Estado |
@@ -93,7 +93,7 @@
 | `fisica11/periodo1/index.html` | Índice período | ✅ Completo |
 | `fisica11/periodo1/1_mas.html` | Movimiento armónico simple | ✅ Completo |
 | `fisica11/periodo1/2_ondas_sonido.html` | Ondas y sonido | ✅ Completo |
-| `fisica11/periodo1/3_sismica.html` | Sísmica y ondas sísmicas | ⬜ Pendiente |
+| `fisica11/periodo1/3_sismica.html` | Sísmica y ondas sísmicas | ✅ Completo |
 
 ### Física 11° — Período 2 · Óptica
 | Archivo | Tema | Estado |
@@ -188,10 +188,10 @@
 |---|---|---|---|
 | Infraestructura | 7 | 7 | 100% |
 | Física 10° | 11 | 11 | 100% |
-| Física 11° | 2 | 9 | 22% |
+| Física 11° | 3 | 9 | 33% |
 | Matemáticas 6° | 0 | 12 | 0% |
 | Geometría 6° | 0 | 8 | 0% |
-| **Total** | **19** | **47** | **40%** |
+| **Total** | **21** | **47** | **45%** |
 
 ---
 
@@ -209,8 +209,12 @@
 | Física 10° | Hidrodinámica | `hHEd6rfc6xg` | ✅ Verificado |
 | Física 10° | Ecuación de Bernoulli | `t0dOLZXkpV4` | ✅ Verificado |
 | Física 10° | Temperatura y calor | `RDOnnSdB7n8` | ✅ Verificado |
+| Física 10° | Termodinámica | `Z6JGLOWXkg4` | ✅ Verificado |
+| Física 11° | Movimiento armónico simple | `Np9r--W-Kgg` | ✅ Verificado |
+| Física 11° | Ondas y sonido | `_D7zaQN-M6Y` | ✅ Verificado |
+| Física 11° | Sísmica y ondas sísmicas | `5PKXzvkEQJg` | ✅ Verificado |
 
-> **Nota de desarrollo:** Al crear nuevas páginas, dejar el bloque del video de YouTube configurado con un identificador de marcador de posición (por ejemplo, `VIDEO_ID_AQUI`) en los enlaces e imágenes, para que el usuario pueda proporcionar su propio video posteriormente.
+> **Nota:** Todos los videos son grabaciones del propio docente (canal lumcab). Nunca reemplazar IDs existentes. Miniatura: `hqdefault.jpg` con fallback `mqdefault.jpg`.
 
 ---
 
@@ -234,7 +238,7 @@
 
 1. Abrir este archivo `ESTRUCTURA.md`
 2. Identificar la siguiente fila con estado ⬜ Pendiente
-3. Leer el modelo: `fisica10/periodo1/3_cinematica_v2.html`
+3. Leer el modelo: `fisica10/periodo1/3_cinematica.html`
 4. Crear la página siguiendo exactamente la misma estructura y colores de la materia
 5. Marcar la fila como ✅ Completo en este archivo
 

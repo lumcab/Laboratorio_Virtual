@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sísmica y Ondas Sísmicas | Física 11° · VirtualLab</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/icons/favicon.ico">
+  <link rel="stylesheet" href="../../css/tema-v2.css">
+  <script src="../../js/theme.js"></script>
+  <style>
+    :root {
+      --accent-a: #7209b7;
+      --accent-b: #560bad;
+      --accent-c: #f72585;
+      --accent-grad: linear-gradient(135deg, #7209b7 0%, #f72585 100%);
+      --hero-c1: #f72585;
+      --hero-c2: #7209b7;
+    }
+    .v2-badge      { background: rgba(114,9,183,.12); border-color: rgba(114,9,183,.35); color: #f72585; }
+    .badge-dot     { background: #f72585; }
+    .o-core        { background: var(--accent-grad); box-shadow: 0 0 40px rgba(247,37,133,.6); }
+    .o-ring-1      { width: 110px; height: 110px; border-color: rgba(114,9,183,.45); animation-duration: 4s; }
+    .o-ring-1::after { background: #7209b7; box-shadow: 0 0 14px #7209b7; }
+    .o-ring-2      { width: 190px; height: 190px; border-color: rgba(247,37,133,.35); animation-duration: 7s; animation-direction: reverse; }
+    .o-ring-2::after { background: #f72585; box-shadow: 0 0 14px #f72585; }
+    .o-ring-3      { width: 290px; height: 290px; border-color: rgba(86,11,173,.3); animation-duration: 13s; }
+    .o-ring-3::after { background: #560bad; box-shadow: 0 0 14px #560bad; width: 8px; height: 8px; top:-4px; left: calc(50% - 4px); }
+    .v2-tab.active { background: var(--accent-a); }
+    .f-eq          { color: #f72585; }
+    .f-sym         { color: #4cc9f0; }
+    .quiz-prog-fill { background: var(--accent-grad); }
+    .score-ring    { background: var(--accent-grad); }
+
+    /* Ondas expansivas en el hero */
+    .seismic-ring {
+      position: absolute; border: 2px solid rgba(247,37,133,0.25); border-radius: 50%;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      animation: seismicwave 5s ease-out infinite; pointer-events: none;
+    }
+    .sr-2 { animation-delay: 1.66s; border-color: rgba(114,9,183,0.25); }
+    .sr-3 { animation-delay: 3.33s; border-color: rgba(76,201,240,0.2); }
+    @keyframes seismicwave {
+      0%   { width: 20px; height: 20px; opacity: 1; }
+      100% { width: 700px; height: 700px; opacity: 0; }
+    }
+
+    #simCanvas { border-radius: 10px; background: rgba(0,0,0,.5); box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
+
+    .quiz-opt {
+      color: #ffffff !important; font-size: 1rem; min-height: 54px;
+      background: rgba(255,255,255,.05) !important; border-color: rgba(255,255,255,.12) !important;
+    }
+    .quiz-opt:hover:not(.answered) { background: rgba(114,9,183,.18) !important; border-color: #7209b7 !important; }
+    .opt-ltr {
+      background: linear-gradient(135deg,#7209b7,#560bad) !important; border: none !important; color: #fff !important;
+      font-weight: 900 !important; width: 36px !important; height: 36px !important; font-size: .88rem !important; box-shadow: 0 0 10px rgba(114,9,183,.4);
+    }
+    .quiz-opt.correct           { background: rgba(6,214,160,.15) !important; border-color: #06d6a0 !important; }
+    .quiz-opt.correct .opt-ltr  { background: linear-gradient(135deg,#06d6a0,#048a68) !important; }
+    .quiz-opt.wrong             { background: rgba(230,57,70,.15) !important; border-color: #e63946 !important; }
+    .quiz-opt.wrong   .opt-ltr  { background: linear-gradient(135deg,#e63946,#9b2226) !important; }
+
+    .yt-player-wrap { border-radius: var(--r-md); overflow: hidden; }
+    .yt-thumb-card  { position: relative; aspect-ratio: 16/9; cursor: pointer; background: linear-gradient(135deg, #7209b7 0%, #560bad 50%, #f72585 100%); border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-thumb-card::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(135deg, rgba(114,9,183,.45) 0%, rgba(247,37,133,.25) 100%); pointer-events: none; }
+    .yt-thumb-img   { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease, filter .4s ease; filter: brightness(.75); }
+    .yt-thumb-card:hover .yt-thumb-img { transform: scale(1.04); filter: brightness(.6); }
+    .yt-thumb-overlay { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+    .yt-big-play { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,0,0,.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #fff; box-shadow: 0 4px 30px rgba(0,0,0,.5); transition: transform .25s ease, background .25s ease; }
+    .yt-thumb-card:hover .yt-big-play { transform: scale(1.12); background: #ff0000; }
+    .yt-info-bar { position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; background: linear-gradient(to top, rgba(0,0,0,.85), transparent); padding: 1.5rem 1rem .8rem; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    .yt-title-bar { font-size: .88rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .yt-ext-btn { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); color: #fff; padding: .35rem .8rem; border-radius: 6px; font-size: .75rem; font-weight: 600; text-decoration: none; white-space: nowrap; flex-shrink: 0; backdrop-filter: blur(6px); transition: background .2s; }
+    .yt-ext-btn:hover { background: rgba(255,255,255,.3); }
+    .yt-embed-frame { display: none; position: relative; aspect-ratio: 16/9; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .yt-embed-frame.visible { display: block; }
+
+    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .phet-mobile-note { display: none; background: rgba(255,209,102,.08); border: 1px solid rgba(255,209,102,.25); border-radius: var(--r-sm); padding: .7rem 1rem; margin-top: .8rem; font-size: .82rem; color: #ffd166; }
+
+    .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { display: flex; align-items: center; gap: .9rem; }
+    .footer-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-grad); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 900; color: #fff; box-shadow: 0 0 18px rgba(114,9,183,.5); flex-shrink: 0; }
+    .footer-name  { font-weight: 800; font-size: .96rem; color: var(--text); }
+    .footer-role  { font-size: .75rem; color: var(--text-muted); margin-top: .1rem; }
+    .footer-right { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .footer-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .28rem .75rem; border-radius: 100px; background: rgba(114,9,183,.12); border: 1px solid rgba(114,9,183,.28); font-size: .73rem; font-weight: 700; color: #f72585; }
+    .footer-tag { font-size: .73rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); }
+
+    /* Leyenda del simulador */
+    .sim-legend { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: .8rem; }
+    .sim-legend-item { display: flex; align-items: center; gap: .5rem; font-size: .8rem; color: var(--text-muted); }
+    .sim-legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+
+    @media(max-width:600px) {
+      .phet-mobile-note { display: block; }
+      .phet-wrap { padding-bottom: 80%; }
+      .yt-big-play { width: 60px; height: 60px; font-size: 1.3rem; }
+      .footer-role { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="page-progress"></div>
+
+<nav class="v2-nav">
+  <div class="inner">
+    <a class="nav-logo" href="../../index.html"><svg class="logo-atom" viewBox="0 0 40 40" width="26" height="26" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="3.2" fill="currentColor"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(120 20 20)"/></svg><span class="logo-text">VirtualLab</span></a>
+    <div class="nav-crumbs">
+      <a href="../../index.html">Inicio</a> <span class="sep">›</span>
+      <a href="../index.html">Física 11°</a> <span class="sep">›</span>
+      <a href="index.html">Período 1</a> <span class="sep">›</span>
+      <span class="current">Sísmica</span>
+    </div>
+    <div class="nav-right">
+      <a class="v2-btn v2-btn-ghost" href="2_ondas_sonido.html">← Ondas y Sonido</a>
+      <a class="v2-btn v2-btn-primary" href="../periodo2/index.html">Período 2 →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="v2-hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-particles-layer" style="z-index:1;">
+    <div class="seismic-ring sr-1"></div>
+    <div class="seismic-ring sr-2"></div>
+    <div class="seismic-ring sr-3"></div>
+  </div>
+  <div class="v2-wrap">
+    <div class="hero-content-wrap">
+      <div class="v2-badge">
+        <span class="badge-dot"></span>
+        <a href="../index.html" style="color:inherit; text-decoration:none;">Física 11°</a> &nbsp;·&nbsp; <a href="index.html" style="color:inherit; text-decoration:none;">Período 1</a> &nbsp;·&nbsp; Tema 3
+      </div>
+      <h1>Sísmica y Ondas Sísmicas</h1>
+      <p class="hero-sub">
+        Descubre cómo los terremotos liberan ondas que viajan por toda la Tierra. Entiende la diferencia entre ondas P y S, la escala de Richter y por qué el Huila es una de las zonas sísmicas más activas de Colombia.
+      </p>
+      <div class="hero-tags">
+        <span class="h-tag">🌍 Ondas P y S</span>
+        <span class="h-tag">📡 Sismógrafo</span>
+        <span class="h-tag">📊 Escala Richter</span>
+        <span class="h-tag">⚠️ Riesgo sísmico</span>
+      </div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-mouse"></div>
+        <span>Desliza para explorar</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual-wrap">
+    <div class="orbital">
+      <div class="o-core"></div>
+      <div class="o-ring o-ring-1"></div>
+      <div class="o-ring o-ring-2"></div>
+      <div class="o-ring o-ring-3"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══ TEORÍA ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-teoria">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📖 Teoría</div>
+    <h2 class="v2-sec-title">La Tierra en Movimiento</h2>
+    <p class="v2-sec-desc">Explora las pestañas para entender cómo se generan, viajan y detectan los terremotos.</p>
+  </div>
+
+  <div class="v2-tabs">
+    <button class="v2-tab active" data-tab="t-ondas">🌊 Ondas Sísmicas</button>
+    <button class="v2-tab" data-tab="t-richter">📊 Escala de Richter</button>
+    <button class="v2-tab" data-tab="t-sismografo">📡 Sismógrafo</button>
+    <button class="v2-tab" data-tab="t-riesgo">⚠️ Riesgo en Colombia</button>
+  </div>
+
+  <div class="v2-card">
+    <div id="t-ondas" class="v2-tab-panel active">
+      <button class="copy-teoria-btn" data-target="copy-ondas">📋 Copiar apuntes</button>
+      <div class="teoria-body" id="copy-ondas">
+        <h3>Tipos de Ondas Sísmicas</h3>
+        <p>Cuando se produce un terremoto en el <strong>hipocentro</strong> (foco interno), la energía liberada viaja por la Tierra en forma de tres tipos de ondas sísmicas:</p>
+
+        <h4>1. Ondas Primarias (P) — Las más rápidas</h4>
+        <ul>
+          <li><strong>Tipo:</strong> Ondas longitudinales (comprimen y expanden el medio en la dirección de avance).</li>
+          <li><strong>Velocidad:</strong> 6–8 km/s en la corteza terrestre. Son las primeras en llegar a las estaciones.</li>
+          <li><strong>Propagación:</strong> Pueden viajar por sólidos, líquidos y gases. Incluso atraviesan el núcleo externo líquido de la Tierra.</li>
+          <li><strong>Daño:</strong> Producen poco daño superficial, pero son las que despiertan animales y hacen crujir edificios justo antes del sismo.</li>
+        </ul>
+
+        <h4>2. Ondas Secundarias (S) — Las más destructivas</h4>
+        <ul>
+          <li><strong>Tipo:</strong> Ondas transversales (mueven el suelo de lado a lado, perpendicular a su dirección de avance).</li>
+          <li><strong>Velocidad:</strong> 3.5–4.5 km/s. Siempre llegan DESPUÉS de las ondas P.</li>
+          <li><strong>Propagación:</strong> Solo viajan por sólidos. No pueden pasar por líquidos (esto ayudó a descubrir que el núcleo externo es líquido).</li>
+          <li><strong>Daño:</strong> Son las principales responsables del movimiento oscilante del terreno y los daños estructurales.</li>
+        </ul>
+
+        <h4>3. Ondas Superficiales (L y R)</h4>
+        <p>Viajan por la superficie terrestre y son más lentas que P y S, pero generan los movimientos más grandes y causan la mayor destrucción visible (ondulación del suelo, tsunamis).</p>
+
+        <div class="key-box">💡 <strong>Clave ICFES:</strong> Las ondas P llegan primero (Primarias = Primero). Las ondas S llegan después (Secundarias = después). La diferencia de tiempo entre su llegada permite calcular la distancia al epicentro.</div>
+      </div>
+    </div>
+
+    <div id="t-richter" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-richter">📋 Copiar apuntes</button>
+      <div class="teoria-body" id="copy-richter">
+        <h3>Cómo Medimos los Terremotos</h3>
+
+        <h4>Escala de Magnitud de Richter (Magnitud Local)</h4>
+        <p>Mide la energía liberada en el hipocentro del terremoto. Es una <strong>escala logarítmica</strong>, lo que significa que cada punto entero representa 10 veces más amplitud en el sismograma y aproximadamente <strong>31.6 veces más energía liberada</strong>.</p>
+        <div class="key-box">💡 Un terremoto de 7.0 libera ≈ 31.6 veces más energía que uno de 6.0, y ≈ 1000 veces más energía que uno de 5.0.</div>
+
+        <h4>Escala de Intensidad de Mercalli</h4>
+        <p>A diferencia de Richter (que mide la energía objetiva), la escala de Mercalli (I al XII) mide el <strong>efecto percibido por personas</strong> en distintos lugares. Un mismo sismo puede sentirse con diferente intensidad Mercalli según la distancia y tipo de suelo.</p>
+
+        <h4>Clasificación por Magnitud Richter:</h4>
+        <ul>
+          <li><strong>Menor de 2.0:</strong> Microterremoto. No se siente.</li>
+          <li><strong>2.0 – 3.9:</strong> Leve. Registrado, raramente sentido.</li>
+          <li><strong>4.0 – 4.9:</strong> Moderado. Se siente claramente, sin daños mayores.</li>
+          <li><strong>5.0 – 5.9:</strong> Medio. Daños leves en estructuras.</li>
+          <li><strong>6.0 – 6.9:</strong> Fuerte. Daños graves en zonas habitadas.</li>
+          <li><strong>7.0 o más:</strong> Gran terremoto. Destrucción masiva en áreas extensas.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="t-sismografo" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-sismografo">📋 Copiar apuntes</button>
+      <div class="teoria-body" id="copy-sismografo">
+        <h3>El Sismógrafo: Oídos de la Tierra</h3>
+        <p>Un <strong>sismógrafo</strong> es el instrumento que detecta y registra el movimiento del suelo producido por las ondas sísmicas. El registro gráfico que produce se llama <strong>sismograma</strong>.</p>
+
+        <h4>¿Cómo funciona?</h4>
+        <p>Se basa en la <strong>inercia</strong>: una masa pesada colgante tiende a quedarse quieta mientras el suelo (y el soporte del instrumento) se mueve. La diferencia entre el movimiento del suelo y la masa quieta genera el trazo del sismograma.</p>
+
+        <h4>Leyendo un sismograma:</h4>
+        <ul>
+          <li>Primero llegan las <strong>ondas P</strong>: pequeñas oscilaciones iniciales.</li>
+          <li>Luego las <strong>ondas S</strong>: oscilaciones más grandes y lentas.</li>
+          <li>Al final, las <strong>ondas superficiales</strong>: las oscilaciones más grandes de todas.</li>
+        </ul>
+
+        <h4>Triangulación del epicentro:</h4>
+        <p>Con al menos <strong>3 estaciones sismográficas</strong> se puede ubicar el epicentro. Cada estación mide la diferencia de tiempo de llegada entre P y S, con eso calcula su distancia al epicentro. Donde se cruzan los tres círculos de distancia, está el epicentro.</p>
+
+        <div class="key-box">💡 La fórmula clave: Δt = d × (1/vS − 1/vP). Con el tiempo de diferencia Δt entre ondas P y S, y sus velocidades conocidas, se despeja la distancia al epicentro.</div>
+      </div>
+    </div>
+
+    <div id="t-riesgo" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-riesgo">📋 Copiar apuntes</button>
+      <div class="teoria-body" id="copy-riesgo">
+        <h3>Riesgo Sísmico en Colombia y el Huila</h3>
+        <p>Colombia está ubicada en uno de los cinturones sísmicos más activos del planeta: el <strong>Cinturón de Fuego del Pacífico</strong>, zona donde convergen varias placas tectónicas (Nazca, Caribe y Suramericana).</p>
+
+        <h4>¿Por qué el Huila es sísmico?</h4>
+        <ul>
+          <li>El departamento del Huila está atravesado por el <strong>Sistema de Fallas de Garrapatas y la Falla de Romeral</strong>.</li>
+          <li>El <strong>Volcán Nevado del Huila</strong> (el más alto de Colombia, 5365 m) genera sismos frecuentes relacionados con su actividad volcánica.</li>
+          <li>El famoso terremoto de <strong>Armenia y el Eje Cafetero (1999, 6.2 Richter)</strong> dejó más de 1000 muertos y demostró la vulnerabilidad de la región andina.</li>
+        </ul>
+
+        <h4>¿Qué hacer ante un sismo?</h4>
+        <ul>
+          <li>No corras; ubícate bajo una mesa resistente o junto a una columna estructural (Triángulo de la Vida).</li>
+          <li>Aléjate de ventanas y objetos que puedan caer.</li>
+          <li>Al salir: usa escaleras, nunca ascensores.</li>
+          <li>Ten un kit de emergencia listo (agua, linterna, botiquín).</li>
+        </ul>
+
+        <div class="key-box">💡 El SGCN (Servicio Geológico Colombiano) monitorea la sismicidad en tiempo real. La red cuenta con más de 200 estaciones sismográficas en todo el país.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FÓRMULAS ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-formulas">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📐 Fórmulas</div>
+    <h2 class="v2-sec-title">Ecuaciones Sísmicas</h2>
+    <p class="v2-sec-desc">Las fórmulas clave para calcular distancias al epicentro y entender la escala logarítmica de Richter.</p>
+  </div>
+
+  <div class="formula-grid">
+    <div class="formula-card">
+      <div class="f-name">Distancia al Epicentro</div>
+      <div class="f-eq" style="font-size:1.25rem;">d = Δt / (1/vS − 1/vP)</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">d</span><span class="f-desc">Distancia al epicentro</span><span class="f-unit">km</span></div>
+        <div class="f-var"><span class="f-sym">Δt</span><span class="f-desc">Diferencia de tiempo P – S</span><span class="f-unit">s</span></div>
+        <div class="f-var"><span class="f-sym">vP</span><span class="f-desc">Velocidad ondas P</span><span class="f-unit">≈ 6 km/s</span></div>
+        <div class="f-var"><span class="f-sym">vS</span><span class="f-desc">Velocidad ondas S</span><span class="f-unit">≈ 3.5 km/s</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Escala de Richter (logarítmica)</div>
+      <div class="f-eq" style="font-size:1.5rem;">M = log(A / A₀)</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">M</span><span class="f-desc">Magnitud Richter</span><span class="f-unit">adimensional</span></div>
+        <div class="f-var"><span class="f-sym">A</span><span class="f-desc">Amplitud medida en sismógrafo</span><span class="f-unit">μm</span></div>
+        <div class="f-var"><span class="f-sym">A₀</span><span class="f-desc">Amplitud de referencia</span><span class="f-unit">μm</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Velocidad Universal de Onda</div>
+      <div class="f-eq" style="font-size:1.6rem;">v = λ · f</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">v</span><span class="f-desc">Velocidad de propagación</span><span class="f-unit">m/s</span></div>
+        <div class="f-var"><span class="f-sym">λ</span><span class="f-desc">Longitud de onda</span><span class="f-unit">m</span></div>
+        <div class="f-var"><span class="f-sym">f</span><span class="f-desc">Frecuencia</span><span class="f-unit">Hz</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Relación de Energía (Richter)</div>
+      <div class="f-eq" style="font-size:1.1rem;">E₂/E₁ = 10^(1.5 × ΔM)</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">E</span><span class="f-desc">Energía liberada</span><span class="f-unit">Joules</span></div>
+        <div class="f-var"><span class="f-sym">ΔM</span><span class="f-desc">Diferencia de magnitudes</span><span class="f-unit">—</span></div>
+        <div class="f-var" style="font-size:.75rem; color:var(--text-muted);">Cada +1 en Richter = ×31.6 energía</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SIMULADOR ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-sim">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🌍 Simulador de Ondas Sísmicas</div>
+    <h2 class="v2-sec-title">Propagación P y S desde el Epicentro</h2>
+    <p class="v2-sec-desc">Observa cómo las ondas P (rápidas, azul) y S (lentas, naranja) se propagan desde el hipocentro. La diferencia de tiempo en llegar al sismógrafo permite calcular la distancia al terremoto.</p>
+  </div>
+
+  <div class="v2-sim">
+    <div class="sim-topbar">
+      <div class="sim-tag"><div class="sim-dot" style="background:#f72585;"></div> Sismología: Ondas P y S</div>
+      <div class="sim-ctrl-row">
+        <button class="s-btn" id="btnTrigger" title="Generar nuevo sismo" style="padding:.35rem .9rem; font-size:.8rem;">💥 Sismo</button>
+        <button class="s-btn" id="btnReset" title="Reiniciar">↺</button>
+      </div>
+    </div>
+
+    <div class="sim-layout" style="grid-template-columns: 260px 1fr;">
+      <div class="sim-sidebar">
+        <div class="s-label" style="color:#4cc9f0;">Profundidad del Hipocentro</div>
+        <input type="range" class="s-range" id="slDepth" min="5" max="100" value="30" step="5">
+        <div class="s-val" id="valDepth">30 km</div>
+
+        <div style="height:1rem"></div>
+
+        <div class="s-label" style="color:#ffd166;">Distancia al Sismógrafo</div>
+        <input type="range" class="s-range" id="slDist" min="50" max="400" value="200" step="10">
+        <div class="s-val" id="valDist">200 km</div>
+
+        <div style="height:1.5rem"></div>
+
+        <div style="padding:.85rem; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:12px;">
+          <div style="font-size:.72rem; color:var(--text-muted); margin-bottom:.6rem; font-weight:700; letter-spacing:.05em;">LLEGADA AL SISMÓGRAFO</div>
+          <div style="display:flex; flex-direction:column; gap:.4rem;">
+            <div style="display:flex; justify-content:space-between;">
+              <span style="font-size:.78rem; color:#4cc9f0;">⬤ Onda P llega en</span>
+              <span id="liveTP" style="font-size:.82rem; font-weight:800; color:#4cc9f0;">—</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="font-size:.78rem; color:#ff9f43;">⬤ Onda S llega en</span>
+              <span id="liveTS" style="font-size:.82rem; font-weight:800; color:#ff9f43;">—</span>
+            </div>
+            <div style="border-top:1px solid rgba(255,255,255,.08); padding-top:.4rem; margin-top:.1rem; display:flex; justify-content:space-between;">
+              <span style="font-size:.78rem; color:var(--text-muted);">Δt (diferencia)</span>
+              <span id="liveDT" style="font-size:.82rem; font-weight:800; color:#ffd166;">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:1rem;" class="sim-legend">
+          <div class="sim-legend-item"><div class="sim-legend-dot" style="background:#4cc9f0;"></div>Onda P (6 km/s)</div>
+          <div class="sim-legend-item"><div class="sim-legend-dot" style="background:#ff9f43;"></div>Onda S (3.5 km/s)</div>
+        </div>
+      </div>
+
+      <div class="sim-main" style="padding:0; overflow:hidden; position:relative;">
+        <canvas id="simCanvas" style="width:100%; height:380px; display:block; border-radius:0 0 10px 0;"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VIDEO ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-video">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🎬 Video explicativo</div>
+    <h2 class="v2-sec-title">Clase en Video</h2>
+    <p class="v2-sec-desc">Refuerza los conceptos con la clase en video del docente.</p>
+  </div>
+
+  <div class="yt-player-wrap" id="ytPlayerWrap">
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('5PKXzvkEQJg')">
+      <img class="yt-thumb-img"
+           src="https://img.youtube.com/vi/5PKXzvkEQJg/hqdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/5PKXzvkEQJg/mqdefault.jpg'"
+           alt="Sísmica y Ondas Sísmicas">
+      <div class="yt-thumb-overlay">
+        <div class="yt-big-play">&#9654;</div>
+      </div>
+      <div class="yt-info-bar">
+        <div class="yt-title-bar">Sísmica y Ondas Sísmicas<br>
+          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Física 11° · Toca para reproducir</span>
+        </div>
+        <a class="yt-ext-btn"
+           href="https://www.youtube.com/watch?v=5PKXzvkEQJg"
+           target="_blank" rel="noopener"
+           onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
+      </div>
+    </div>
+    <div class="yt-embed-frame" id="ytEmbedFrame">
+      <iframe id="ytIframe" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PhET ═══ -->
+<section class="v2-section-sm v2-wrap anim-scroll" id="sec-phet">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🧪 Laboratorio PhET</div>
+    <h2 class="v2-sec-title">Interferencia de Ondas</h2>
+    <p class="v2-sec-desc">Observa cómo dos fuentes de ondas interactúan. Relaciona los patrones de interferencia constructiva y destructiva con cómo varias estaciones sismográficas detectan el mismo terremoto.</p>
+  </div>
+  <div class="phet-wrap">
+    <iframe
+      src="https://phet.colorado.edu/sims/html/wave-interference/latest/wave-interference_es.html"
+      title="Interferencia de Ondas - PhET"
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+  <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
+    💡 <strong>Actividad sugerida:</strong> Selecciona "Interferencia". Activa dos fuentes de agua. Observa los nodos (zonas quietas) y los antinodos (zonas de mayor amplitud). Estos mismos patrones ocurren cuando varias réplicas de un sismo se superponen.
+  </p>
+  <p class="phet-mobile-note">📱 Esta simulación funciona mejor en pantallas grandes o computador.</p>
+</section>
+
+<!-- ═══ TIPS ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-tips">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">💡 Tips y errores</div>
+    <h2 class="v2-sec-title">Asegura tu puntaje ICFES</h2>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:2rem;">
+    <div class="tip-card">
+      <div class="t-icon">🔵</div>
+      <h4>P antes que S, siempre</h4>
+      <p>Las ondas <strong>P</strong> (Primarias) viajan a ≈ 6 km/s. Las <strong>S</strong> (Secundarias) viajan a ≈ 3.5 km/s. Sin importar la distancia, las P siempre llegan primero. La diferencia de tiempos de llegada (Δt) es la clave para calcular la distancia al terremoto.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">📊</div>
+      <h4>Richter es logarítmica, no lineal</h4>
+      <p>Un sismo de <strong>6.0 no es el doble</strong> de uno de 3.0. Es 1000 veces mayor en amplitud y aproximadamente 31,623 veces mayor en energía. El error más común es sumar o restar magnitudes como si fueran sumas normales.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">💧</div>
+      <h4>Las S no pasan por líquidos</h4>
+      <p>Las ondas S son transversales y no pueden viajar por fluidos. Que no se detecten ondas S en el lado opuesto de la Tierra fue la evidencia que confirmó que el <strong>núcleo externo terrestre es líquido</strong>.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🗺️</div>
+      <h4>Epicentro ≠ Hipocentro</h4>
+      <p>El <strong>hipocentro</strong> (o foco) es el punto dentro de la Tierra donde se origina el sismo. El <strong>epicentro</strong> es la proyección del hipocentro sobre la superficie terrestre, directamente encima. Los daños son mayores cerca del epicentro.</p>
+    </div>
+  </div>
+
+  <div class="v2-sec-label text-accent" style="margin-bottom:1rem;">❌ Errores frecuentes</div>
+  <div class="error-table-card">
+    <div class="err-row">
+      <div class="err-cell err-head err-bad">❌ Error frecuente</div>
+      <div class="err-cell err-head err-good">✅ Lo correcto</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Confundir Richter (magnitud) con Mercalli (intensidad).</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Richter mide la <strong>energía objetiva</strong> del sismo (igual en todo el mundo). Mercalli mide <strong>cómo se siente</strong> en un lugar específico (varía con la distancia y el suelo).</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Pensar que las ondas P son las que destruyen los edificios.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Las ondas <strong>S y superficiales</strong> son las más destructivas. Las ondas P solo generan pequeños crujidos y son útiles como alerta temprana.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Creer que se necesita un solo sismógrafo para ubicar el epicentro.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Se necesitan al menos <strong>3 estaciones</strong> para triangular la posición del epicentro con precisión.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUIZ ═══ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-quiz">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📝 Quiz ICFES</div>
+    <h2 class="v2-sec-title">Ponte a prueba</h2>
+    <p class="v2-sec-desc">5 preguntas estilo ICFES. Tómate tu tiempo.</p>
+  </div>
+
+  <div class="quiz-v2" id="quizBox">
+    <div class="quiz-top">
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizFill" style="width:0%"></div></div>
+      <div class="quiz-cnt" id="quizCnt">Pregunta 1 de 5</div>
+    </div>
+    <div class="quiz-body" id="quizBody">
+      <div class="quiz-q" id="qText"></div>
+      <div class="quiz-opts" id="qOpts"></div>
+      <div class="quiz-fb" id="qFb"></div>
+    </div>
+    <div class="quiz-foot">
+      <button class="v2-btn v2-btn-primary" id="qNext" style="display:none">Siguiente →</button>
+    </div>
+    <div class="quiz-result-screen" id="quizResult">
+      <div class="score-ring" id="scoreRing">
+        <div class="score-big" id="scoreBig">0/5</div>
+        <div class="score-sub">respuestas correctas</div>
+      </div>
+      <div class="score-msg" id="scoreMsg"></div>
+      <div class="score-hint" id="scoreHint"></div>
+      <button class="v2-btn v2-btn-primary" id="qRestart">🔄 Intentar de nuevo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NAVEGACIÓN ═══ -->
+<div class="v2-wrap">
+  <hr class="v2-hr">
+  <div class="v2-page-nav">
+    <a class="nav-btn-card" href="2_ondas_sonido.html">
+      <span class="nbc-arr">←</span>
+      <div>
+        <div class="nbc-sub">Tema anterior</div>
+        <div class="nbc-title">Ondas y Sonido</div>
+      </div>
+    </a>
+    <a class="nav-btn-card right" href="../periodo2/index.html">
+      <div>
+        <div class="nbc-sub">Siguiente período</div>
+        <div class="nbc-title">Período 2 — Óptica</div>
+      </div>
+      <span class="nbc-arr">→</span>
+    </a>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="v2-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-avatar">LC</div>
+      <div>
+        <div class="footer-name">Docente Luis Miguel Cabrera</div>
+        <div class="footer-role">I.E. Paulo VI &nbsp;·&nbsp; Huila, Colombia &nbsp;·&nbsp; Física & Matemáticas</div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">⚛️ VirtualLab 2026</span>
+      <span class="footer-tag">lumcab</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script>
+/* ==========================================
+   INTERACCIONES BÁSICAS
+========================================== */
+(function() {
+  const bar = document.getElementById('page-progress');
+  window.addEventListener('scroll', () => {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (window.scrollY / docH * 100) + '%';
+  }, { passive: true });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.anim-scroll').forEach(el => obs.observe(el));
+
+  document.querySelectorAll('.v2-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.closest('section') || btn.parentElement.parentElement;
+      group.querySelectorAll('.v2-tab').forEach(b => b.classList.remove('active'));
+      group.querySelectorAll('.v2-tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = group.querySelector('#' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const content = document.getElementById(btn.getAttribute('data-target'));
+      if (!content) return;
+      navigator.clipboard.writeText(content.innerText.replace(/📋 Copiar apuntes/g, '').trim())
+        .then(() => { btn.innerText = '✅ ¡Copiado!'; btn.classList.add('copied'); setTimeout(() => { btn.innerText = '📋 Copiar apuntes'; btn.classList.remove('copied'); }, 2500); })
+        .catch(() => { btn.innerText = '❌ Error al copiar'; });
+    });
+  });
+})();
+
+function ytLoadEmbed(videoId) {
+  const thumb = document.getElementById('ytThumbCard');
+  const frame = document.getElementById('ytEmbedFrame');
+  const iframe = document.getElementById('ytIframe');
+  if (!thumb || !frame || !iframe) return;
+  thumb.style.display = 'none';
+  frame.classList.add('visible');
+  iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1&color=white';
+}
+
+/* ==========================================
+   SIMULADOR DE ONDAS SÍSMICAS P y S
+========================================== */
+(function() {
+  const canvas = document.getElementById('simCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let W, H;
+  function resize() {
+    W = canvas.width = canvas.parentElement.offsetWidth;
+    H = canvas.height = 380;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const VP = 6;    // km/s ondas P (escala visual)
+  const VS = 3.5;  // km/s ondas S
+
+  let depth  = 30;
+  let dist   = 200;
+  let waves  = [];
+  let time   = 0;
+  let running = false;
+  let raf;
+
+  const slDepth = document.getElementById('slDepth');
+  const slDist  = document.getElementById('slDist');
+  const valDepth = document.getElementById('valDepth');
+  const valDist  = document.getElementById('valDist');
+  const liveTP   = document.getElementById('liveTP');
+  const liveTS   = document.getElementById('liveTS');
+  const liveDT   = document.getElementById('liveDT');
+  const btnTrigger = document.getElementById('btnTrigger');
+  const btnReset   = document.getElementById('btnReset');
+
+  function updateParams() {
+    depth = parseFloat(slDepth.value);
+    dist  = parseFloat(slDist.value);
+    valDepth.textContent = depth + ' km';
+    valDist.textContent  = dist  + ' km';
+    const hypo  = Math.sqrt(depth*depth + dist*dist); // distancia al hipocentro
+    const tP = (hypo / VP).toFixed(1);
+    const tS = (hypo / VS).toFixed(1);
+    const dt = (hypo/VS - hypo/VP).toFixed(1);
+    liveTP.textContent = tP + ' s';
+    liveTS.textContent = tS + ' s';
+    liveDT.textContent = dt + ' s';
+  }
+
+  slDepth.addEventListener('input', () => { updateParams(); if (!running) drawStatic(); });
+  slDist.addEventListener('input',  () => { updateParams(); if (!running) drawStatic(); });
+
+  function triggerEarthquake() {
+    waves = [];
+    time = 0;
+    running = true;
+    if (raf) cancelAnimationFrame(raf);
+    animate();
+  }
+
+  function resetSim() {
+    running = false;
+    if (raf) cancelAnimationFrame(raf);
+    waves = [];
+    time = 0;
+    drawStatic();
+  }
+
+  btnTrigger.addEventListener('click', triggerEarthquake);
+  btnReset.addEventListener('click', resetSim);
+
+  function getLayout() {
+    // El epicentro está a la izquierda, el sismógrafo a la derecha
+    const scale   = (W * 0.55) / 400; // 400km = ancho útil
+    const groundY = H * 0.40;
+    const epiX    = W * 0.18;
+    const hypY    = groundY + depth * scale;
+    const seisX   = epiX + dist * scale;
+    return { scale, groundY, epiX, hypY, seisX };
+  }
+
+  function drawStatic() {
+    const { scale, groundY, epiX, hypY, seisX } = getLayout();
+    ctx.clearRect(0, 0, W, H);
+
+    // Fondo tierra
+    const earthGrad = ctx.createLinearGradient(0, groundY, 0, H);
+    earthGrad.addColorStop(0, 'rgba(120,80,40,.35)');
+    earthGrad.addColorStop(1, 'rgba(60,30,10,.7)');
+    ctx.fillStyle = earthGrad;
+    ctx.fillRect(0, groundY, W, H - groundY);
+
+    // Línea del suelo
+    ctx.beginPath();
+    ctx.moveTo(0, groundY);
+    ctx.lineTo(W, groundY);
+    ctx.strokeStyle = 'rgba(200,160,80,.6)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Línea punteada hipocentro → epicentro
+    ctx.beginPath();
+    ctx.setLineDash([5, 5]);
+    ctx.moveTo(epiX, hypY);
+    ctx.lineTo(epiX, groundY);
+    ctx.strokeStyle = 'rgba(247,37,133,.4)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Epicentro (cruz en superficie)
+    ctx.beginPath();
+    ctx.arc(epiX, groundY, 6, 0, Math.PI * 2);
+    ctx.fillStyle = '#f72585';
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.85)';
+    ctx.font = 'bold 11px system-ui';
+    ctx.fillText('Epicentro', epiX - 28, groundY - 12);
+
+    // Hipocentro (estrella/punto)
+    ctx.beginPath();
+    ctx.arc(epiX, hypY, 8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(247,37,133,.9)';
+    ctx.shadowColor = '#f72585';
+    ctx.shadowBlur = 12;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(255,255,255,.75)';
+    ctx.font = 'bold 11px system-ui';
+    ctx.fillText('Hipocentro', epiX + 12, hypY + 4);
+
+    // Sismógrafo
+    drawSeismograph(seisX, groundY, false, false);
+  }
+
+  function drawSeismograph(x, y, pHit, sHit) {
+    // Base
+    ctx.fillStyle = sHit ? 'rgba(255,159,67,.9)' : (pHit ? 'rgba(76,201,240,.9)' : 'rgba(255,255,255,.7)');
+    ctx.fillRect(x - 10, y - 30, 20, 30);
+    ctx.fillStyle = 'rgba(255,255,255,.4)';
+    ctx.fillRect(x - 16, y - 4, 32, 6);
+    ctx.fillStyle = 'rgba(255,255,255,.85)';
+    ctx.font = 'bold 10px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('📡', x, y - 34);
+    ctx.fillText('Sismógrafo', x, y - 40);
+    ctx.textAlign = 'left';
+  }
+
+  let lastTime = null;
+  const WAVE_EMIT_INTERVAL = 0.6; // segundos entre ondas
+  let lastEmit = -99;
+  let pArrived = false, sArrived = false;
+
+  function animate(ts) {
+    if (!running) return;
+    if (!lastTime) lastTime = ts;
+    const dt = Math.min((ts - lastTime) / 1000, 0.05);
+    lastTime = ts;
+    time += dt;
+
+    const { scale, groundY, epiX, hypY, seisX } = getLayout();
+    const hypo = Math.sqrt(depth*depth + dist*dist);
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Fondo tierra
+    const earthGrad = ctx.createLinearGradient(0, groundY, 0, H);
+    earthGrad.addColorStop(0, 'rgba(120,80,40,.35)');
+    earthGrad.addColorStop(1, 'rgba(60,30,10,.7)');
+    ctx.fillStyle = earthGrad;
+    ctx.fillRect(0, groundY, W, H - groundY);
+    ctx.beginPath();
+    ctx.moveTo(0, groundY); ctx.lineTo(W, groundY);
+    ctx.strokeStyle = 'rgba(200,160,80,.6)'; ctx.lineWidth = 2; ctx.stroke();
+
+    // Emitir nueva onda cada intervalo
+    if (time - lastEmit >= WAVE_EMIT_INTERVAL) {
+      waves.push({ r: 0, born: time });
+      lastEmit = time;
+    }
+
+    // Calcular tiempos de llegada al sismógrafo
+    const tP = hypo / VP;
+    const tS = hypo / VS;
+    pArrived = time >= tP;
+    sArrived = time >= tS;
+
+    // Dibujar ondas P (azul, más rápidas)
+    for (let w of waves) {
+      const age = time - w.born;
+      const rP = VP * age * scale;
+      const op = Math.max(0, 1 - rP / (W * 0.8));
+      if (op <= 0) continue;
+      ctx.beginPath();
+      ctx.arc(epiX, hypY, rP, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(76,201,240,${op * 0.7})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // Dibujar ondas S (naranja, más lentas)
+    for (let w of waves) {
+      const age = time - w.born;
+      const rS = VS * age * scale;
+      const op = Math.max(0, 1 - rS / (W * 0.7));
+      if (op <= 0) continue;
+      ctx.beginPath();
+      ctx.arc(epiX, hypY, rS, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255,159,67,${op * 0.7})`;
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+    }
+
+    // Hipocentro
+    ctx.beginPath();
+    ctx.arc(epiX, hypY, 8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(247,37,133,.9)';
+    ctx.shadowColor = '#f72585'; ctx.shadowBlur = 14;
+    ctx.fill(); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(255,255,255,.75)';
+    ctx.font = 'bold 11px system-ui';
+    ctx.fillText('Hipocentro', epiX + 12, hypY + 4);
+
+    // Epicentro
+    ctx.beginPath();
+    ctx.arc(epiX, groundY, 6, 0, Math.PI * 2);
+    ctx.fillStyle = '#f72585'; ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.85)';
+    ctx.fillText('Epicentro', epiX - 28, groundY - 12);
+    ctx.beginPath(); ctx.setLineDash([5,5]);
+    ctx.moveTo(epiX, hypY); ctx.lineTo(epiX, groundY);
+    ctx.strokeStyle = 'rgba(247,37,133,.35)'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Sismógrafo
+    drawSeismograph(seisX, groundY, pArrived, sArrived);
+
+    // Mensaje de llegada
+    if (sArrived) {
+      ctx.fillStyle = 'rgba(255,159,67,.9)';
+      ctx.font = 'bold 12px system-ui';
+      ctx.fillText('¡Onda S detectada!', seisX - 45, groundY - 55);
+    } else if (pArrived) {
+      ctx.fillStyle = 'rgba(76,201,240,.9)';
+      ctx.font = 'bold 12px system-ui';
+      ctx.fillText('¡Onda P detectada!', seisX - 45, groundY - 55);
+    }
+
+    // Timer
+    ctx.fillStyle = 'rgba(255,255,255,.5)';
+    ctx.font = '11px system-ui';
+    ctx.fillText('t = ' + time.toFixed(1) + ' s', 10, 20);
+
+    raf = requestAnimationFrame(ts2 => { lastTime = ts; animate(ts2); });
+  }
+
+  updateParams();
+  drawStatic();
+})();
+
+/* ==========================================
+   QUIZ ICFES
+========================================== */
+(function() {
+  const qData = [
+    {
+      q: "Un sismógrafo registra primero pequeñas oscilaciones y, segundos después, oscilaciones mucho más grandes. Las pequeñas oscilaciones iniciales son producidas por:",
+      opts: [
+        { text: "Las ondas superficiales, porque viajan por encima del suelo.", isCorrect: false },
+        { text: "Las ondas S, porque son transversales y más energéticas.", isCorrect: false },
+        { text: "Las ondas P, porque son longitudinales y viajan más rápido.", isCorrect: true },
+        { text: "El tsunami, que llega antes que cualquier onda interna.", isCorrect: false }
+      ],
+      fbGood: "¡Correcto! Las ondas Primarias (P) son longitudinales y viajan a ≈ 6 km/s, siempre llegando antes. Son útiles como sistema de alerta temprana para los daños más graves que llegan después.",
+      fbBad: "Las P de Primarias = llegan Primero. Son longitudinales (comprimen el suelo) y más rápidas que las S."
+    },
+    {
+      q: "¿Por qué las ondas S no pueden detectarse en el lado exactamente opuesto de la Tierra al epicentro de un terremoto?",
+      opts: [
+        { text: "Porque pierden toda su energía en la corteza terrestre.", isCorrect: false },
+        { text: "Porque el núcleo externo de la Tierra es líquido y las ondas transversales no se propagan en fluidos.", isCorrect: true },
+        { text: "Porque la distancia es demasiado grande y las ondas se agotan.", isCorrect: false },
+        { text: "Porque las ondas S solo viajan hacia arriba, no hacia los lados.", isCorrect: false }
+      ],
+      fbGood: "¡Excelente! Las S son ondas transversales y solo pueden propagarse en sólidos. La 'zona de sombra' de las ondas S fue la evidencia clave para descubrir que el núcleo externo terrestre es líquido.",
+      fbBad: "Las ondas S (transversales) no pueden viajar por líquidos. El núcleo externo de la Tierra es fundido, ¡por eso las S no atraviesan el centro!"
+    },
+    {
+      q: "Un terremoto de magnitud 7.0 libera aproximadamente ¿cuántas veces más energía que uno de magnitud 5.0?",
+      opts: [
+        { text: "2 veces más.", isCorrect: false },
+        { text: "100 veces más.", isCorrect: false },
+        { text: "Unas 1000 veces más.", isCorrect: true },
+        { text: "Exactamente 14 veces más.", isCorrect: false }
+      ],
+      fbGood: "¡Correcto! La escala de Richter es logarítmica: cada punto entero implica ×31.6 en energía. De 5.0 a 7.0 hay 2 puntos: 31.6² ≈ 1000 veces más energía.",
+      fbBad: "Richter no es lineal. Cada punto = ×31.6 en energía. Dos puntos de diferencia: 31.6 × 31.6 ≈ 1000 veces."
+    },
+    {
+      q: "Para localizar con precisión el epicentro de un terremoto es necesario contar con información de al menos:",
+      opts: [
+        { text: "1 estación sismográfica.", isCorrect: false },
+        { text: "2 estaciones sismográficas.", isCorrect: false },
+        { text: "3 estaciones sismográficas.", isCorrect: true },
+        { text: "10 estaciones sismográficas.", isCorrect: false }
+      ],
+      fbGood: "¡Correcto! Con una estación solo sabes la distancia (un círculo posible). Con dos, hay dos puntos de intersección. Con tres círculos se obtiene un único punto de intersección: el epicentro.",
+      fbBad: "Cada estación mide distancia al epicentro (un círculo). Para que tres círculos se corten en un solo punto necesitas exactamente 3 estaciones."
+    },
+    {
+      q: "En una zona de subducción como la costa del Pacífico colombiano, la placa Nazca choca con la placa Suramericana. ¿Qué ocurre en este proceso que genera terremotos?",
+      opts: [
+        { text: "Las placas se separan generando un gran vacío que hace colapsar el suelo.", isCorrect: false },
+        { text: "La placa Nazca se hunde bajo la Suramericana acumulando tensión; cuando esta tensión se libera bruscamente, genera un sismo.", isCorrect: true },
+        { text: "El magma entre las placas explota como un volcán submarino constantemente.", isCorrect: false },
+        { text: "Las placas giran en sentido contrario causando tornados sísmicos.", isCorrect: false }
+      ],
+      fbGood: "¡Perfecto! En la subducción, la placa más densa se hunde. La fricción acumula energía elástica durante décadas o siglos, hasta que la roca cede de golpe liberando esa energía: ¡el terremoto!",
+      fbBad: "La subducción es un proceso lento donde la tensión acumulada se libera súbitamente. Colombia tiene alta actividad sísmica por estar en el Cinturón de Fuego del Pacífico."
+    }
+  ];
+
+  let qIndex = 0, correctCount = 0, answered = false;
+  const quizFill = document.getElementById('quizFill');
+  const quizCnt  = document.getElementById('quizCnt');
+  const qText    = document.getElementById('qText');
+  const qOpts    = document.getElementById('qOpts');
+  const qFb      = document.getElementById('qFb');
+  const qNext    = document.getElementById('qNext');
+  const resultScr= document.getElementById('quizResult');
+
+  function initQuiz() {
+    qIndex = 0; correctCount = 0; resultScr.style.display = 'none';
+    document.getElementById('quizBody').style.display = 'block';
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    answered = false; qNext.style.display = 'none';
+    qFb.innerHTML = ''; qFb.className = 'quiz-fb';
+    const d = qData[qIndex];
+    quizFill.style.width = (qIndex / qData.length * 100) + '%';
+    quizCnt.textContent  = `Pregunta ${qIndex + 1} de ${qData.length}`;
+    qText.textContent    = d.q;
+    qOpts.innerHTML      = '';
+    const ltrs = ['A','B','C','D'];
+    d.opts.forEach((o, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-opt';
+      btn.innerHTML = `<div class="opt-ltr">${ltrs[i]}</div><div class="opt-txt">${o.text}</div>`;
+      btn.onclick = () => selectOption(btn, o.isCorrect, d);
+      qOpts.appendChild(btn);
+    });
+  }
+
+  function selectOption(btn, isCorrect, d) {
+    if (answered) return;
+    answered = true;
+    Array.from(qOpts.children).forEach(b => { b.classList.add('answered'); b.style.opacity = '.6'; });
+    btn.style.opacity = '1';
+    if (isCorrect) {
+      correctCount++; btn.classList.add('correct');
+      qFb.className = 'quiz-fb correct visible';
+      qFb.innerHTML = `<div style="font-weight:800;margin-bottom:.4rem;color:#06d6a0;">✅ ¡Correcto!</div>${d.fbGood}`;
+    } else {
+      btn.classList.add('wrong');
+      qFb.className = 'quiz-fb wrong visible';
+      qFb.innerHTML = `<div style="font-weight:800;margin-bottom:.4rem;color:#e63946;">❌ Incorrecto</div>${d.fbBad}`;
+      Array.from(qOpts.children).forEach((b, i) => {
+        if (d.opts[i].isCorrect) { b.classList.add('correct'); b.style.opacity = '1'; }
+      });
+    }
+    qNext.style.display = 'inline-flex';
+    quizFill.style.width = ((qIndex + 1) / qData.length * 100) + '%';
+  }
+
+  qNext.addEventListener('click', () => { qIndex++; if (qIndex < qData.length) loadQuestion(); else showResult(); });
+
+  function showResult() {
+    document.getElementById('quizBody').style.display = 'none';
+    qNext.style.display = 'none'; resultScr.style.display = 'flex';
+    document.getElementById('scoreBig').textContent = `${correctCount}/${qData.length}`;
+    const pct  = correctCount / qData.length;
+    const sMsg = document.getElementById('scoreMsg');
+    const sHint= document.getElementById('scoreHint');
+    if (pct === 1) {
+      document.getElementById('scoreRing').style.background = 'linear-gradient(135deg,#06d6a0,#048a68)';
+      sMsg.textContent  = '¡Sismólogo experto!';
+      sHint.textContent = 'Dominas a la perfección los conceptos de sismología. ¡Excelente!';
+    } else if (pct >= 0.6) {
+      sMsg.textContent  = '¡Buen trabajo!';
+      sHint.textContent = 'Revisa la diferencia entre magnitud (Richter) e intensidad (Mercalli), y la razón de las zonas de sombra.';
+    } else {
+      document.getElementById('scoreRing').style.background = 'linear-gradient(135deg,#e63946,#9b2226)';
+      sMsg.textContent  = 'Sigue repasando';
+      sHint.textContent = 'Presta especial atención a los tipos de ondas P y S y a la naturaleza logarítmica de la escala de Richter.';
+    }
+  }
+
+  document.getElementById('qRestart').addEventListener('click', initQuiz);
+  initQuiz();
+})();
+</script>
+</body>
+</html>
