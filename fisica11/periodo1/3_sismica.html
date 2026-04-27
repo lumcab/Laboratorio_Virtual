@@ -638,11 +638,24 @@ function ytLoadEmbed(videoId) {
 
   let W, H;
   function resize() {
-    W = canvas.width = canvas.parentElement.offsetWidth;
+    const w = canvas.parentElement.offsetWidth;
+    if (w === 0) return;          // todavía sin layout — se reintenta
+    W = canvas.width  = w;
     H = canvas.height = 380;
+    if (!running) drawStatic();
   }
   window.addEventListener('resize', resize);
-  resize();
+
+  // Diferir hasta que el layout esté calculado
+  function initCanvas() {
+    if (canvas.parentElement.offsetWidth > 0) {
+      resize();
+      updateParams();
+    } else {
+      requestAnimationFrame(initCanvas);
+    }
+  }
+  requestAnimationFrame(initCanvas);
 
   const VP = 6;    // km/s ondas P (escala visual)
   const VS = 3.5;  // km/s ondas S
@@ -650,17 +663,22 @@ function ytLoadEmbed(videoId) {
   let depth  = 30;
   let dist   = 200;
   let waves  = [];
-  let time   = 0;
-  let running = false;
-  let raf;
+  let simTime = 0;
+  let running  = false;
+  let raf      = null;
+  let lastTS   = null;  // timestamp del frame anterior
 
-  const slDepth = document.getElementById('slDepth');
-  const slDist  = document.getElementById('slDist');
-  const valDepth = document.getElementById('valDepth');
-  const valDist  = document.getElementById('valDist');
-  const liveTP   = document.getElementById('liveTP');
-  const liveTS   = document.getElementById('liveTS');
-  const liveDT   = document.getElementById('liveDT');
+  const WAVE_INTERVAL = 0.55; // segundos entre pulsos de onda
+  let lastEmit = -99;
+  let pArrived = false, sArrived = false;
+
+  const slDepth    = document.getElementById('slDepth');
+  const slDist     = document.getElementById('slDist');
+  const valDepth   = document.getElementById('valDepth');
+  const valDist    = document.getElementById('valDist');
+  const liveTP     = document.getElementById('liveTP');
+  const liveTS     = document.getElementById('liveTS');
+  const liveDT     = document.getElementById('liveDT');
   const btnTrigger = document.getElementById('btnTrigger');
   const btnReset   = document.getElementById('btnReset');
 
@@ -669,31 +687,32 @@ function ytLoadEmbed(videoId) {
     dist  = parseFloat(slDist.value);
     valDepth.textContent = depth + ' km';
     valDist.textContent  = dist  + ' km';
-    const hypo  = Math.sqrt(depth*depth + dist*dist); // distancia al hipocentro
-    const tP = (hypo / VP).toFixed(1);
-    const tS = (hypo / VS).toFixed(1);
-    const dt = (hypo/VS - hypo/VP).toFixed(1);
-    liveTP.textContent = tP + ' s';
-    liveTS.textContent = tS + ' s';
-    liveDT.textContent = dt + ' s';
+    const hypo = Math.sqrt(depth * depth + dist * dist);
+    liveTP.textContent = (hypo / VP).toFixed(1) + ' s';
+    liveTS.textContent = (hypo / VS).toFixed(1) + ' s';
+    liveDT.textContent = (hypo / VS - hypo / VP).toFixed(1) + ' s';
   }
 
   slDepth.addEventListener('input', () => { updateParams(); if (!running) drawStatic(); });
   slDist.addEventListener('input',  () => { updateParams(); if (!running) drawStatic(); });
 
   function triggerEarthquake() {
-    waves = [];
-    time = 0;
-    running = true;
     if (raf) cancelAnimationFrame(raf);
-    animate();
+    waves    = [];
+    simTime  = 0;
+    lastTS   = null;
+    lastEmit = -99;
+    pArrived = false;
+    sArrived = false;
+    running  = true;
+    raf = requestAnimationFrame(animate);  // siempre pasar animate directamente
   }
 
   function resetSim() {
     running = false;
-    if (raf) cancelAnimationFrame(raf);
-    waves = [];
-    time = 0;
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+    waves = []; simTime = 0; lastTS = null;
+    pArrived = false; sArrived = false;
     drawStatic();
   }
 
@@ -701,193 +720,156 @@ function ytLoadEmbed(videoId) {
   btnReset.addEventListener('click', resetSim);
 
   function getLayout() {
-    // El epicentro está a la izquierda, el sismógrafo a la derecha
-    const scale   = (W * 0.55) / 400; // 400km = ancho útil
+    const scale  = (W * 0.60) / 400;
     const groundY = H * 0.40;
-    const epiX    = W * 0.18;
-    const hypY    = groundY + depth * scale;
-    const seisX   = epiX + dist * scale;
+    const epiX   = W * 0.15;
+    const hypY   = groundY + depth * scale;
+    const seisX  = epiX + dist * scale;
     return { scale, groundY, epiX, hypY, seisX };
   }
 
-  function drawStatic() {
-    const { scale, groundY, epiX, hypY, seisX } = getLayout();
-    ctx.clearRect(0, 0, W, H);
-
-    // Fondo tierra
+  function drawBase(groundY, epiX, hypY, seisX) {
     const earthGrad = ctx.createLinearGradient(0, groundY, 0, H);
     earthGrad.addColorStop(0, 'rgba(120,80,40,.35)');
     earthGrad.addColorStop(1, 'rgba(60,30,10,.7)');
     ctx.fillStyle = earthGrad;
     ctx.fillRect(0, groundY, W, H - groundY);
 
-    // Línea del suelo
-    ctx.beginPath();
-    ctx.moveTo(0, groundY);
-    ctx.lineTo(W, groundY);
-    ctx.strokeStyle = 'rgba(200,160,80,.6)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Línea punteada hipocentro → epicentro
-    ctx.beginPath();
-    ctx.setLineDash([5, 5]);
-    ctx.moveTo(epiX, hypY);
-    ctx.lineTo(epiX, groundY);
-    ctx.strokeStyle = 'rgba(247,37,133,.4)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Epicentro (cruz en superficie)
-    ctx.beginPath();
-    ctx.arc(epiX, groundY, 6, 0, Math.PI * 2);
-    ctx.fillStyle = '#f72585';
-    ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.85)';
-    ctx.font = 'bold 11px system-ui';
-    ctx.fillText('Epicentro', epiX - 28, groundY - 12);
-
-    // Hipocentro (estrella/punto)
-    ctx.beginPath();
-    ctx.arc(epiX, hypY, 8, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(247,37,133,.9)';
-    ctx.shadowColor = '#f72585';
-    ctx.shadowBlur = 12;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = 'rgba(255,255,255,.75)';
-    ctx.font = 'bold 11px system-ui';
-    ctx.fillText('Hipocentro', epiX + 12, hypY + 4);
-
-    // Sismógrafo
-    drawSeismograph(seisX, groundY, false, false);
-  }
-
-  function drawSeismograph(x, y, pHit, sHit) {
-    // Base
-    ctx.fillStyle = sHit ? 'rgba(255,159,67,.9)' : (pHit ? 'rgba(76,201,240,.9)' : 'rgba(255,255,255,.7)');
-    ctx.fillRect(x - 10, y - 30, 20, 30);
-    ctx.fillStyle = 'rgba(255,255,255,.4)';
-    ctx.fillRect(x - 16, y - 4, 32, 6);
-    ctx.fillStyle = 'rgba(255,255,255,.85)';
-    ctx.font = 'bold 10px system-ui';
-    ctx.textAlign = 'center';
-    ctx.fillText('📡', x, y - 34);
-    ctx.fillText('Sismógrafo', x, y - 40);
-    ctx.textAlign = 'left';
-  }
-
-  let lastTime = null;
-  const WAVE_EMIT_INTERVAL = 0.6; // segundos entre ondas
-  let lastEmit = -99;
-  let pArrived = false, sArrived = false;
-
-  function animate(ts) {
-    if (!running) return;
-    if (!lastTime) lastTime = ts;
-    const dt = Math.min((ts - lastTime) / 1000, 0.05);
-    lastTime = ts;
-    time += dt;
-
-    const { scale, groundY, epiX, hypY, seisX } = getLayout();
-    const hypo = Math.sqrt(depth*depth + dist*dist);
-
-    ctx.clearRect(0, 0, W, H);
-
-    // Fondo tierra
-    const earthGrad = ctx.createLinearGradient(0, groundY, 0, H);
-    earthGrad.addColorStop(0, 'rgba(120,80,40,.35)');
-    earthGrad.addColorStop(1, 'rgba(60,30,10,.7)');
-    ctx.fillStyle = earthGrad;
-    ctx.fillRect(0, groundY, W, H - groundY);
     ctx.beginPath();
     ctx.moveTo(0, groundY); ctx.lineTo(W, groundY);
-    ctx.strokeStyle = 'rgba(200,160,80,.6)'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.strokeStyle = 'rgba(200,160,80,.6)'; ctx.lineWidth = 2;
+    ctx.setLineDash([]); ctx.stroke();
 
-    // Emitir nueva onda cada intervalo
-    if (time - lastEmit >= WAVE_EMIT_INTERVAL) {
-      waves.push({ r: 0, born: time });
-      lastEmit = time;
-    }
-
-    // Calcular tiempos de llegada al sismógrafo
-    const tP = hypo / VP;
-    const tS = hypo / VS;
-    pArrived = time >= tP;
-    sArrived = time >= tS;
-
-    // Dibujar ondas P (azul, más rápidas)
-    for (let w of waves) {
-      const age = time - w.born;
-      const rP = VP * age * scale;
-      const op = Math.max(0, 1 - rP / (W * 0.8));
-      if (op <= 0) continue;
-      ctx.beginPath();
-      ctx.arc(epiX, hypY, rP, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(76,201,240,${op * 0.7})`;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-
-    // Dibujar ondas S (naranja, más lentas)
-    for (let w of waves) {
-      const age = time - w.born;
-      const rS = VS * age * scale;
-      const op = Math.max(0, 1 - rS / (W * 0.7));
-      if (op <= 0) continue;
-      ctx.beginPath();
-      ctx.arc(epiX, hypY, rS, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(255,159,67,${op * 0.7})`;
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-    }
-
-    // Hipocentro
-    ctx.beginPath();
-    ctx.arc(epiX, hypY, 8, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(247,37,133,.9)';
-    ctx.shadowColor = '#f72585'; ctx.shadowBlur = 14;
-    ctx.fill(); ctx.shadowBlur = 0;
-    ctx.fillStyle = 'rgba(255,255,255,.75)';
-    ctx.font = 'bold 11px system-ui';
-    ctx.fillText('Hipocentro', epiX + 12, hypY + 4);
+    // Línea punteada hipocentro → epicentro
+    ctx.beginPath(); ctx.setLineDash([5, 5]);
+    ctx.moveTo(epiX, hypY); ctx.lineTo(epiX, groundY);
+    ctx.strokeStyle = 'rgba(247,37,133,.4)'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.setLineDash([]);
 
     // Epicentro
     ctx.beginPath();
     ctx.arc(epiX, groundY, 6, 0, Math.PI * 2);
     ctx.fillStyle = '#f72585'; ctx.fill();
     ctx.fillStyle = 'rgba(255,255,255,.85)';
-    ctx.fillText('Epicentro', epiX - 28, groundY - 12);
-    ctx.beginPath(); ctx.setLineDash([5,5]);
-    ctx.moveTo(epiX, hypY); ctx.lineTo(epiX, groundY);
-    ctx.strokeStyle = 'rgba(247,37,133,.35)'; ctx.lineWidth = 1.5; ctx.stroke();
-    ctx.setLineDash([]);
+    ctx.font = 'bold 11px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('Epicentro', epiX, groundY - 12);
 
-    // Sismógrafo
-    drawSeismograph(seisX, groundY, pArrived, sArrived);
-
-    // Mensaje de llegada
-    if (sArrived) {
-      ctx.fillStyle = 'rgba(255,159,67,.9)';
-      ctx.font = 'bold 12px system-ui';
-      ctx.fillText('¡Onda S detectada!', seisX - 45, groundY - 55);
-    } else if (pArrived) {
-      ctx.fillStyle = 'rgba(76,201,240,.9)';
-      ctx.font = 'bold 12px system-ui';
-      ctx.fillText('¡Onda P detectada!', seisX - 45, groundY - 55);
-    }
-
-    // Timer
-    ctx.fillStyle = 'rgba(255,255,255,.5)';
-    ctx.font = '11px system-ui';
-    ctx.fillText('t = ' + time.toFixed(1) + ' s', 10, 20);
-
-    raf = requestAnimationFrame(ts2 => { lastTime = ts; animate(ts2); });
+    // Hipocentro
+    ctx.beginPath();
+    ctx.arc(epiX, hypY, 8, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(247,37,133,.9)';
+    ctx.shadowColor = '#f72585'; ctx.shadowBlur = 12;
+    ctx.fill(); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(255,255,255,.75)';
+    ctx.font = 'bold 11px system-ui';
+    ctx.fillText('Hipocentro', epiX, hypY + 16);
   }
 
-  updateParams();
-  drawStatic();
+  function drawSeismograph(x, y, pHit, sHit) {
+    ctx.fillStyle = sHit ? '#ff9f43' : (pHit ? '#4cc9f0' : 'rgba(255,255,255,.7)');
+    ctx.shadowColor = sHit ? '#ff9f43' : (pHit ? '#4cc9f0' : 'transparent');
+    ctx.shadowBlur  = (pHit || sHit) ? 18 : 0;
+    ctx.fillRect(x - 10, y - 30, 20, 30);
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(255,255,255,.4)';
+    ctx.fillRect(x - 16, y - 4, 32, 6);
+    ctx.fillStyle = 'rgba(255,255,255,.9)';
+    ctx.font = '13px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('📡', x, y - 34);
+    ctx.font = 'bold 10px system-ui';
+    ctx.fillText('Sismógrafo', x, y - 46);
+    ctx.textAlign = 'left';
+  }
+
+  function drawStatic() {
+    const { scale, groundY, epiX, hypY, seisX } = getLayout();
+    ctx.clearRect(0, 0, W, H);
+    drawBase(groundY, epiX, hypY, seisX);
+    drawSeismograph(seisX, groundY, false, false);
+
+    // Instrucción
+    ctx.fillStyle = 'rgba(255,255,255,.4)';
+    ctx.font = '12px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('Pulsa 💥 Sismo para iniciar la simulación', W / 2, H - 14);
+    ctx.textAlign = 'left';
+  }
+
+  function animate(ts) {
+    if (!running) return;
+
+    // Calcular delta time correctamente
+    if (lastTS === null) lastTS = ts;
+    const dt = Math.min((ts - lastTS) / 1000, 0.05);
+    lastTS = ts;
+    simTime += dt;
+
+    const { scale, groundY, epiX, hypY, seisX } = getLayout();
+    const hypo = Math.sqrt(depth * depth + dist * dist);
+    const tP   = hypo / VP;
+    const tS   = hypo / VS;
+
+    // Emitir pulso de onda
+    if (simTime - lastEmit >= WAVE_INTERVAL) {
+      waves.push({ born: simTime });
+      lastEmit = simTime;
+    }
+
+    // Limpiar ondas muy expandidas
+    const maxR = Math.sqrt(W * W + H * H);
+    waves = waves.filter(w => (simTime - w.born) * VP * scale < maxR * 1.2);
+
+    pArrived = simTime >= tP;
+    sArrived = simTime >= tS;
+
+    ctx.clearRect(0, 0, W, H);
+    drawBase(groundY, epiX, hypY, seisX);
+
+    // Ondas P (azul — rápidas)
+    for (const w of waves) {
+      const age = simTime - w.born;
+      const rP  = VP * age * scale;
+      const op  = Math.max(0, 0.75 - rP / (W * 0.9));
+      if (op <= 0.01) continue;
+      ctx.beginPath();
+      ctx.arc(epiX, hypY, rP, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(76,201,240,${op})`;
+      ctx.lineWidth = 2; ctx.stroke();
+    }
+
+    // Ondas S (naranja — lentas)
+    for (const w of waves) {
+      const age = simTime - w.born;
+      const rS  = VS * age * scale;
+      const op  = Math.max(0, 0.75 - rS / (W * 0.85));
+      if (op <= 0.01) continue;
+      ctx.beginPath();
+      ctx.arc(epiX, hypY, rS, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255,159,67,${op})`;
+      ctx.lineWidth = 2.5; ctx.stroke();
+    }
+
+    drawSeismograph(seisX, groundY, pArrived, sArrived);
+
+    // Mensaje de detección
+    if (sArrived) {
+      ctx.fillStyle = '#ff9f43';
+      ctx.font = 'bold 12px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText('¡Onda S detectada! 🔴', seisX, groundY - 58);
+    } else if (pArrived) {
+      ctx.fillStyle = '#4cc9f0';
+      ctx.font = 'bold 12px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText('¡Onda P detectada! 🔵', seisX, groundY - 58);
+    }
+    ctx.textAlign = 'left';
+
+    // Timer en esquina
+    ctx.fillStyle = 'rgba(255,255,255,.55)';
+    ctx.font = '11px system-ui';
+    ctx.fillText('t = ' + simTime.toFixed(1) + ' s', 10, 20);
+
+    raf = requestAnimationFrame(animate);
+  }
+
 })();
 
 /* ==========================================

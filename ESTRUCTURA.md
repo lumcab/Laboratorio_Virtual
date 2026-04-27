@@ -99,8 +99,8 @@
 | Archivo | Tema | Estado |
 |---|---|---|
 | `fisica11/periodo2/index.html` | Índice período | ✅ Completo |
-| `fisica11/periodo2/1_optica_naturaleza.html` | Naturaleza de la luz | ⬜ Pendiente |
-| `fisica11/periodo2/2_refraccion_instrumentos.html` | Refracción e instrumentos ópticos | ⬜ Pendiente |
+| `fisica11/periodo2/1_optica_naturaleza.html` | Naturaleza de la luz | ✅ Completo |
+| `fisica11/periodo2/2_refraccion_instrumentos.html` | Refracción e instrumentos ópticos | ✅ Completo |
 
 ### Física 11° — Período 3 · Electricidad
 | Archivo | Tema | Estado |
