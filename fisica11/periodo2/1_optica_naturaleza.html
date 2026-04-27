@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naturaleza de la Luz | Física 11° · VirtualLab</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/icons/favicon.ico">
+  <link rel="stylesheet" href="../../css/tema-v2.css">
+  <script src="../../js/theme.js"></script>
+  <style>
+    /* ── Colores de materia: Física 11° ── */
+    :root {
+      --accent-a: #7209b7;
+      --accent-b: #560bad;
+      --accent-c: #f72585;
+      --accent-grad: linear-gradient(135deg, #7209b7 0%, #f72585 100%);
+      --hero-c1: #f72585;
+      --hero-c2: #7209b7;
+    }
+    .v2-badge      { background: rgba(114,9,183,.12); border-color: rgba(114,9,183,.35); color: #f72585; }
+    .badge-dot     { background: #f72585; }
+    .o-core        { background: var(--accent-grad); box-shadow: 0 0 40px rgba(247,37,133,.6); }
+    .o-ring-1      { width: 110px; height: 110px; border-color: rgba(114,9,183,.45); animation-duration: 4s; }
+    .o-ring-1::after { background: #7209b7; box-shadow: 0 0 14px #7209b7; }
+    .o-ring-2      { width: 190px; height: 190px; border-color: rgba(247,37,133,.35); animation-duration: 7s; animation-direction: reverse; }
+    .o-ring-2::after { background: #f72585; box-shadow: 0 0 14px #f72585; }
+    .o-ring-3      { width: 290px; height: 290px; border-color: rgba(86,11,173,.3); animation-duration: 13s; }
+    .o-ring-3::after { background: #560bad; box-shadow: 0 0 14px #560bad; width: 8px; height: 8px; top:-4px; left: calc(50% - 4px); }
+    .v2-tab.active { background: var(--accent-a); }
+    .f-eq          { color: #f72585; }
+    .f-sym         { color: #4cc9f0; }
+    .quiz-prog-fill { background: var(--accent-grad); }
+    .score-ring    { background: var(--accent-grad); }
+
+    .hero-bg-glow::before { background: radial-gradient(circle, rgba(247,37,133,.18) 0%, transparent 70%); }
+    .hero-bg-glow::after  { background: radial-gradient(circle, rgba(114,9,183,.12) 0%, transparent 70%); }
+
+    /* ── Canvas Simulator ── */
+    #simCanvas {
+      border-radius: 10px; background: rgba(0,0,0,.5);
+      box-shadow: inset 0 0 20px rgba(0,0,0,.8);
+      cursor: crosshair; display: block;
+    }
+
+    /* ── QUIZ ── */
+    .quiz-opt {
+      color: #ffffff !important; font-size: 1rem; min-height: 54px;
+      background: rgba(255,255,255,.05) !important; border-color: rgba(255,255,255,.12) !important;
+    }
+    .quiz-opt:hover:not(.answered) { background: rgba(114,9,183,.18) !important; border-color: #7209b7 !important; }
+    .opt-ltr {
+      background: linear-gradient(135deg,#7209b7,#560bad) !important;
+      border: none !important; color: #fff !important; font-weight: 900 !important;
+      width: 36px !important; height: 36px !important; font-size: .88rem !important;
+      box-shadow: 0 0 10px rgba(114,9,183,.4);
+    }
+    .quiz-opt.correct            { background: rgba(6,214,160,.15)  !important; border-color: #06d6a0 !important; }
+    .quiz-opt.correct .opt-ltr  { background: linear-gradient(135deg,#06d6a0,#048a68) !important; }
+    .quiz-opt.wrong              { background: rgba(230,57,70,.15)   !important; border-color: #e63946 !important; }
+    .quiz-opt.wrong   .opt-ltr  { background: linear-gradient(135deg,#e63946,#9b2226) !important; }
+
+    /* ── Video thumbnail ── */
+    .yt-player-wrap { border-radius: var(--r-md); overflow: hidden; }
+    .yt-thumb-card {
+      position: relative; aspect-ratio: 16/9; cursor: pointer;
+      background: linear-gradient(135deg, #7209b7 0%, #560bad 50%, #f72585 100%);
+      border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1);
+    }
+    .yt-thumb-card::before {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(135deg, rgba(114,9,183,.45) 0%, rgba(247,37,133,.25) 100%);
+      pointer-events: none;
+    }
+    .yt-thumb-img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s, filter .4s; filter: brightness(.75); }
+    .yt-thumb-card:hover .yt-thumb-img { transform: scale(1.04); filter: brightness(.6); }
+    .yt-thumb-overlay { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+    .yt-big-play {
+      width: 72px; height: 72px; border-radius: 50%; background: rgba(255,0,0,.9);
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: #fff; box-shadow: 0 4px 30px rgba(0,0,0,.5); transition: transform .25s, background .25s;
+    }
+    .yt-thumb-card:hover .yt-big-play { transform: scale(1.12); background: #ff0000; }
+    .yt-info-bar {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+      background: linear-gradient(to top, rgba(0,0,0,.85), transparent);
+      padding: 1.5rem 1rem .8rem; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+    }
+    .yt-title-bar { font-size: .88rem; font-weight: 700; color: #fff; line-height: 1.3; }
+    .yt-ext-btn {
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); color: #fff;
+      padding: .35rem .8rem; border-radius: 6px; font-size: .75rem; font-weight: 600;
+      text-decoration: none; white-space: nowrap; flex-shrink: 0; backdrop-filter: blur(6px); transition: background .2s;
+    }
+    .yt-ext-btn:hover { background: rgba(255,255,255,.3); }
+    .yt-embed-frame { display: none; position: relative; aspect-ratio: 16/9; border-radius: var(--r-md); overflow: hidden; border: 1px solid rgba(255,255,255,.1); }
+    .yt-embed-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .yt-embed-frame.visible { display: block; }
+
+    /* ── PhET ── */
+    .phet-wrap { position: relative; width: 100%; padding-bottom: 62%; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-md); }
+    .phet-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .phet-mobile-note { display: none; background: rgba(255,209,102,.08); border: 1px solid rgba(255,209,102,.25); border-radius: var(--r-sm); padding: .7rem 1rem; margin-top: .8rem; font-size: .82rem; color: #ffd166; }
+
+    /* ── Footer ── */
+    .v2-footer { background: rgba(0,0,0,.4); border-top: 1px solid var(--border); padding: 1.8rem 0 2.2rem; margin-top: 2rem; }
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-brand { display: flex; align-items: center; gap: .9rem; }
+    .footer-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-grad); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; font-weight: 900; color: #fff; box-shadow: 0 0 18px rgba(114,9,183,.5); flex-shrink: 0; }
+    .footer-name  { font-weight: 800; font-size: .96rem; color: var(--text); }
+    .footer-role  { font-size: .75rem; color: var(--text-muted); margin-top: .1rem; }
+    .footer-right { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .footer-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .28rem .75rem; border-radius: 100px; background: rgba(114,9,183,.12); border: 1px solid rgba(114,9,183,.28); font-size: .73rem; font-weight: 700; color: #f72585; }
+    .footer-tag { font-size: .73rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); }
+
+    /* ── Espectro EM decorativo ── */
+    .spectrum-bar {
+      height: 22px; border-radius: 12px; margin: 1.2rem 0;
+      background: linear-gradient(to right,
+        #7b00ff 0%,    /* Violeta */
+        #4400ff 10%,   /* Índigo */
+        #0044ff 20%,   /* Azul */
+        #00cc44 35%,   /* Verde */
+        #ffee00 50%,   /* Amarillo */
+        #ff8800 65%,   /* Naranja */
+        #ff0000 80%,   /* Rojo */
+        #880000 100%   /* IR */
+      );
+      position: relative; overflow: hidden;
+    }
+    .spectrum-bar::after {
+      content: '← Rayos gamma · UV · Visible · Infrarrojo · Microondas · Radio →';
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-size: .65rem; font-weight: 700; color: rgba(255,255,255,.9); letter-spacing: .03em;
+      text-shadow: 0 1px 3px rgba(0,0,0,.8);
+    }
+
+    /* ── Controles del simulador ── */
+    .sim-controls-row { display: flex; gap: 1.2rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1rem; }
+    .s-ctrl-group { display: flex; flex-direction: column; gap: .3rem; flex: 1; min-width: 140px; }
+    .s-ctrl-label { font-size: .75rem; color: var(--text-muted); font-weight: 600; }
+    .s-ctrl-select {
+      background: var(--surface); border: 1px solid var(--border); color: var(--text);
+      padding: .45rem .8rem; border-radius: var(--r-sm); font-size: .84rem; cursor: pointer;
+    }
+    .s-ctrl-select:focus { outline: 2px solid var(--accent-a); }
+    .live-data-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: .6rem; margin-top: .8rem;
+    }
+    .live-data-item {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--r-sm); padding: .6rem .8rem; text-align: center;
+    }
+    .ldi-label { font-size: .65rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+    .ldi-val { font-size: 1.3rem; font-weight: 900; margin-top: .2rem; }
+
+    @media(max-width:600px) {
+      .phet-mobile-note { display: block; }
+      .phet-wrap { padding-bottom: 80%; }
+      .yt-big-play { width: 60px; height: 60px; font-size: 1.3rem; }
+      .footer-role { display: none; }
+      .sim-controls-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="page-progress"></div>
+
+<!-- ═══════════════════════════════════
+     NAVBAR
+══════════════════════════════════════ -->
+<nav class="v2-nav">
+  <div class="inner">
+    <a class="nav-logo" href="../../index.html">
+      <svg class="logo-atom" viewBox="0 0 40 40" width="26" height="26" fill="none" aria-hidden="true">
+        <circle cx="20" cy="20" r="3.2" fill="currentColor"/>
+        <ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5"/>
+        <ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(60 20 20)"/>
+        <ellipse cx="20" cy="20" rx="17" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(120 20 20)"/>
+      </svg>
+      <span class="logo-text">VirtualLab</span>
+    </a>
+    <div class="nav-crumbs">
+      <a href="../../index.html">Inicio</a> <span class="sep">›</span>
+      <a href="../index.html">Física 11°</a> <span class="sep">›</span>
+      <a href="index.html">Período 2</a> <span class="sep">›</span>
+      <span class="current">Naturaleza de la Luz</span>
+    </div>
+    <div class="nav-right">
+      <a class="v2-btn v2-btn-primary" href="2_refraccion_instrumentos.html">Refracción →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section class="v2-hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-particles-layer" id="heroParticles"></div>
+
+  <div class="v2-wrap">
+    <div class="hero-content-wrap">
+      <div class="v2-badge">
+        <span class="badge-dot"></span>
+        <a href="../index.html" style="color:inherit;text-decoration:none;">Física 11°</a>
+        &nbsp;·&nbsp;
+        <a href="index.html" style="color:inherit;text-decoration:none;">Período 2</a>
+        &nbsp;·&nbsp; Tema 1
+      </div>
+      <h1>Naturaleza de la Luz</h1>
+      <p class="hero-sub">
+        Explora uno de los enigmas más fascinantes de la física: ¿es la luz una onda o una partícula?
+        Descubre la dualidad onda-partícula, el espectro electromagnético y los fenómenos que revelan la verdadera naturaleza de la luz.
+      </p>
+      <div class="hero-tags">
+        <span class="h-tag">🌈 Espectro EM</span>
+        <span class="h-tag">💡 Fotones</span>
+        <span class="h-tag">🌊 Dualidad onda-partícula</span>
+        <span class="h-tag">🔬 Reflexión y Refracción</span>
+      </div>
+      <div class="hero-scroll-hint">
+        <div class="scroll-mouse"></div>
+        <span>Desliza para explorar</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual-wrap">
+    <div class="orbital">
+      <div class="o-core"></div>
+      <div class="o-ring o-ring-1"></div>
+      <div class="o-ring o-ring-2"></div>
+      <div class="o-ring o-ring-3"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="v2-hr">
+
+<!-- ═══════════════════════════════════
+     TEORÍA
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-teoria">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📖 Teoría</div>
+    <h2 class="v2-sec-title">Fundamentos de la Óptica</h2>
+    <p class="v2-sec-desc">Explora las pestañas para entender la naturaleza dual de la luz y los fenómenos que la caracterizan.</p>
+  </div>
+
+  <div class="v2-tabs">
+    <button class="v2-tab active" data-tab="t-naturaleza">¿Qué es la luz?</button>
+    <button class="v2-tab" data-tab="t-espectro">Espectro EM</button>
+    <button class="v2-tab" data-tab="t-reflexion">Reflexión</button>
+    <button class="v2-tab" data-tab="t-refraccion">Refracción y Dispersión</button>
+  </div>
+
+  <div class="v2-card">
+
+    <!-- TAB 1: Naturaleza de la luz -->
+    <div id="t-naturaleza" class="v2-tab-panel active">
+      <button class="copy-teoria-btn" data-target="copy-naturaleza">📋 Copiar apuntes</button>
+      <div class="teoria-body" id="copy-naturaleza">
+        <h3>¿Qué es la luz?</h3>
+        <p>La luz es una <strong>onda electromagnética transversal</strong> que se propaga a través del vacío a una velocidad constante de aproximadamente <strong>3 × 10⁸ m/s</strong>. A diferencia de las ondas mecánicas (como el sonido), la luz no necesita un medio material para propagarse.</p>
+
+        <div class="key-box">💡 Idea clave: <strong>La luz es simultáneamente una onda y una partícula.</strong> Esta dualidad onda-partícula es uno de los principios fundamentales de la física cuántica moderna.</div>
+
+        <h3>La Dualidad Onda-Partícula</h3>
+        <p>Durante siglos, los físicos debatieron si la luz era una onda o un flujo de partículas:</p>
+        <ul>
+          <li><strong>Modelo corpuscular (Newton, s. XVII):</strong> La luz está compuesta por pequeñas partículas llamadas "corpúsculos". Explicaba la reflexión y la refracción.</li>
+          <li><strong>Modelo ondulatorio (Huygens / Young, s. XVIII-XIX):</strong> La luz es una onda. El experimento de la doble rendija de Thomas Young (1801) demostró que la luz produce patrones de interferencia y difracción, propios de las ondas.</li>
+          <li><strong>Modelo electromagnético (Maxwell, 1865):</strong> La luz es una onda electromagnética que se propaga por oscilaciones acopladas de campos eléctrico y magnético.</li>
+          <li><strong>El fotón (Einstein, 1905):</strong> Para explicar el efecto fotoeléctrico, Einstein propuso que la luz también se comporta como paquetes discretos de energía llamados <strong>fotones</strong>. Este descubrimiento le valió el Premio Nobel de Física en 1921.</li>
+        </ul>
+        <div class="key-box">⚡ Para el ICFES: <strong>La luz muestra comportamiento ondulatorio</strong> en fenómenos como interferencia y difracción, y <strong>comportamiento corpuscular</strong> en el efecto fotoeléctrico. Ambos modelos son necesarios para describir la luz completamente.</div>
+      </div>
+    </div>
+
+    <!-- TAB 2: Espectro EM -->
+    <div id="t-espectro" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-espectro">📋 Copiar apuntes</button>
+      <div class="teoria-body" id="copy-espectro">
+        <h3>El Espectro Electromagnético</h3>
+        <p>El espectro electromagnético es el conjunto de todas las radiaciones electromagnéticas, ordenadas por su frecuencia (o longitud de onda). La luz visible es solo una pequeña fracción de este espectro.</p>
+
+        <div class="spectrum-bar"></div>
+
+        <h3>Regiones del Espectro (de menor a mayor energía)</h3>
+        <ul>
+          <li><strong>Ondas de radio (λ: km a 10 cm):</strong> Telecomunicaciones, radio AM/FM, TV.</li>
+          <li><strong>Microondas (λ: 10 cm a 1 mm):</strong> Hornos microondas, radar, WiFi, GPS.</li>
+          <li><strong>Infrarrojo (λ: 1 mm a 700 nm):</strong> Control remoto, visión nocturna, calefacción.</li>
+          <li><strong>Luz visible (λ: 700 nm a 400 nm):</strong> El único rango detectado por el ojo humano. Va del rojo (700 nm) al violeta (400 nm).</li>
+          <li><strong>Ultravioleta (λ: 400 nm a 10 nm):</strong> Bronceado, esterilización, síntesis de vitamina D.</li>
+          <li><strong>Rayos X (λ: 10 nm a 0.01 nm):</strong> Diagnóstico médico, seguridad aeroportuaria.</li>
+          <li><strong>Rayos gamma (λ: &lt; 0.01 nm):</strong> Medicina nuclear, astronomía de alta energía.</li>
+        </ul>
+
+        <div class="key-box">🌈 Mnemotecnia del espectro visible: <strong>Rojo, Naranja, Amarillo, Verde, Azul, Índigo, Violeta</strong> → <em>ROYGBIV</em> (en inglés) o recuerda: <em>"Roy G. Biv"</em>. A mayor longitud de onda, menor energía; el rojo tiene mayor λ y menor energía que el violeta.</div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Reflexión -->
+    <div id="t-reflexion" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-reflexion">📋 Copiar apuntes</button>
+      <div class="teoria-body" id="copy-reflexion">
+        <h3>Reflexión de la Luz</h3>
+        <p>La reflexión ocurre cuando un rayo de luz incide sobre una superficie y <strong>rebota</strong> de vuelta al mismo medio. La <strong>Ley de la Reflexión</strong> establece que:</p>
+        <ul>
+          <li>El rayo incidente, la normal y el rayo reflejado están todos en el mismo plano.</li>
+          <li>El <strong>ángulo de incidencia (θᵢ) es igual al ángulo de reflexión (θᵣ)</strong>: θᵢ = θᵣ</li>
+        </ul>
+        <div class="key-box">📐 Los ángulos se miden siempre desde la <strong>normal</strong> (línea perpendicular a la superficie en el punto de incidencia), no desde la superficie misma.</div>
+
+        <h3>Tipos de Reflexión</h3>
+        <ul>
+          <li><strong>Reflexión especular:</strong> Se produce en superficies lisas (espejos, agua tranquila). Los rayos reflejados son paralelos entre sí → imagen nítida.</li>
+          <li><strong>Reflexión difusa:</strong> Se produce en superficies rugosas (pared, papel). Los rayos se dispersan en todas direcciones → no hay imagen nítida, pero nos permite ver los objetos.</li>
+        </ul>
+
+        <h3>Reflexión Total Interna</h3>
+        <p>Cuando la luz viaja de un medio más denso (mayor n) a uno menos denso y el ángulo de incidencia supera el <strong>ángulo crítico</strong>, toda la luz se refleja sin pasar al otro medio. Este fenómeno se llama <strong>Reflexión Total Interna</strong> y es la base de la <strong>fibra óptica</strong>.</p>
+      </div>
+    </div>
+
+    <!-- TAB 4: Refracción y Dispersión -->
+    <div id="t-refraccion" class="v2-tab-panel">
+      <button class="copy-teoria-btn" data-target="copy-refraccion">📋 Copiar apuntes</button>
+      <div class="teoria-body" id="copy-refraccion">
+        <h3>Refracción de la Luz</h3>
+        <p>La refracción ocurre cuando la luz pasa de un medio a otro con diferente índice de refracción, lo que provoca un <strong>cambio en su velocidad y dirección</strong>. La <strong>Ley de Snell</strong> describe cuantitativamente este cambio:</p>
+        <ul>
+          <li><strong>n₁ · sin(θ₁) = n₂ · sin(θ₂)</strong></li>
+          <li>Si la luz pasa de un medio menos denso a uno más denso (n₂ > n₁), el rayo se acerca a la normal (θ₂ < θ₁).</li>
+          <li>Si pasa de un medio más denso a uno menos denso (n₂ < n₁), el rayo se aleja de la normal (θ₂ > θ₁).</li>
+        </ul>
+        <div class="key-box">💡 Analogía: Imagina un carro que pasa de asfalto seco a un campo de barro. Las ruedas que tocan el barro primero frenan, haciendo que el carro "gire" hacia ese lado. Así se comporta la luz al refractarse.</div>
+
+        <h3>Dispersión de la Luz</h3>
+        <p>Cuando la luz blanca pasa por un prisma, se separa en sus colores componentes formando un espectro visible (arcoíris). Esto ocurre porque el <strong>índice de refracción</strong> de un material depende de la longitud de onda:</p>
+        <ul>
+          <li>La <strong>luz violeta</strong> se refracta más (mayor índice, menor velocidad en el vidrio).</li>
+          <li>La <strong>luz roja</strong> se refracta menos (menor índice, mayor velocidad en el vidrio).</li>
+        </ul>
+        <p>Este fenómeno explica la formación del arcoíris: las gotas de agua actúan como pequeños prismas que dispersan la luz solar.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     FÓRMULAS
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-formulas">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📐 Fórmulas</div>
+    <h2 class="v2-sec-title">Ecuaciones de la Óptica Geométrica</h2>
+    <p class="v2-sec-desc">Las ecuaciones fundamentales que rigen el comportamiento de la luz.</p>
+  </div>
+
+  <div class="formula-grid">
+
+    <div class="formula-card">
+      <div class="f-name">Velocidad de la Luz en el Vacío</div>
+      <div class="f-eq">c = λ · f</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">c</span><span class="f-desc">Velocidad de la luz</span><span class="f-unit">3 × 10⁸ m/s</span></div>
+        <div class="f-var"><span class="f-sym">λ</span><span class="f-desc">Longitud de onda</span><span class="f-unit">m</span></div>
+        <div class="f-var"><span class="f-sym">f</span><span class="f-desc">Frecuencia</span><span class="f-unit">Hz</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Índice de Refracción</div>
+      <div class="f-eq" style="font-size:1.5rem;">n = c / v</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">n</span><span class="f-desc">Índice de refracción (adimensional)</span><span class="f-unit">≥ 1</span></div>
+        <div class="f-var"><span class="f-sym">c</span><span class="f-desc">Velocidad en el vacío</span><span class="f-unit">3×10⁸ m/s</span></div>
+        <div class="f-var"><span class="f-sym">v</span><span class="f-desc">Velocidad en el medio</span><span class="f-unit">m/s</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Ley de la Reflexión</div>
+      <div class="f-eq" style="font-size:1.6rem;">θᵢ = θᵣ</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">θᵢ</span><span class="f-desc">Ángulo de incidencia</span><span class="f-unit">grados (°)</span></div>
+        <div class="f-var"><span class="f-sym">θᵣ</span><span class="f-desc">Ángulo de reflexión</span><span class="f-unit">grados (°)</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Ley de Snell (Refracción)</div>
+      <div class="f-eq" style="font-size:1.25rem;">n₁ · sin(θ₁) = n₂ · sin(θ₂)</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">n₁, n₂</span><span class="f-desc">Índices de refracción</span><span class="f-unit">adimensional</span></div>
+        <div class="f-var"><span class="f-sym">θ₁</span><span class="f-desc">Ángulo de incidencia</span><span class="f-unit">°</span></div>
+        <div class="f-var"><span class="f-sym">θ₂</span><span class="f-desc">Ángulo de refracción</span><span class="f-unit">°</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Energía del Fotón</div>
+      <div class="f-eq" style="font-size:1.5rem;">E = h · f</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">E</span><span class="f-desc">Energía del fotón</span><span class="f-unit">Joules (J)</span></div>
+        <div class="f-var"><span class="f-sym">h</span><span class="f-desc">Constante de Planck</span><span class="f-unit">6.626×10⁻³⁴ J·s</span></div>
+        <div class="f-var"><span class="f-sym">f</span><span class="f-desc">Frecuencia de la onda</span><span class="f-unit">Hz</span></div>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="f-name">Ángulo Crítico (Reflexión Total)</div>
+      <div class="f-eq" style="font-size:1.3rem;">sin(θc) = n₂ / n₁</div>
+      <div class="f-divider"></div>
+      <div class="f-vars">
+        <div class="f-var"><span class="f-sym">θc</span><span class="f-desc">Ángulo crítico</span><span class="f-unit">°</span></div>
+        <div class="f-var"><span class="f-sym">n₁</span><span class="f-desc">Índice del medio más denso</span><span class="f-unit">n₁ > n₂</span></div>
+        <div class="f-var"><span class="f-sym">n₂</span><span class="f-desc">Índice del medio menos denso</span><span class="f-unit">—</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     SIMULADOR: REFLEXIÓN Y REFRACCIÓN
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-sim">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">⚡ Simulador Interactivo</div>
+    <h2 class="v2-sec-title">Ley de Snell en Acción</h2>
+    <p class="v2-sec-desc">
+      Haz clic (o toca) en la zona superior para mover el rayo incidente y observa en tiempo real
+      cómo cambian el rayo reflejado y el rayo refractado al cambiar el ángulo y el segundo medio.
+    </p>
+  </div>
+
+  <div class="v2-sim">
+    <div class="sim-topbar">
+      <div class="sim-tag"><div class="sim-dot"></div> Laboratorio: Reflexión y Refracción</div>
+    </div>
+
+    <div style="padding: 1rem 1.2rem;">
+      <div class="sim-controls-row">
+        <div class="s-ctrl-group">
+          <label class="s-ctrl-label" for="selMedio1">Medio 1 (superior)</label>
+          <select class="s-ctrl-select" id="selMedio1">
+            <option value="1.00">Aire (n = 1.00)</option>
+            <option value="1.33">Agua (n = 1.33)</option>
+            <option value="1.50">Vidrio (n = 1.50)</option>
+          </select>
+        </div>
+        <div class="s-ctrl-group">
+          <label class="s-ctrl-label" for="selMedio2">Medio 2 (inferior)</label>
+          <select class="s-ctrl-select" id="selMedio2">
+            <option value="1.33">Agua (n = 1.33)</option>
+            <option value="1.50" selected>Vidrio (n = 1.50)</option>
+            <option value="2.42">Diamante (n = 2.42)</option>
+            <option value="1.00">Aire (n = 1.00)</option>
+          </select>
+        </div>
+      </div>
+      <canvas id="simCanvas" style="width:100%; height:360px;"></canvas>
+      <div class="live-data-grid">
+        <div class="live-data-item">
+          <div class="ldi-label">Ángulo Incidencia</div>
+          <div class="ldi-val" id="valTheta1" style="color:#4cc9f0;">45°</div>
+        </div>
+        <div class="live-data-item">
+          <div class="ldi-label">Ángulo Reflexión</div>
+          <div class="ldi-val" id="valThetaR" style="color:#f72585;">45°</div>
+        </div>
+        <div class="live-data-item">
+          <div class="ldi-label">Ángulo Refracción</div>
+          <div class="ldi-val" id="valTheta2" style="color:#ffd166;">28.1°</div>
+        </div>
+        <div class="live-data-item">
+          <div class="ldi-label">Reflexión Total</div>
+          <div class="ldi-val" id="valTIR" style="color:#ff6b6b;">No</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     VIDEO EXPLICATIVO
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-video">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🎬 Video explicativo</div>
+    <h2 class="v2-sec-title">Naturaleza de la Luz</h2>
+    <p class="v2-sec-desc">Repasa los conceptos clave con la explicación del docente.</p>
+  </div>
+
+  <div class="yt-player-wrap" id="ytPlayerWrap">
+    <div class="yt-thumb-card" id="ytThumbCard" onclick="ytLoadEmbed('i8Tg4-6Wxlw')">
+      <img class="yt-thumb-img"
+           src="https://img.youtube.com/vi/i8Tg4-6Wxlw/hqdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/i8Tg4-6Wxlw/mqdefault.jpg'"
+           alt="Naturaleza de la Luz">
+      <div class="yt-thumb-overlay">
+        <div class="yt-big-play">&#9654;</div>
+      </div>
+      <div class="yt-info-bar">
+        <div class="yt-title-bar">Naturaleza de la Luz<br>
+          <span style="font-weight:400;opacity:.8;font-size:.78rem;">Física 11° · Toca para reproducir</span>
+        </div>
+        <a class="yt-ext-btn"
+           href="https://www.youtube.com/watch?v=i8Tg4-6Wxlw"
+           target="_blank" rel="noopener"
+           onclick="event.stopPropagation()">↗ Abrir en YouTube</a>
+      </div>
+    </div>
+    <div class="yt-embed-frame" id="ytEmbedFrame">
+      <iframe id="ytIframe" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     PhET INTEGRADO
+══════════════════════════════════════ -->
+<section class="v2-section-sm v2-wrap anim-scroll" id="sec-phet">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">🧪 Laboratorio PhET</div>
+    <h2 class="v2-sec-title">Curvando la Luz</h2>
+    <p class="v2-sec-desc">
+      Explora la reflexión y refracción con el simulador PhET. Cambia los materiales, ajusta el ángulo
+      y activa la vista del "rayo" para verificar la Ley de Snell visualmente.
+    </p>
+  </div>
+  <div class="phet-wrap" style="padding-bottom: 70%;">
+    <iframe
+      src="https://phet.colorado.edu/sims/html/bending-light/latest/bending-light_es.html"
+      title="Curvando la Luz - PhET"
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+  <p class="phet-mobile-note">📱 El simulador está optimizado para escritorio. En móviles es posible que la interacción sea limitada.</p>
+  <p class="text-muted" style="margin-top:.8rem; font-size:.84rem;">
+    💡 <strong>Actividad sugerida:</strong> Pon el medio superior como "Aire" y el inferior como "Vidrio". Arrastra el rayo y fíjate cómo el ángulo refractado es siempre menor que el incidente. Luego cámbialo al revés (vidrio → aire) y busca el ángulo en el que aparece la reflexión total interna.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════
+     TIPS Y ERRORES COMUNES
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-tips">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">💡 Tips y errores</div>
+    <h2 class="v2-sec-title">Claves para el ICFES</h2>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:2rem;">
+    <div class="tip-card">
+      <div class="t-icon">📐</div>
+      <h4>Los ángulos siempre desde la normal</h4>
+      <p>El error más común en el ICFES es medir los ángulos de reflexión/refracción desde la superficie. <strong>Siempre se miden desde la línea normal</strong> (perpendicular a la superficie). Un rayo rasante tiene θ = 90°, no 0°.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🌊</div>
+      <h4>La frecuencia no cambia al refractarse</h4>
+      <p>Cuando la luz pasa de un medio a otro, su <strong>frecuencia permanece constante</strong>. Lo que cambia es la longitud de onda y la velocidad. En el vidrio, la luz va más lento pero su "color" (frecuencia) no cambia.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">🔴</div>
+      <h4>Rojo vs Violeta en el prisma</h4>
+      <p>En un prisma, el <strong>violeta se refracta más</strong> (aparece en la parte inferior del espectro) y el <strong>rojo menos</strong> (en la parte superior). Recuerda: mayor frecuencia → mayor energía → más interacción con el medio → mayor refracción.</p>
+    </div>
+    <div class="tip-card">
+      <div class="t-icon">💎</div>
+      <h4>Reflexión total interna</h4>
+      <p>Solo ocurre cuando la luz va de un medio <strong>más denso hacia uno menos denso</strong> (ej: vidrio → aire, NO al revés). El ángulo crítico depende de la relación entre los índices: sin(θc) = n₂/n₁.</p>
+    </div>
+  </div>
+
+  <div class="v2-sec-label text-accent" style="margin-bottom:1rem;">❌ Errores frecuentes</div>
+  <div class="error-table-card">
+    <div class="err-row">
+      <div class="err-cell err-head err-bad">❌ Error frecuente</div>
+      <div class="err-cell err-head err-good">✅ Lo correcto</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Creer que la luz solo es una onda.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>La luz tiene <strong>dualidad onda-partícula</strong>: actúa como onda en interferencia y difracción, y como partícula (fotón) en el efecto fotoeléctrico.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Pensar que la reflexión total interna puede ocurrir en cualquier dirección.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Solo ocurre cuando la luz pasa de un medio de <strong>mayor índice</strong> (más denso ópticamente) a uno de <strong>menor índice</strong>, y solo si el ángulo supera el ángulo crítico.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Afirmar que al entrar al vidrio la luz aumenta su velocidad.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>Al pasar al vidrio (mayor n), la luz <strong>reduce su velocidad</strong>. v = c/n. Por ejemplo, en vidrio con n = 1.5 la luz va a 2×10⁸ m/s.</div>
+    </div>
+    <div class="err-row">
+      <div class="err-cell err-bad"><span class="mark">✗</span>Confundir el arcoíris con que la luz crea los colores.</div>
+      <div class="err-cell err-good"><span class="mark">✓</span>La luz blanca ya <strong>contiene todos los colores</strong>. El prisma o las gotas de agua los <strong>separan</strong> (dispersión), no los crean.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     QUIZ ICFES
+══════════════════════════════════════ -->
+<section class="v2-section v2-wrap anim-scroll" id="sec-quiz">
+  <div class="mb-md">
+    <div class="v2-sec-label text-accent">📝 Quiz ICFES</div>
+    <h2 class="v2-sec-title">Ponte a prueba</h2>
+  </div>
+
+  <div class="quiz-v2" id="quizBox">
+    <div class="quiz-top">
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizFill" style="width:0%"></div></div>
+      <div class="quiz-cnt" id="quizCnt">Pregunta 1 de 5</div>
+    </div>
+    <div class="quiz-body" id="quizBody">
+      <div class="quiz-q" id="qText"></div>
+      <div class="quiz-opts" id="qOpts"></div>
+      <div class="quiz-fb" id="qFb"></div>
+    </div>
+    <div class="quiz-foot">
+      <button class="v2-btn v2-btn-primary" id="qNext" style="display:none">Siguiente →</button>
+    </div>
+    <div class="quiz-result-screen" id="quizResult">
+      <div class="score-ring" id="scoreRing">
+        <div class="score-big" id="scoreBig">0/5</div>
+        <div class="score-sub">respuestas correctas</div>
+      </div>
+      <div class="score-msg" id="scoreMsg"></div>
+      <div class="score-hint" id="scoreHint"></div>
+      <button class="v2-btn v2-btn-primary" id="qRestart">🔄 Intentar de nuevo</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     NAVEGACIÓN INFERIOR
+══════════════════════════════════════ -->
+<div class="v2-wrap">
+  <hr class="v2-hr">
+  <div class="v2-page-nav">
+    <a class="nav-btn-card" href="index.html">
+      <span class="nbc-arr">←</span>
+      <div>
+        <div class="nbc-sub">Volver al índice</div>
+        <div class="nbc-title">Período 2 — Óptica</div>
+      </div>
+    </a>
+    <a class="nav-btn-card right" href="2_refraccion_instrumentos.html">
+      <div>
+        <div class="nbc-sub">Siguiente tema</div>
+        <div class="nbc-title">Refracción e Instrumentos Ópticos</div>
+      </div>
+      <span class="nbc-arr">→</span>
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     PIE DE PÁGINA
+══════════════════════════════════════ -->
+<footer class="v2-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-avatar">LC</div>
+      <div>
+        <div class="footer-name">Docente Luis Miguel Cabrera</div>
+        <div class="footer-role">I.E. Paulo VI &nbsp;·&nbsp; Huila, Colombia &nbsp;·&nbsp; Física &amp; Matemáticas</div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">⚛️ VirtualLab 2026</span>
+      <span class="footer-tag">lumcab</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
+<script>
+/* ── Interacciones básicas ── */
+(function () {
+  const bar = document.getElementById('page-progress');
+  window.addEventListener('scroll', () => {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (window.scrollY / docH * 100) + '%';
+  }, { passive: true });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.anim-scroll').forEach(el => obs.observe(el));
+
+  document.querySelectorAll('.v2-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.closest('section') || btn.parentElement.parentElement;
+      group.querySelectorAll('.v2-tab').forEach(b => b.classList.remove('active'));
+      group.querySelectorAll('.v2-tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = group.querySelector('#' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const content = document.getElementById(btn.getAttribute('data-target'));
+      if (!content) return;
+      const text = content.innerText.replace(/📋 Copiar apuntes/g, '').trim();
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.innerText;
+        btn.innerText = '✅ ¡Copiado!'; btn.classList.add('copied');
+        setTimeout(() => { btn.innerText = orig; btn.classList.remove('copied'); }, 2500);
+      }).catch(() => { btn.innerText = '❌ Error al copiar'; });
+    });
+  });
+
+  const layer = document.getElementById('heroParticles');
+  const colors = ['#7209b7', '#f72585', '#4cc9f0', 'rgba(247,37,133,.5)'];
+  for (let i = 0; i < 24; i++) {
+    const d = document.createElement('div');
+    d.className = 'p-dot';
+    const size = Math.random() * 5 + 2;
+    d.style.cssText = `width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random() * colors.length)]};left:${Math.random() * 100}%;bottom:-20px;animation-duration:${7 + Math.random() * 10}s;animation-delay:${Math.random() * 8}s;opacity:${.3 + Math.random() * .5};`;
+    layer.appendChild(d);
+  }
+})();
+
+function ytLoadEmbed(videoId) {
+  const thumb = document.getElementById('ytThumbCard');
+  const frame = document.getElementById('ytEmbedFrame');
+  const iframe = document.getElementById('ytIframe');
+  if (!thumb || !frame || !iframe) return;
+  thumb.style.display = 'none';
+  frame.classList.add('visible');
+  iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1&color=white';
+}
+
+/* ── SIMULADOR: Reflexión y Refracción ── */
+(function () {
+  const canvas = document.getElementById('simCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let W, H, interfaceY;
+
+  function resize() {
+    const wrap = canvas.parentElement;
+    W = canvas.width = wrap.offsetWidth;
+    H = canvas.height = 360;
+    interfaceY = H * 0.5;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  let n1 = 1.00;
+  let n2 = 1.50;
+  let incidentAngleDeg = 45;
+
+  const selMedio1 = document.getElementById('selMedio1');
+  const selMedio2 = document.getElementById('selMedio2');
+  const valTheta1 = document.getElementById('valTheta1');
+  const valThetaR = document.getElementById('valThetaR');
+  const valTheta2 = document.getElementById('valTheta2');
+  const valTIR    = document.getElementById('valTIR');
+
+  selMedio1.addEventListener('change', () => { n1 = parseFloat(selMedio1.value); draw(); });
+  selMedio2.addEventListener('change', () => { n2 = parseFloat(selMedio2.value); draw(); });
+
+  const originX = () => W * 0.5;
+  const originY = () => interfaceY;
+
+  function getAngleFromMouse(cx, cy, mx, my) {
+    const dx = mx - cx;
+    const dy = my - cy;
+    const angle = Math.atan2(Math.abs(dx), -dy) * 180 / Math.PI;
+    return Math.max(1, Math.min(89, angle));
+  }
+
+  function onInteract(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    let cx, cy;
+    if (e.touches) {
+      cx = (e.touches[0].clientX - rect.left) * scaleX;
+      cy = (e.touches[0].clientY - rect.top) * scaleY;
+    } else {
+      cx = (e.clientX - rect.left) * scaleX;
+      cy = (e.clientY - rect.top) * scaleY;
+    }
+    if (cy < interfaceY) {
+      incidentAngleDeg = getAngleFromMouse(originX(), originY(), cx, cy);
+      draw();
+    }
+  }
+
+  canvas.addEventListener('mousemove', e => { if (e.buttons === 1 || true) onInteract(e); });
+  canvas.addEventListener('click', onInteract);
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); onInteract(e); }, { passive: false });
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); onInteract(e); }, { passive: false });
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    const ox = originX();
+    const oy = originY();
+    const rayLen = Math.min(W, H) * 0.42;
+    const theta1 = incidentAngleDeg * Math.PI / 180;
+
+    // Nombres de medios
+    const name1 = selMedio1.options[selMedio1.selectedIndex].text.split(' (')[0];
+    const name2 = selMedio2.options[selMedio2.selectedIndex].text.split(' (')[0];
+
+    // ── Fondos de medios ──
+    ctx.fillStyle = 'rgba(76, 201, 240, 0.07)';
+    ctx.fillRect(0, 0, W, oy);
+    ctx.fillStyle = 'rgba(247, 37, 133, 0.07)';
+    ctx.fillRect(0, oy, W, H - oy);
+
+    // ── Etiquetas de medios ──
+    ctx.font = 'bold 13px Segoe UI, sans-serif';
+    ctx.fillStyle = 'rgba(76,201,240,.7)';
+    ctx.fillText(`Medio 1: ${name1}  (n₁ = ${n1.toFixed(2)})`, 14, 22);
+    ctx.fillStyle = 'rgba(247,37,133,.7)';
+    ctx.fillText(`Medio 2: ${name2}  (n₂ = ${n2.toFixed(2)})`, 14, oy + 22);
+
+    // ── Línea de interfaz ──
+    ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+
+    // ── Normal (línea discontinua) ──
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([8, 6]);
+    ctx.beginPath(); ctx.moveTo(ox, oy - rayLen * 0.95); ctx.lineTo(ox, oy + rayLen * 0.95); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // ── Rayo incidente ──
+    const ix = ox - Math.sin(theta1) * rayLen;
+    const iy = oy - Math.cos(theta1) * rayLen;
+    drawArrow(ctx, ix, iy, ox, oy, '#4cc9f0', 2.5);
+
+    // ── Rayo reflejado ──
+    const rx = ox + Math.sin(theta1) * rayLen * 0.85;
+    const ry = oy - Math.cos(theta1) * rayLen * 0.85;
+    drawArrow(ctx, ox, oy, rx, ry, '#f72585', 2.5);
+
+    // ── Ley de Snell ──
+    const sinTheta2 = (n1 / n2) * Math.sin(theta1);
+    let isTIR = false;
+
+    if (sinTheta2 <= 1) {
+      const theta2 = Math.asin(sinTheta2);
+      const refX = ox + Math.sin(theta2) * rayLen * 0.9;
+      const refY = oy + Math.cos(theta2) * rayLen * 0.9;
+      drawArrow(ctx, ox, oy, refX, refY, '#ffd166', 2.5);
+
+      // ── Ángulos ──
+      drawAngleArc(ctx, ox, oy, -Math.PI / 2, -(Math.PI / 2 - theta1), 44, 'rgba(76,201,240,.5)', theta1 * 180 / Math.PI, 'left', -1);
+      drawAngleArc(ctx, ox, oy, -(Math.PI / 2 - theta1), 0, 52, 'rgba(247,37,133,.4)', theta1 * 180 / Math.PI, 'right', -1);
+      drawAngleArc(ctx, ox, oy, Math.PI / 2, Math.PI / 2 - theta2, 44, 'rgba(255,209,102,.5)', theta2 * 180 / Math.PI, 'right', 1);
+
+      valTheta2.textContent = (theta2 * 180 / Math.PI).toFixed(1) + '°';
+      valTIR.textContent = 'No';
+      valTIR.style.color = '#06d6a0';
+    } else {
+      isTIR = true;
+      valTheta2.textContent = '—';
+      valTIR.textContent = 'SÍ';
+      valTIR.style.color = '#ff6b6b';
+
+      ctx.font = 'bold 14px Segoe UI, sans-serif';
+      ctx.fillStyle = '#ff6b6b';
+      ctx.textAlign = 'center';
+      ctx.fillText('⚠ Reflexión Total Interna', ox, oy + 50);
+      ctx.textAlign = 'left';
+    }
+
+    valTheta1.textContent = incidentAngleDeg.toFixed(1) + '°';
+    valThetaR.textContent  = incidentAngleDeg.toFixed(1) + '°';
+
+    // ── Leyenda ──
+    ctx.font = '11px Segoe UI, sans-serif';
+    ctx.fillStyle = '#4cc9f0'; ctx.fillText('→ Rayo incidente', W - 145, 18);
+    ctx.fillStyle = '#f72585'; ctx.fillText('→ Rayo reflejado', W - 145, 34);
+    if (!isTIR) { ctx.fillStyle = '#ffd166'; ctx.fillText('→ Rayo refractado', W - 145, 50); }
+  }
+
+  function drawArrow(ctx, x1, y1, x2, y2, color, lw) {
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    const headLen = 12;
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw;
+    ctx.shadowColor = color; ctx.shadowBlur = 8;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - headLen * Math.cos(angle - 0.42), y2 - headLen * Math.sin(angle - 0.42));
+    ctx.lineTo(x2 - headLen * Math.cos(angle + 0.42), y2 - headLen * Math.sin(angle + 0.42));
+    ctx.closePath(); ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+
+  function drawAngleArc(ctx, cx, cy, startA, endA, r, color, label, side, yDir) {
+    ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, startA * yDir + (yDir < 0 ? 0 : Math.PI), endA * yDir + (yDir < 0 ? 0 : Math.PI));
+    ctx.stroke();
+  }
+
+  draw();
+})();
+
+/* ── QUIZ ICFES ── */
+(function () {
+  const qData = [
+    {
+      q: "Un rayo de luz pasa del aire (n = 1.00) al agua (n = 1.33). Si el ángulo de incidencia es de 30°, ¿qué ocurre con el rayo al entrar al agua?",
+      opts: [
+        { text: "Se aleja de la normal (el ángulo aumenta).", isCorrect: false },
+        { text: "Se acerca a la normal (el ángulo disminuye).", isCorrect: true },
+        { text: "No cambia de dirección.", isCorrect: false },
+        { text: "Se refleja completamente.", isCorrect: false }
+      ],
+      fbGood: "¡Correcto! Al pasar de un medio menos denso (aire, n=1) a uno más denso (agua, n=1.33), el rayo se dobla hacia la normal. Por Snell: sin(θ₂) = (1.00/1.33)·sin(30°) ≈ 0.376, por lo que θ₂ ≈ 22°, menor que 30°.",
+      fbBad: "Recuerda la Ley de Snell: n₁·sin(θ₁) = n₂·sin(θ₂). Como n₂ > n₁, sin(θ₂) < sin(θ₁), lo que significa θ₂ < θ₁. El rayo se acerca a la normal al entrar a un medio más denso."
+    },
+    {
+      q: "¿Cuál de las siguientes evidencias apoya el modelo corpuscular (de partículas) de la luz?",
+      opts: [
+        { text: "Los patrones de interferencia en el experimento de la doble rendija.", isCorrect: false },
+        { text: "La difracción de la luz al pasar por una rendija estrecha.", isCorrect: false },
+        { text: "El efecto fotoeléctrico: metales emiten electrones solo al ser iluminados con cierta frecuencia.", isCorrect: true },
+        { text: "La formación de colores en pompas de jabón.", isCorrect: false }
+      ],
+      fbGood: "¡Excelente! Einstein explicó el efecto fotoeléctrico (1905) proponiendo que la luz son fotones (cuantos de energía). La energía de cada fotón es E = h·f. Por eso, si la frecuencia no supera un umbral, no hay efecto, sin importar la intensidad de la luz.",
+      fbBad: "La interferencia, la difracción y los colores en pompas de jabón son fenómenos de onda. El efecto fotoeléctrico es el que requiere explicar la luz como partículas (fotones). Einstein ganó el Nobel por esta explicación en 1905."
+    },
+    {
+      q: "La luz viaja en el vacío a 3×10⁸ m/s. Al entrar al vidrio (n = 1.5), su velocidad será:",
+      opts: [
+        { text: "4.5 × 10⁸ m/s", isCorrect: false },
+        { text: "3 × 10⁸ m/s (igual, no cambia).", isCorrect: false },
+        { text: "2 × 10⁸ m/s", isCorrect: true },
+        { text: "1 × 10⁸ m/s", isCorrect: false }
+      ],
+      fbGood: "¡Correcto! Usando v = c/n: v = (3×10⁸)/1.5 = 2×10⁸ m/s. Al entrar a un medio con mayor índice de refracción, la luz se desacelera.",
+      fbBad: "Usa la fórmula del índice de refracción: n = c/v, despejando v = c/n = (3×10⁸ m/s) / 1.5 = 2×10⁸ m/s. La velocidad disminuye al entrar a un medio más denso ópticamente."
+    },
+    {
+      q: "¿Cuál de las siguientes regiones del espectro electromagnético tiene mayor energía por fotón?",
+      opts: [
+        { text: "Ondas de radio.", isCorrect: false },
+        { text: "Luz visible.", isCorrect: false },
+        { text: "Infrarrojo.", isCorrect: false },
+        { text: "Rayos gamma.", isCorrect: true }
+      ],
+      fbGood: "¡Perfecto! La energía del fotón es E = h·f. Los rayos gamma tienen la mayor frecuencia (y menor longitud de onda) de todo el espectro electromagnético, por lo tanto tienen la mayor energía.",
+      fbBad: "Recuerda: E = h·f. A mayor frecuencia, mayor energía. El orden de menor a mayor energía es: Radio < Microondas < Infrarrojo < Luz visible < Ultravioleta < Rayos X < Rayos gamma."
+    },
+    {
+      q: "Un rayo de luz viaja del vidrio (n = 1.5) al aire (n = 1.0). El ángulo crítico para la reflexión total interna es aproximadamente:",
+      opts: [
+        { text: "30°", isCorrect: false },
+        { text: "41.8°", isCorrect: true },
+        { text: "60°", isCorrect: false },
+        { text: "90°", isCorrect: false }
+      ],
+      fbGood: "¡Muy bien! sin(θc) = n₂/n₁ = 1.0/1.5 = 0.667, entonces θc = arcsin(0.667) ≈ 41.8°. Para ángulos mayores a este, toda la luz se refleja internamente.",
+      fbBad: "Usa la fórmula: sin(θc) = n₂/n₁ = 1.0/1.5 = 0.667. Aplicando arcoseno: θc = arcsin(0.667) ≈ 41.8°. Este es el principio que hace funcionar la fibra óptica."
+    }
+  ];
+
+  let qIndex = 0, correctCount = 0, answered = false;
+  const quizFill = document.getElementById('quizFill');
+  const quizCnt  = document.getElementById('quizCnt');
+  const qText    = document.getElementById('qText');
+  const qOpts    = document.getElementById('qOpts');
+  const qFb      = document.getElementById('qFb');
+  const qNext    = document.getElementById('qNext');
+  const resultScr = document.getElementById('quizResult');
+
+  function initQuiz() {
+    qIndex = 0; correctCount = 0;
+    resultScr.style.display = 'none';
+    document.getElementById('quizBody').style.display = 'block';
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    answered = false; qNext.style.display = 'none';
+    qFb.innerHTML = ''; qFb.className = 'quiz-fb';
+    const d = qData[qIndex];
+    quizFill.style.width = (qIndex / qData.length * 100) + '%';
+    quizCnt.textContent = `Pregunta ${qIndex + 1} de ${qData.length}`;
+    qText.textContent = d.q;
+    qOpts.innerHTML = '';
+    const ltrs = ['A', 'B', 'C', 'D'];
+    d.opts.forEach((o, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-opt';
+      btn.innerHTML = `<div class="opt-ltr">${ltrs[i]}</div><div class="opt-txt">${o.text}</div>`;
+      btn.onclick = () => selectOption(btn, o.isCorrect, d);
+      qOpts.appendChild(btn);
+    });
+  }
+
+  function selectOption(btn, isCorrect, d) {
+    if (answered) return;
+    answered = true;
+    Array.from(qOpts.children).forEach(b => { b.classList.add('answered'); b.style.opacity = '.6'; });
+    btn.style.opacity = '1';
+    if (isCorrect) {
+      correctCount++; btn.classList.add('correct');
+      qFb.className = 'quiz-fb correct visible';
+      qFb.innerHTML = `<div style="font-weight:800;margin-bottom:.4rem;color:#06d6a0;">✅ ¡Correcto!</div>${d.fbGood}`;
+    } else {
+      btn.classList.add('wrong');
+      qFb.className = 'quiz-fb wrong visible';
+      qFb.innerHTML = `<div style="font-weight:800;margin-bottom:.4rem;color:#e63946;">❌ Incorrecto</div>${d.fbBad}`;
+      Array.from(qOpts.children).forEach((b, i) => {
+        if (d.opts[i].isCorrect) { b.classList.add('correct'); b.style.opacity = '1'; }
+      });
+    }
+    qNext.style.display = 'inline-flex';
+    quizFill.style.width = ((qIndex + 1) / qData.length * 100) + '%';
+  }
+
+  qNext.addEventListener('click', () => {
+    qIndex++;
+    if (qIndex < qData.length) loadQuestion(); else showResult();
+  });
+
+  function showResult() {
+    document.getElementById('quizBody').style.display = 'none';
+    qNext.style.display = 'none'; resultScr.style.display = 'flex';
+    document.getElementById('scoreBig').textContent = `${correctCount}/${qData.length}`;
+    const pct = correctCount / qData.length;
+    const sRing = document.getElementById('scoreRing');
+    const sMsg  = document.getElementById('scoreMsg');
+    const sHint = document.getElementById('scoreHint');
+    if (pct === 1) {
+      sRing.style.background = 'linear-gradient(135deg,#06d6a0,#048a68)';
+      sMsg.textContent = '¡Magnífico!';
+      sHint.textContent = 'Dominas la naturaleza de la luz. ¡Estás listo para el ICFES!';
+    } else if (pct >= 0.6) {
+      sRing.style.background = 'linear-gradient(135deg,#f72585,#7209b7)';
+      sMsg.textContent = '¡Buen esfuerzo!';
+      sHint.textContent = 'Buen avance, repasa la Ley de Snell y la dualidad onda-partícula.';
+    } else {
+      sRing.style.background = 'linear-gradient(135deg,#e63946,#9b2226)';
+      sMsg.textContent = 'Necesitas repasar';
+      sHint.textContent = 'Vuelve a la teoría, especialmente reflexión total interna y espectro EM.';
+    }
+  }
+
+  document.getElementById('qRestart').addEventListener('click', initQuiz);
+  initQuiz();
+})();
+</script>
+</body>
+</html>
