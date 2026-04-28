@@ -1083,7 +1083,14 @@ document.querySelectorAll('.copy-teoria-btn').forEach(btn => {
   }));
 
   window.addEventListener('resize', resize);
-  resize(); reset(); drawTrack(); drawGraphs(); startLoop();
+  function initSim() {
+    if (trackCanvas.offsetWidth > 0) {
+      resize(); reset(); drawTrack(); drawGraphs(); startLoop();
+    } else {
+      requestAnimationFrame(initSim);
+    }
+  }
+  requestAnimationFrame(initSim);
 })();
 
 /* ==========================================
