@@ -106,8 +106,8 @@
 | Archivo | Tema | Estado |
 |---|---|---|
 | `fisica11/periodo3/index.html` | Índice período | ✅ Completo |
-| `fisica11/periodo3/1_electrostatica.html` | Electrostática | ⬜ Pendiente |
-| `fisica11/periodo3/2_electrodinamica.html` | Electrodinámica | ⬜ Pendiente |
+| `fisica11/periodo3/1_electrostatica.html` | Electrostática | ✅ Completo |
+| `fisica11/periodo3/2_electrodinamica.html` | Electrodinámica | ✅ Completo |
 
 ### Física 11° — Período 4 · Magnetismo
 | Archivo | Tema | Estado |
@@ -188,10 +188,10 @@
 |---|---|---|---|
 | Infraestructura | 7 | 7 | 100% |
 | Física 10° | 11 | 11 | 100% |
-| Física 11° | 3 | 9 | 33% |
+| Física 11° | 5 | 9 | 56% |
 | Matemáticas 6° | 0 | 12 | 0% |
 | Geometría 6° | 0 | 8 | 0% |
-| **Total** | **21** | **47** | **45%** |
+| **Total** | **23** | **47** | **49%** |
 
 ---
 
@@ -213,6 +213,8 @@
 | Física 11° | Movimiento armónico simple | `Np9r--W-Kgg` | ✅ Verificado |
 | Física 11° | Ondas y sonido | `_D7zaQN-M6Y` | ✅ Verificado |
 | Física 11° | Sísmica y ondas sísmicas | `5PKXzvkEQJg` | ✅ Verificado |
+| Física 11° | Electrostática | `n2gdvTEU0Jk` | ✅ Verificado |
+| Física 11° | Electrodinámica | `xw1wZaNmZOI` | ✅ Verificado |
 
 > **Nota:** Todos los videos son grabaciones del propio docente (canal lumcab). Nunca reemplazar IDs existentes. Miniatura: `hqdefault.jpg` con fallback `mqdefault.jpg`.
 
@@ -227,7 +229,8 @@
 | Energía | `phet.colorado.edu/sims/html/energy-skate-park-basics/latest/energy-skate-park-basics_es.html` |
 | Presión y fluidos | `phet.colorado.edu/sims/html/under-pressure/latest/under-pressure_es.html` |
 | Ondas y sonido | `phet.colorado.edu/sims/html/wave-on-a-string/latest/wave-on-a-string_es.html` |
-| Electricidad | `phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_es.html` |
+| Electrostática — Cargas y campos | `phet.colorado.edu/sims/html/charges-and-fields/latest/charges-and-fields_es.html` |
+| Electrodinámica — Circuitos DC | `phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_es.html` |
 | Magnetismo | `phet.colorado.edu/sims/html/magnets-and-electromagnets/latest/magnets-and-electromagnets_es.html` |
 | Fracciones | `phet.colorado.edu/sims/html/fractions-intro/latest/fractions-intro_es.html` |
 | Geometría / Área | `phet.colorado.edu/sims/html/area-builder/latest/area-builder_es.html` |
